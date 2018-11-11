@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anirudh Vemula</title>
+    <link>https://vvanirudh.github.io/</link>
+    <description>Recent content on Anirudh Vemula</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Mon, 02 Oct 2017 15:59:13 -0400</lastBuildDate>
+    
+	<atom:link href="https://vvanirudh.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>New York City</title>
+      <link>https://vvanirudh.github.io/blog/newyork_pics/</link>
+      <pubDate>Mon, 02 Oct 2017 15:59:13 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/blog/newyork_pics/</guid>
+      <description>Some of these photos were taken in New York city when I visited it in October for an AI forum. I wanted to take pictures in NYC for so long and felt this was as good a time as any. So, carried my old-ass camera around uptown and midtown manhattan, and took most of the photos.</description>
+    </item>
+    
+    <item>
+      <title>Graffiti in Pittsburgh through 35mm</title>
+      <link>https://vvanirudh.github.io/blog/pittsburgh_graffiti/</link>
+      <pubDate>Fri, 22 Sep 2017 15:59:13 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/blog/pittsburgh_graffiti/</guid>
+      <description>Early fall 2017, I went on a search for graffiti in Pittsburgh and found a lot! Took a bunch of snaps and developed them on Ilford HP5 35mm. To get most of these I had to bike around Pittsburgh (mostly in Lawrenceville and Oakland). Never knew Pittsburgh had so much street art (some might call it vandalism though).</description>
+    </item>
+    
+    <item>
+      <title>Research</title>
+      <link>https://vvanirudh.github.io/research/</link>
+      <pubDate>Fri, 15 Sep 2017 22:55:05 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/research/</guid>
+      <description>Browse my research either using the Projects page or the publications listed below.
+Publications Preprints  Anirudh Vemula, Wen Sun, J. Andrew Bagnell. Contrasting Exploration in Parameter and Action Space: A Zeroth Order Optimization Perspective. Submitted to the International Conference on Artificial Intelligence and Statistics (AISTATS). 2019 (webpage)  Conference Publications  Anirudh Vemula, Katharina Muelling, Jean Oh. Social Attention: Modeling Attention in Human Crowds. Proceedings of the International Conference on Robotics and Automation (ICRA).</description>
+    </item>
+    
+    <item>
+      <title>Code</title>
+      <link>https://vvanirudh.github.io/code/</link>
+      <pubDate>Sat, 02 Sep 2017 22:55:05 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/code/</guid>
+      <description> Exploration in Action Space
+ Predictive uncertainty using deep ensembles
+ Path Planning in Dynamic Environments using Adaptive Dimensionality
+ Transition-based RRT*
+ Anytime D*
+ Depixelizing Pixel Art
+  </description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://vvanirudh.github.io/about/</link>
+      <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/about/</guid>
+      <description>Anirudh is a graduate student in the Robotics Institute at Carnegie Mellon University. He works with Maxim Likhachev and Drew Bagnell on research areas at the intersection of planning and learning.
+Anirudh tries to make robots move, grasp, think and plan. He fails often but every once in a while, he stumbles onto something.
+When not doing aforementioned, he can be seen
+ biking - he wants to complete the GAP hiking - he is adept at avoiding spider webs climbing - he knows when to rotate his hips shooting and developing 35mm film - he uses a 1977 Pentax K1000  </description>
+    </item>
+    
+    <item>
+      <title>Planner Ensemble for Adaptive Motion Planning</title>
+      <link>https://vvanirudh.github.io/projects/planner_ensemble/</link>
+      <pubDate>Sun, 31 Aug 2014 20:37:14 +0530</pubDate>
+      
+      <guid>https://vvanirudh.github.io/projects/planner_ensemble/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

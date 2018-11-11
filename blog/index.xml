@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blogs on Anirudh Vemula</title>
+    <link>https://vvanirudh.github.io/blog/</link>
+    <description>Recent content in Blogs on Anirudh Vemula</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Mon, 02 Oct 2017 15:59:13 -0400</lastBuildDate>
+    
+	<atom:link href="https://vvanirudh.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>New York City</title>
+      <link>https://vvanirudh.github.io/blog/newyork_pics/</link>
+      <pubDate>Mon, 02 Oct 2017 15:59:13 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/blog/newyork_pics/</guid>
+      <description>Some of these photos were taken in New York city when I visited it in October for an AI forum. I wanted to take pictures in NYC for so long and felt this was as good a time as any. So, carried my old-ass camera around uptown and midtown manhattan, and took most of the photos.</description>
+    </item>
+    
+    <item>
+      <title>Graffiti in Pittsburgh through 35mm</title>
+      <link>https://vvanirudh.github.io/blog/pittsburgh_graffiti/</link>
+      <pubDate>Fri, 22 Sep 2017 15:59:13 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/blog/pittsburgh_graffiti/</guid>
+      <description>Early fall 2017, I went on a search for graffiti in Pittsburgh and found a lot! Took a bunch of snaps and developed them on Ilford HP5 35mm. To get most of these I had to bike around Pittsburgh (mostly in Lawrenceville and Oakland). Never knew Pittsburgh had so much street art (some might call it vandalism though).</description>
+    </item>
+    
+  </channel>
+</rss>
