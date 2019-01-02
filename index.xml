@@ -46,7 +46,8 @@ Publications Conference Publications  Anirudh Vemula, Wen Sun, J. Andrew Bagnell
       <pubDate>Sat, 02 Sep 2017 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/code/</guid>
-      <description> Exploration in Action Space
+      <description> Contrasting Exploration in Parameter and Action Space
+ Exploration in Action Space
  Predictive uncertainty using deep ensembles
  Path Planning in Dynamic Environments using Adaptive Dimensionality
  Transition-based RRT*
