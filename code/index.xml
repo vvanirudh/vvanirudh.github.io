@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Codes on Anirudh Vemula</title>
+    <link>https://vvanirudh.github.io/code/</link>
+    <description>Recent content in Codes on Anirudh Vemula</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sat, 02 Sep 2017 22:55:05 -0400</lastBuildDate>
+    
+	<atom:link href="https://vvanirudh.github.io/code/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Code</title>
+      <link>https://vvanirudh.github.io/code/</link>
+      <pubDate>Sat, 02 Sep 2017 22:55:05 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/code/</guid>
+      <description> Contrasting Exploration in Parameter and Action Space
+ Exploration in Action Space
+ Predictive uncertainty using deep ensembles
+ Path Planning in Dynamic Environments using Adaptive Dimensionality
+ Transition-based RRT*
+ Anytime D*
+ Depixelizing Pixel Art
+  </description>
+    </item>
+    
+  </channel>
+</rss>

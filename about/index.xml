@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Abouts on Anirudh Vemula</title>
+    <link>https://vvanirudh.github.io/about/</link>
+    <description>Recent content in Abouts on Anirudh Vemula</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sun, 02 Oct 2016 22:55:05 -0400</lastBuildDate>
+    
+	<atom:link href="https://vvanirudh.github.io/about/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About</title>
+      <link>https://vvanirudh.github.io/about/</link>
+      <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/about/</guid>
+      <description>Anirudh is a graduate student in the Robotics Institute at Carnegie Mellon University. He works with Maxim Likhachev and Drew Bagnell on research areas at the intersection of planning and learning.
+Anirudh tries to make robots move, grasp, think and plan. He fails often but every once in a while, he stumbles onto something.
+When not doing aforementioned, he can be seen
+ biking - he wants to complete the GAP hiking - he is adept at avoiding spider webs climbing - he knows when to rotate his hips shooting and developing 35mm film - he uses a 1977 Pentax K1000  To know more about him, you can check out his CV.</description>
+    </item>
+    
+  </channel>
+</rss>
