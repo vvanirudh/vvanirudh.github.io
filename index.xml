@@ -35,9 +35,9 @@
       <pubDate>Fri, 15 Sep 2017 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/research/</guid>
-      <description>Publications Conference Publications  Anirudh Vemula, Wen Sun, J. Andrew Bagnell. Contrasting Exploration in Parameter and Action Space: A Zeroth Order Optimization Perspective. Proceedings of the International Conference on Artificial Intelligence and Statistics (AISTATS). 2019 (pdf, code)
- Anirudh Vemula, Katharina Muelling, Jean Oh. Social Attention: Modeling Attention in Human Crowds. Proceedings of the International Conference on Robotics and Automation (ICRA). 2018 (arxiv)
- Anirudh Vemula, Katharina Muelling, Jean Oh.</description>
+      <description>Check out news page for latest updates.
+Publications Conference Publications  Anirudh Vemula, Wen Sun, J. Andrew Bagnell. Contrasting Exploration in Parameter and Action Space: A Zeroth Order Optimization Perspective. Proceedings of the International Conference on Artificial Intelligence and Statistics (AISTATS). 2019 (pdf, code)
+ Anirudh Vemula, Katharina Muelling, Jean Oh. Social Attention: Modeling Attention in Human Crowds. Proceedings of the International Conference on Robotics and Automation (ICRA). 2018 (arxiv)</description>
     </item>
     
     <item>
@@ -46,14 +46,16 @@
       <pubDate>Sat, 02 Sep 2017 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/code/</guid>
-      <description> Contrasting Exploration in Parameter and Action Space
+      <description>Most of my code is open sourced under GPL v3.0 license.
+Implementations of my papers and other related works can be found at my personal or lab&amp;rsquo;s github profiles.
+The following are a few highlights:
+ Contrasting Exploration in Parameter and Action Space
  Exploration in Action Space
  Predictive uncertainty using deep ensembles
  Path Planning in Dynamic Environments using Adaptive Dimensionality
  Transition-based RRT*
  Anytime D*
- Depixelizing Pixel Art
-  </description>
+ Depixelizing Pixel Art</description>
     </item>
     
     <item>
@@ -65,7 +67,19 @@
       <description>Anirudh is a graduate student in the Robotics Institute at Carnegie Mellon University. He works with Maxim Likhachev and Drew Bagnell on research areas at the intersection of planning and learning.
 Anirudh tries to make robots move, grasp, think and plan. He fails often but every once in a while, he stumbles onto something.
 When not doing aforementioned, he can be seen
- biking - he wants to complete the GAP hiking - he is adept at avoiding spider webs climbing - he knows when to rotate his hips shooting and developing 35mm film - he uses a 1977 Pentax K1000  To know more about him, you can check out his CV.</description>
+ biking - he wants to complete the GAP hiking - he is adept at avoiding spider webs climbing - he knows when to rotate his hips shooting and developing 35mm film - he uses a 1977 Pentax K1000  To know more about him, you can check out his CV and latest updates.</description>
+    </item>
+    
+    <item>
+      <title>News</title>
+      <link>https://vvanirudh.github.io/news/</link>
+      <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/news/</guid>
+      <description>[Jan 2019] I was awarded the inaugral Amazon Go PhD Fellowship, 2019
+ [Jan 2019] I will be working with Vladlen Koltun at the Intelligent Systems Lab, Intel, Santa Clara over the summer of 2019
+ [Dec 2018] Our paper on why random search beats state-of-the-art policy gradient approaches got accepted at AISTATS 2019
+ [Nov 2018] A preliminary version of our paper is being presented at the Deep RL Workshop, NeurIPS 2018</description>
     </item>
     
     <item>
