@@ -36,8 +36,12 @@
       
       <guid>https://vvanirudh.github.io/research/</guid>
       <description>Check out news page for latest updates.
-Publications Conference Publications  Anirudh Vemula, Wen Sun, J. Andrew Bagnell. Contrasting Exploration in Parameter and Action Space: A Zeroth Order Optimization Perspective. Proceedings of the International Conference on Artificial Intelligence and Statistics (AISTATS). 2019 (pdf, code)
- Anirudh Vemula, Katharina Muelling, Jean Oh. Social Attention: Modeling Attention in Human Crowds. Proceedings of the International Conference on Robotics and Automation (ICRA). 2018 (arxiv)</description>
+Publications Conference Publications  Contrasting Exploration in Parameter and Action Space: A Zeroth Order Optimization Perspective Anirudh Vemula, Wen Sun, J. Andrew Bagnell AISTATS 2019 (pdf, code)
+Acceptance rate: 32.4%
+ Social Attention: Modeling Attention in Human Crowds Anirudh Vemula, Katharina Muelling, Jean Oh ICRA 2018 (arxiv)
+Acceptance rate: 40.6%
+ Modeling Cooperative Navigation in Dense Human Crowds
+Anirudh Vemula, Katharina Muelling, Jean Oh ICRA 2017 (arxiv)</description>
     </item>
     
     <item>
@@ -76,10 +80,10 @@ When not doing aforementioned, he can be seen
       <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/news/</guid>
-      <description>[Jan 2019] I was awarded the inaugral Amazon Go PhD Fellowship, 2019
- [Jan 2019] I will be working with Vladlen Koltun at the Intelligent Systems Lab, Intel, Santa Clara over the summer of 2019
- [Dec 2018] Our paper on why random search beats state-of-the-art policy gradient approaches got accepted at AISTATS 2019
- [Nov 2018] A preliminary version of our paper is being presented at the Deep RL Workshop, NeurIPS 2018</description>
+      <description>(Jan 2019) I was awarded the inaugral Amazon Go PhD Fellowship, 2019
+ (Jan 2019) I will be working with Vladlen Koltun at the Intelligent Systems Lab, Intel, Santa Clara over the summer of 2019
+ (Dec 2018) Our paper on why random search beats state-of-the-art policy gradient approaches got accepted at AISTATS 2019
+ (Nov 2018) A preliminary version of our paper is being presented at the Deep RL Workshop, NeurIPS 2018</description>
     </item>
     
     <item>
