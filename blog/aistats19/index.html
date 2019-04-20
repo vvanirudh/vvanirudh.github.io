@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta name="description" content="Home Page of Anirudh Vemula">
+<meta name="keywords" content="roboticist, cmu, learning, planning, robots">
+
+<base href="https://vvanirudh.github.io">
+
+<title>Anirudh Vemula</title>
+
+<meta name="generator" content="Hugo 0.36.1" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css">
+<link rel="stylesheet" href="https://vvanirudh.github.io/css/main.css">
+
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+<body lang="en-US">
+<div class="container">
+
+
+<header class="row text-left title">
+  <h1 class="title">AISTATS 2019</h1>
+</header>
+<section id="category-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-left meta">
+        PUBLISHED ON APR 19, 2019 
+      
+      
+      
+      —
+      
+      
+      <a class="meta" href="/categories/conferences">CONFERENCES</a>
+      
+      
+      
+    </h6>
+  </div>
+  
+</section>
+<section id="content-pane" class="row">
+  <div class="col-md-12 text-justify content">
+    
+
+<h1 id="thoughts-on-the-conference">Thoughts on the conference</h1>
+
+<p>My overall impression of AISTATS was that its a really good conference if statistical ML is what you are interested/working in. I learnt a fair bit about the basics of unknown topics and made a few friends who work in widely different areas. Its a single track conference so there&rsquo;s more interaction among people and more exposure to the oral sessions. There&rsquo;s barely any presence of industry (either in sponsors or papers) except for Google Research/Brain/Deepmind papers. And thankfully, AISTATS community seems to not be onboard the hype train (yet) and there&rsquo;s ample time to ask questions in the poster session.</p>
+
+<p>I am not really a statistical ML person and there were very few people who understood robotics/RL, in general. People were definitely more interested in the theoretical analysis than major takeaways in the papers, and this was reflected in the posters which had insane amounts of math in them (not that its a bad thing, but it makes newcomers to the field not understand anything about the work without asking an excessively large number of questions)</p>
+
+<h1 id="interesting-papers">Interesting Papers</h1>
+
+<p>I will try to list the few papers that I liked on each day with a line or two about what I liked in them.</p>
+
+<h2 id="day-1">Day 1:</h2>
+
+<ul>
+<li><strong>Pathwise Derivatives for Multivariate Distributions</strong> : An interesting new take on the reparameterization trick and showing how its actually solving a differential equation to get the new estimator. Given the insight, you can design a new estimator by minimizing the variance and in simple cases, you obtain a more accurate gradient estimate than what you get by the reparameterization trick.</li>
+<li><strong>Exponential convergence rates for Batch Normalization</strong> : Another paper along the lines of the Madry paper explaining what Batch Normalization is really doing (and no, its not tackling the internal covariate shift problem)</li>
+<li><strong>Sequential Neural Likelihood</strong> : If you have a simulator with parameters that need to be tuned and real data, how do you get MLE estimates without knowing the likelihood function. Looks relevant to robotics problems, however they have a proposal distribution on the data which could be a bad idea if data is high-dimensional (which they dont test on)</li>
+
+<li><p><strong>Active Exploration in MDPs</strong> : Got small parts of the poster but basically similar work to what Sham and Hazan&rsquo;s new paper does : how do you explore an MDP efficiently if you don&rsquo;t know the reward function and dynamics. Sham took a MaxEnt approach, these guys take a different approach</p>
+
+<h2 id="day-2">Day 2:</h2></li>
+
+<li><p><strong>Does data interpolation contradict statistical optimality</strong>: A mikhail belkin paper which had no one standing in front of the poster. Very math-y poster which I could barely understand. Need to read the paper but the premise seems to be very interesting.</p></li>
+
+<li><p><strong>Negative Momentum for improved game dynamics</strong>: Tackling the oscillating behavior of minmax games (like GANs). Using negative momentum for both steps gives you an extra-gradient like step where the iterate takes an inner step closer towards the limit point. Interesting</p></li>
+
+<li><p><strong>Distributional RL with linear function approximation</strong>: Had a long chat with Marc Bellemare about distributional RL and why it should work? He is super convinced by empirical results that it is a great idea however he admits there&rsquo;s no theory backing it up. This paper and a subsequent one show that, in theory and practice, if you use a linear function approximation you will do worse with distributional RL than good old point estimate RL. Marc claims having deep nonlinear models are essential for good performance (no theory yet)</p></li>
+
+<li><p><strong>The termination critic</strong>: Paper from Doina Precup&rsquo;s group about discovery of options. How do you force the agent to discover options on its own? You train a separate critic that tries to predict the termination of an option and you train it by forcing any policy that reliably reaches a part of the state space to become an option. Need to read further</p>
+
+<h2 id="day-3">Day 3:</h2></li>
+
+<li><p><strong>Derivative-free methods for policy optimization</strong> : Very similar work to what I did, except they analyze the LQR setting and are more concerned with stabilizing controllers. Turns out the objective in LQR (non-convex) satisfies a strong growth condition which makes it &ldquo;almost&rdquo; strongly-convex so zeroth-order methods have really quick convergence to global optima with high probability.</p></li>
+
+<li><p><strong>Model-free LQ control via reduction to expert prediction</strong>: Yasin Abbasi and Csaba Szepesvari paper. Looked interesting but a very math-y poster with no one standing beside it :( Will need to read it</p></li>
+
+<li><p><strong>Sample-efficient IL via GANs</strong> : GAIL with an actor-critic replacing the TRPO. However, the whole way they deal with off-policy samples (which have reward as computed from several iterations ago) is very hack-y but it has a very good empirical performance (1 or 2 orders of magnitude less number of interactions with environment when compared to GAIL)</p></li>
+
+<li><p><strong>Distilling Policy Distillation</strong> : Deepmind paper. Apparently, there&rsquo;s a term called &lsquo;policy distillation&rsquo; in RL literature which basically means doing RL with a few not-so-optimal expert demonstrations. This paper tries to give a common framework to understand the numerous policy distillation approaches proposed in the past. Might be worth a read</p></li>
+
+<li><p><strong>Theoretical analysis of efficiency and robustness of softmax and gap-increasing operators in RL</strong> : Why VI fails in the presence of function approximation and why approaches like mellowmax and advantage learning help. The one poster I couldn&rsquo;t go to since my own poster was today. Need to read</p></li>
+</ul>
+
+  </div>
+</section>
+<section id="tag-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-right meta">
+      
+      
+      
+      TAGS:
+      
+      
+      <a class="meta" href="/tags/aistats">AISTATS</a>
+      
+      
+      
+    </h6>
+  </div>
+  
+</section>
+
+
+
+
+
+
+
+
+<section id="menu-pane" class="row menu text-center">
+  
+  
+  <span><a class="menu-item" href="https://vvanirudh.github.io/blog/newyork_pics/">&lt; prev | </a></span>
+  
+  
+  <span><a class="menu-item" href="/blog">blog</a></span>
+  
+  
+  
+  <h4 class="text-center"><a class="menu-item" href="https://vvanirudh.github.io">home</a></h4>
+</section>
+
+
+
+<footer class="row text-center footer">
+  <hr />
+  
+  <h6 class="text-center copyright">© 2018. Anirudh Vemula.</h6>
+  
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  
+  
+</footer>
+
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
+
+

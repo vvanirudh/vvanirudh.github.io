@@ -6,10 +6,19 @@
     <description>Recent content in Blogs on Anirudh Vemula</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Mon, 02 Oct 2017 15:59:13 -0400</lastBuildDate>
+    <lastBuildDate>Fri, 19 Apr 2019 15:59:13 -0400</lastBuildDate>
     
 	<atom:link href="https://vvanirudh.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>AISTATS 2019</title>
+      <link>https://vvanirudh.github.io/blog/aistats19/</link>
+      <pubDate>Fri, 19 Apr 2019 15:59:13 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/blog/aistats19/</guid>
+      <description>Thoughts on the conference My overall impression of AISTATS was that its a really good conference if statistical ML is what you are interested/working in. I learnt a fair bit about the basics of unknown topics and made a few friends who work in widely different areas. Its a single track conference so there&amp;rsquo;s more interaction among people and more exposure to the oral sessions. There&amp;rsquo;s barely any presence of industry (either in sponsors or papers) except for Google Research/Brain/Deepmind papers.</description>
+    </item>
     
     <item>
       <title>New York City</title>
@@ -17,7 +26,10 @@
       <pubDate>Mon, 02 Oct 2017 15:59:13 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/blog/newyork_pics/</guid>
-      <description>Some of these photos were taken in New York city when I visited it in October for an AI forum. I wanted to take pictures in NYC for so long and felt this was as good a time as any. So, carried my old-ass camera around uptown and midtown manhattan, and took most of the photos.</description>
+      <description>Some of these photos were taken in New York city when I visited it in October for an AI forum. I wanted to take pictures in NYC for so long and felt this was as good a time as any. So, carried my old-ass camera around uptown and midtown manhattan, and took most of the photos.
+Image 1
+Image 2
+Image 3</description>
     </item>
     
     <item>
@@ -26,7 +38,13 @@
       <pubDate>Fri, 22 Sep 2017 15:59:13 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/blog/pittsburgh_graffiti/</guid>
-      <description>Early fall 2017, I went on a search for graffiti in Pittsburgh and found a lot! Took a bunch of snaps and developed them on Ilford HP5 35mm. To get most of these I had to bike around Pittsburgh (mostly in Lawrenceville and Oakland). Never knew Pittsburgh had so much street art (some might call it vandalism though).</description>
+      <description>Early fall 2017, I went on a search for graffiti in Pittsburgh and found a lot! Took a bunch of snaps and developed them on Ilford HP5 35mm. To get most of these I had to bike around Pittsburgh (mostly in Lawrenceville and Oakland). Never knew Pittsburgh had so much street art (some might call it vandalism though).
+Image 1
+Image 2
+Image 3
+Image 4
+Image 5
+Image 6</description>
     </item>
     
   </channel>

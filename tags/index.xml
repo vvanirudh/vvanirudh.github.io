@@ -6,10 +6,19 @@
     <description>Recent content in Tags on Anirudh Vemula</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Fri, 22 Sep 2017 15:59:13 -0400</lastBuildDate>
+    <lastBuildDate>Fri, 19 Apr 2019 15:59:13 -0400</lastBuildDate>
     
 	<atom:link href="https://vvanirudh.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Aistats</title>
+      <link>https://vvanirudh.github.io/tags/aistats/</link>
+      <pubDate>Fri, 19 Apr 2019 15:59:13 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/tags/aistats/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Graffiti</title>

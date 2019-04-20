@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Conferences on Anirudh Vemula</title>
+    <link>https://vvanirudh.github.io/categories/conferences/</link>
+    <description>Recent content in Conferences on Anirudh Vemula</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Fri, 19 Apr 2019 15:59:13 -0400</lastBuildDate>
+    
+	<atom:link href="https://vvanirudh.github.io/categories/conferences/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>AISTATS 2019</title>
+      <link>https://vvanirudh.github.io/blog/aistats19/</link>
+      <pubDate>Fri, 19 Apr 2019 15:59:13 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/blog/aistats19/</guid>
+      <description>Thoughts on the conference My overall impression of AISTATS was that its a really good conference if statistical ML is what you are interested/working in. I learnt a fair bit about the basics of unknown topics and made a few friends who work in widely different areas. Its a single track conference so there&amp;rsquo;s more interaction among people and more exposure to the oral sessions. There&amp;rsquo;s barely any presence of industry (either in sponsors or papers) except for Google Research/Brain/Deepmind papers.</description>
+    </item>
+    
+  </channel>
+</rss>
