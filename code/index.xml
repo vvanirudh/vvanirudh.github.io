@@ -17,14 +17,14 @@
       <pubDate>Sat, 02 Sep 2017 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/code/</guid>
-      <description> Contrasting Exploration in Parameter and Action Space
+      <description>Most of my code is open sourced under GPL v3.0 license.
+Implementations of my papers and other related works can be found at my personal or lab&amp;rsquo;s github profiles.
+The following are a few highlights:
+ iLQR planning for a differential drive robot C++
+ Contrasting Exploration in Parameter and Action Space
  Exploration in Action Space
  Predictive uncertainty using deep ensembles
- Path Planning in Dynamic Environments using Adaptive Dimensionality
- Transition-based RRT*
- Anytime D*
- Depixelizing Pixel Art
-  </description>
+ Path Planning in Dynamic Environments using Adaptive Dimensionality</description>
     </item>
     
   </channel>

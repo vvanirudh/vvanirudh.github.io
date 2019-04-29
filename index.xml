@@ -58,7 +58,7 @@ Publications Conference Publications  Provably Efficient Imitation Learning from
 Acceptance rate: 22%
  Contrasting Exploration in Parameter and Action Space: A Zeroth Order Optimization Perspective Anirudh Vemula, Wen Sun, J. Andrew Bagnell AISTATS 2019 (arxiv, code)
 Acceptance rate: 32%
- Social Attention: Modeling Attention in Human Crowds Anirudh Vemula, Katharina Muelling, Jean Oh ICRA 2018 (arxiv) Best Paper Award in Cognitive Robotics</description>
+ Social Attention: Modeling Attention in Human Crowds Anirudh Vemula, Katharina Muelling, Jean Oh ICRA 2018 (arxiv)</description>
     </item>
     
     <item>
@@ -95,7 +95,7 @@ When not doing aforementioned, he can be seen
       <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/news/</guid>
-      <description>(Apr 2019) Our paper on imitation learning from observations alone (without access to expert&amp;rsquo;s actions) has been accepted at ICML 2019
+      <description>(Apr 2019) Our paper on imitation learning from observations alone (without access to expert&amp;rsquo;s actions) with provable guarantees has been accepted at ICML 2019
  (Apr 2019) New blog post about interesting work that I got to see at AISTATS 2019
  (Mar 2019) I will be at AISTATS 2019 happening in Okinawa, Japan during April 16-18 2019, presenting a poster on our work
  (Jan 2019) I was awarded the CMU PhD Fellowship, 2019</description>
