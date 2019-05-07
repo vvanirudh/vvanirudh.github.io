@@ -43,12 +43,6 @@
   </url>
   
   <url>
-    <loc>https://vvanirudh.github.io/about/</loc>
-    <lastmod>2016-10-02T22:55:05-04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://vvanirudh.github.io/tags/aistats/</loc>
     <lastmod>2019-04-19T15:59:13-04:00</lastmod>
     <priority>0</priority>
@@ -72,12 +66,6 @@
   </url>
   
   <url>
-    <loc>https://vvanirudh.github.io/code/</loc>
-    <lastmod>2017-09-02T22:55:05-04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://vvanirudh.github.io/categories/conferences/</loc>
     <lastmod>2019-04-19T15:59:13-04:00</lastmod>
     <priority>0</priority>
@@ -92,12 +80,6 @@
   <url>
     <loc>https://vvanirudh.github.io/tags/new-york-city/</loc>
     <lastmod>2017-10-02T15:59:13-04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://vvanirudh.github.io/news/</loc>
-    <lastmod>2016-10-02T22:55:05-04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -120,20 +102,14 @@
   </url>
   
   <url>
-    <loc>https://vvanirudh.github.io/tags/research/</loc>
-    <lastmod>2014-08-31T20:37:14+05:30</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://vvanirudh.github.io/categories/research/</loc>
     <lastmod>2014-08-31T20:37:14+05:30</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://vvanirudh.github.io/research/</loc>
-    <lastmod>2017-09-15T22:55:05-04:00</lastmod>
+    <loc>https://vvanirudh.github.io/tags/research/</loc>
+    <lastmod>2014-08-31T20:37:14+05:30</lastmod>
     <priority>0</priority>
   </url>
   
