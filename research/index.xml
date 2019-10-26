@@ -17,12 +17,9 @@
       <pubDate>Fri, 15 Sep 2017 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/research/</guid>
-      <description>Check out news page for latest updates.
-Publications Conference Publications  Provably Efficient Imitation Learning from Observation Alone Wen Sun, Anirudh Vemula, Byron Boots, J. Andrew Bagnell ICML 2019
-Acceptance rate: 22%
- Contrasting Exploration in Parameter and Action Space: A Zeroth Order Optimization Perspective Anirudh Vemula, Wen Sun, J. Andrew Bagnell AISTATS 2019 (arxiv, code)
-Acceptance rate: 32%
- Social Attention: Modeling Attention in Human Crowds Anirudh Vemula, Katharina Muelling, Jean Oh ICRA 2018 (arxiv)</description>
+      <description>Check out news page for latest updates and my scholar page for a complete list.
+Publications Preprints  Planning, Learning and Reasoning Framework for Robot Truck Unloading Fahad Islam*, Anirudh Vemula*, Sung-Kyun Kim, Andrew Dornbush, Oren Salzman, Maxim Likhachev Under review (arxiv)  Conference Publications  Provably Efficient Imitation Learning from Observation Alone Wen Sun, Anirudh Vemula, Byron Boots, J. Andrew Bagnell ICML 2019 (Oral) (arxiv, code)
+Acceptance rate: 22% (Oral 5%)</description>
     </item>
     
   </channel>
