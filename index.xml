@@ -54,9 +54,7 @@ Image 6</description>
       
       <guid>https://vvanirudh.github.io/research/</guid>
       <description>Check out news page for latest updates and my scholar page for a complete list.
-Publications Preprints  Planning, Learning and Reasoning Framework for Robot Truck Unloading Fahad Islam*, Anirudh Vemula*, Sung-Kyun Kim, Andrew Dornbush, Oren Salzman, Maxim Likhachev Under review (arxiv)
- Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv)
-  Conference Publications  Provably Efficient Imitation Learning from Observation Alone Wen Sun, Anirudh Vemula, Byron Boots, J.</description>
+Publications Preprints  Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv)  Conference Publications  Planning, Learning and Reasoning Framework for Robot Truck Unloading Fahad Islam*, Anirudh Vemula*, Sung-Kyun Kim, Andrew Dornbush, Oren Salzman, Maxim Likhachev * Equal Contribution ICRA 2020 (arxiv) Acceptance rate: 42%</description>
     </item>
     
     <item>
@@ -92,7 +90,8 @@ When not doing aforementioned, he can be seen</description>
       <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/news/</guid>
-      <description>(Oct 2019) I was awarded the CMU Presidential Fellowship endowed by TCS to support my graduate tuition and stipend
+      <description>(Jan 2020) Our systems paper on my PhD work in automated truck unloading has been accepted at ICRA 2019!
+ (Oct 2019) I was awarded the CMU Presidential Fellowship endowed by TCS to support my graduate tuition and stipend
  (May 2019) My PhD work, in collaboration with NREC and Honeywell, has been covered by Bloomberg in their article on automating truck unloading!
  (Apr 2019) Our paper on imitation learning from observations alone (without access to expert&amp;rsquo;s actions) with provable guarantees has been accepted at ICML 2019 for an Oral Presentation!</description>
     </item>
