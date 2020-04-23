@@ -46,9 +46,9 @@
       <guid>https://vvanirudh.github.io/research/</guid>
       <description>Check out news page for latest updates and my scholar page for a complete list.
 Publications Preprints  TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions Anirudh Vemula, J. Andrew Bagnell
-(arxiv, code)
- Planning and Execution using Inaccurate Models with Provable Guarantees Anirudh Vemula, Yash Oza, J. Andrew Bagnell, Maxim Likhachev (arxiv, code, video)
- Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv)</description>
+(arxiv, code, bibtex)
+ Planning and Execution using Inaccurate Models with Provable Guarantees Anirudh Vemula, Yash Oza, J. Andrew Bagnell, Maxim Likhachev (arxiv, code, video, bibtex)
+ Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv, bibtex)</description>
     </item>
     
     <item>
@@ -60,11 +60,10 @@ Publications Preprints  TRON: A Fast Solver for Trajectory Optimization with Non
       <description>Most of my code is open sourced under GPL v3.0 license.
 Implementations of my papers and other related works can be found at my personal or lab&amp;rsquo;s github profiles.
 The following are a few highlights:
+ TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions
+ Planning and Execution using Inaccurate Models with Provable Guarantees
  iLQR planning for a differential drive robot C++
- Contrasting Exploration in Parameter and Action Space
- Exploration in Action Space
- Predictive uncertainty using deep ensembles
- Path Planning in Dynamic Environments using Adaptive Dimensionality</description>
+ Contrasting Exploration in Parameter and Action Space</description>
     </item>
     
     <item>
