@@ -52,7 +52,11 @@
 
 <p>Check out <a href="news/">news</a> page for latest updates and my <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">scholar</a> page for a complete list.</p>
 
-<h2 id="publications">Publications</h2>
+<p><center>
+<a href="research/#preprints">Preprints</a> &nbsp;&nbsp;   <a href="research/#conference-publications">Conference Publications</a>  &nbsp;&nbsp;  <a href="research/#workshop-publications">Workshop Publications</a></p>
+
+<p><a href="research/#journal-publications">Journal Publications</a> &nbsp;&nbsp; <a href="research/#technical-reports">Technical Reports</a> &nbsp;&nbsp; <a href="research/#theses">Theses</a>
+</center></p>
 
 <h3 id="preprints">Preprints</h3>
 
@@ -60,10 +64,6 @@
 <li><p><strong>TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions</strong> <br>
 <span style="text-decoration:underline">Anirudh Vemula</span>, J. Andrew Bagnell<br>
 (<a href="https://arxiv.org/abs/2003.14393">arxiv</a>, <a href="https://github.com/vvanirudh/TRON">code</a>, <a href="https://dblp.uni-trier.de/rec/bibtex/journals/corr/abs-2003-14393">bibtex</a>)</p></li>
-
-<li><p><strong>Planning and Execution using Inaccurate Models with Provable Guarantees</strong> <br>
-<span style="text-decoration:underline">Anirudh Vemula</span>, Yash Oza, J. Andrew Bagnell, Maxim Likhachev <br>
-(<a href="https://arxiv.org/abs/2003.04394">arxiv</a>, <a href="https://github.com/vvanirudh/CMAX">code</a>, <a href="https://www.youtube.com/watch?v=eQmAeWIhjO8&amp;feature=youtu.be">video</a>, <a href="https://dblp.uni-trier.de/rec/bibtex/journals/corr/abs-2003-04394">bibtex</a>)</p></li>
 
 <li><p><strong>Task-informed Fidelity Management for Speeding up Robotics Simulation</strong> <br>
 Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, <span style="text-decoration:underline">Anirudh Vemula</span>, Levi Lister, Oren Salzman <br>
@@ -73,6 +73,10 @@ Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, <span style="text-
 <h3 id="conference-publications">Conference Publications</h3>
 
 <ul>
+<li><p><strong>Planning and Execution using Inaccurate Models with Provable Guarantees</strong> <br>
+<span style="text-decoration:underline">Anirudh Vemula</span>, Yash Oza, J. Andrew Bagnell, Maxim Likhachev <br>
+<span style="color:#DB4437">RSS 2020</span> (<a href="https://arxiv.org/abs/2003.04394">arxiv</a>, <a href="https://github.com/vvanirudh/CMAX">code</a>, <a href="https://www.youtube.com/watch?v=eQmAeWIhjO8&amp;feature=youtu.be">video</a>, <a href="https://dblp.uni-trier.de/rec/bibtex/journals/corr/abs-2003-04394">bibtex</a>)</p></li>
+
 <li><p><strong>Planning, Learning and Reasoning Framework for Robot Truck Unloading</strong> <br>
 Fahad Islam*, <span style="text-decoration:underline">Anirudh Vemula</span>*, Sung-Kyun Kim, Andrew Dornbush, Oren Salzman, Maxim Likhachev <br>
 * Equal Contribution <br>
@@ -141,7 +145,7 @@ Meghshyam G Prasad, Sona Praneeth Akula, <span style="text-decoration:underline"
 <em>Technical Report, Robotics Institute, Carnegie Mellon University</em>. 2014 (<a href="http://www.ri.cmu.edu/pub_files/2014/8/LearningMotionPlanningAssumptions.pdf">pdf</a>)</li>
 </ul>
 
-<h3 id="thesis">Thesis</h3>
+<h3 id="theses">Theses</h3>
 
 <ul>
 <li><strong>Safe and Efficient Navigation in Dynamic Environments</strong><br>
@@ -200,7 +204,29 @@ hljs.initHighlightingOnLoad();
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="js/main.js"></script>
+
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"> </script>
+
 </body>
 </html>
+
+
+<script type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+     inlineMath: [['$','$'], ['\\(','\\)']],
+     displayMath: [['$$','$$']],
+     processEscapes: true,
+     processEnvironments: true,
+     skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+     TeX: { equationNumbers: { autoNumber: "AMS" },
+            extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
 
 

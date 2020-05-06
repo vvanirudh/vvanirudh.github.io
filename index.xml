@@ -45,9 +45,10 @@
       
       <guid>https://vvanirudh.github.io/research/</guid>
       <description>Check out news page for latest updates and my scholar page for a complete list.
-Publications Preprints  TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions Anirudh Vemula, J. Andrew Bagnell
+ Preprints &amp;nbsp;&amp;nbsp; Conference Publications &amp;nbsp;&amp;nbsp; Workshop Publications
+Journal Publications &amp;nbsp;&amp;nbsp; Technical Reports &amp;nbsp;&amp;nbsp; Theses 
+Preprints  TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions Anirudh Vemula, J. Andrew Bagnell
 (arxiv, code, bibtex)
- Planning and Execution using Inaccurate Models with Provable Guarantees Anirudh Vemula, Yash Oza, J. Andrew Bagnell, Maxim Likhachev (arxiv, code, video, bibtex)
  Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv, bibtex)</description>
     </item>
     
@@ -83,10 +84,10 @@ When not doing aforementioned, he can be seen</description>
       <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/news/</guid>
-      <description>(Apr 2020) Our latest preprint on a fast efficient solver for trajectory optimization with non-differentiable cost functions is online!
+      <description>2020  (May 2020) Our paper on using inaccurate models for provably complete planning and execution has been accepted at RSS 2020! Code is also released.
+ (Apr 2020) Our latest preprint on a fast efficient solver for trajectory optimization with non-differentiable cost functions is online!
  (Mar 2020) Our latest preprint on how to use inaccurate models for interleaving planning and execution efficiently is online!
- (Jan 2020) Our systems paper on my PhD work in automated truck unloading has been accepted at ICRA 2019!
- (Oct 2019) I was awarded the CMU Presidential Fellowship endowed by TCS to support my graduate tuition and stipend</description>
+ (Jan 2020) Our systems paper on my PhD work in automated truck unloading has been accepted at ICRA 2020!</description>
     </item>
     
     <item>
