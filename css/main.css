@@ -21,7 +21,10 @@ a:link
 }
 body
 {
+    /*
     font-family: 'Roboto Slab', 'Roboto', 'Lato', sans-serif;
+   */
+    font-family: Arvo, serif;
     font-size: 20px;
     font-weight: 400;
 
@@ -30,7 +33,7 @@ body
     min-height: 100%;
     margin: 0;
 
-    background-color: #fcfcfc;
+    background-color: #f5f5f0;
 }
 html
 {
@@ -42,7 +45,7 @@ html
 }
 .author
 {
-    color: #444;
+    color: #303030;
 }
 .author h1,
 .author h2,
@@ -52,7 +55,8 @@ html
 .author h6,
 .author p
 {
-    font-family: 'Roboto Slab', serif;
+    /*font-family: 'Roboto Slab', serif;*/
+    font-family: Arvo, serif;
 }
 .category
 {
@@ -62,7 +66,7 @@ html
 {
     overflow: auto;
 
-    max-width: 880px;
+    max-width: 680px;
     padding: 0 15px;
 }
 .content
@@ -72,27 +76,31 @@ html
 }
 div.content
 {
-    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
+    font-family: Arvo, serif;
     font-size: 18px;
     font-weight: 300;
 
-    color: #777;
+    color: #303030;
 }
 .copyright
 {
-    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
+    font-family: Arvo, serif;
     font-size: 12px;
     font-weight: 200;
 }
 .description
 {
-    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
+    font-family: Arvo, serif;
     font-weight: 200;
     color: #8b8b8b;
 }
 .error
 {
-    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
+    font-family: Arvo, serif;
 
     margin-top: 100px;
 }
@@ -110,7 +118,8 @@ div.content
 }
 .excerpt
 {
-    font-family: 'Lato', sans-serif;
+    /*font-family: 'Lato', sans-serif;*/
+    font-family: Arvo, serif;
     font-size: 18px;
     font-weight: 200;
 
@@ -140,7 +149,8 @@ div.content
 }
 .intro
 {
-    font-family: 'Roboto Slab', serif;
+    /*font-family: 'Roboto Slab', serif;*/
+    font-family: Arvo, serif;
     font-weight: 200;
     color: #777;
 }
@@ -150,7 +160,8 @@ h3.intro
 }
 .list
 {
-    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
+    font-family: Arvo, serif;
 
     margin-top: 50px;
 }
@@ -160,7 +171,8 @@ h3.intro
 }
 .list-entry
 {
-    font-family: 'Roboto Slab', serif;
+    /*font-family: 'Roboto Slab', serif;*/
+    font-family: Arvo, serif;
     font-size: 25px;
     font-weight: 400;
 
@@ -183,7 +195,8 @@ h3.intro
 }
 .menu-item
 {
-    font-family: 'Lato', sans-serif;
+    /*font-family: 'Lato', sans-serif;*/
+    font-family: Arvo, serif;
     font-size: 20px;
     font-weight: 300;
 
@@ -193,7 +206,8 @@ h3.intro
 }
 .meta
 {
-    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
+    font-family: Arvo, serif;
     font-size: 12px;
     font-weight: 200;
 
@@ -205,7 +219,8 @@ a.meta
 }
 h6.meta
 {
-    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
+    font-family: Arvo, serif;
     font-size: 12px;
     font-weight: 200;
 
@@ -216,7 +231,8 @@ section.meta {
 }
 .powered
 {
-    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
+    font-family: Arvo, serif;
     font-size: 12px;
     font-weight: 300;
 }
@@ -231,10 +247,11 @@ section.meta {
 }
 .title
 {
-    font-family: 'Roboto Slab', serif;
+    /*font-family: 'Roboto Slab', serif;*/
+    font-family: Arvo, serif;
     font-weight: 400;
 
-    color: #555;
+    color: #000;
 }
 header.title
 {
@@ -250,7 +267,8 @@ header.title
     }
     .list
     {
-        font-family: 'Roboto', sans-serif;
+        /*font-family: 'Roboto', sans-serif;*/
+        font-family: Arvo, serif;
 
         margin-top: 30px;
     }

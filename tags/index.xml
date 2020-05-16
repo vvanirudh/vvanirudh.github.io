@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Anirudh Vemula</title>
@@ -12,7 +12,7 @@
     
     
     <item>
-      <title>Aistats</title>
+      <title>AISTATS</title>
       <link>https://vvanirudh.github.io/tags/aistats/</link>
       <pubDate>Fri, 19 Apr 2019 15:59:13 -0400</pubDate>
       
@@ -21,16 +21,7 @@
     </item>
     
     <item>
-      <title>Graffiti</title>
-      <link>https://vvanirudh.github.io/tags/graffiti/</link>
-      <pubDate>Fri, 22 Sep 2017 15:59:13 -0400</pubDate>
-      
-      <guid>https://vvanirudh.github.io/tags/graffiti/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>New York City</title>
+      <title>new york city</title>
       <link>https://vvanirudh.github.io/tags/new-york-city/</link>
       <pubDate>Mon, 02 Oct 2017 15:59:13 -0400</pubDate>
       
@@ -39,7 +30,16 @@
     </item>
     
     <item>
-      <title>Pittsburgh</title>
+      <title>graffiti</title>
+      <link>https://vvanirudh.github.io/tags/graffiti/</link>
+      <pubDate>Fri, 22 Sep 2017 15:59:13 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/tags/graffiti/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pittsburgh</title>
       <link>https://vvanirudh.github.io/tags/pittsburgh/</link>
       <pubDate>Fri, 22 Sep 2017 15:59:13 -0400</pubDate>
       
@@ -48,7 +48,7 @@
     </item>
     
     <item>
-      <title>Research</title>
+      <title>research</title>
       <link>https://vvanirudh.github.io/tags/research/</link>
       <pubDate>Sun, 31 Aug 2014 20:37:14 +0530</pubDate>
       

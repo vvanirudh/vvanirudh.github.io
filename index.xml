@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Anirudh Vemula</title>
@@ -6,7 +6,7 @@
     <description>Recent content on Anirudh Vemula</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Fri, 19 Apr 2019 15:59:13 -0400</lastBuildDate>
+    <lastBuildDate>Fri, 15 Sep 2017 22:55:05 -0400</lastBuildDate>
     
 	<atom:link href="https://vvanirudh.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -45,11 +45,11 @@
       
       <guid>https://vvanirudh.github.io/research/</guid>
       <description>Check out news page for latest updates and my scholar page for a complete list.
- Preprints &amp;nbsp;&amp;nbsp; Conference Publications &amp;nbsp;&amp;nbsp; Workshop Publications
-Journal Publications &amp;nbsp;&amp;nbsp; Technical Reports &amp;nbsp;&amp;nbsp; Theses 
-Preprints  TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions Anirudh Vemula, J. Andrew Bagnell
+ Preprints Conference Publications Workshop Publications
+Journal Publications Technical Reports Theses
+ Preprints   TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions Anirudh Vemula, J. Andrew Bagnell
 (arxiv, code, bibtex)
- Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv, bibtex)</description>
+  Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv, bibtex)</description>
     </item>
     
     <item>
@@ -61,21 +61,10 @@ Preprints  TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost 
       <description>Most of my code is open sourced under GPL v3.0 license.
 Implementations of my papers and other related works can be found at my personal or lab&amp;rsquo;s github profiles.
 The following are a few highlights:
- TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions
- Planning and Execution using Inaccurate Models with Provable Guarantees
- iLQR planning for a differential drive robot C++
- Contrasting Exploration in Parameter and Action Space</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>https://vvanirudh.github.io/about/</link>
-      <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
-      
-      <guid>https://vvanirudh.github.io/about/</guid>
-      <description>Anirudh is a graduate student in the Robotics Institute at Carnegie Mellon University. He works with Maxim Likhachev and Drew Bagnell on research areas at the intersection of planning and learning. He is supported by CMU Presidential Fellowship endowed by TCS.
-Anirudh tries to make robots move, grasp, think and plan. He fails often but every once in a while, he stumbles onto something.
-When not doing aforementioned, he can be seen</description>
+  TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions
+  Planning and Execution using Inaccurate Models with Provable Guarantees
+  iLQR planning for a differential drive robot C++
+  Contrasting Exploration in Parameter and Action Space</description>
     </item>
     
     <item>
@@ -84,10 +73,20 @@ When not doing aforementioned, he can be seen</description>
       <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/news/</guid>
-      <description>2020  (May 2020) Our paper on using inaccurate models for provably complete planning and execution has been accepted at RSS 2020! Code is also released.
- (Apr 2020) Our latest preprint on a fast efficient solver for trajectory optimization with non-differentiable cost functions is online!
- (Mar 2020) Our latest preprint on how to use inaccurate models for interleaving planning and execution efficiently is online!
- (Jan 2020) Our systems paper on my PhD work in automated truck unloading has been accepted at ICRA 2020!</description>
+      <description>2020   (May 2020)  Our paper on using inaccurate models for provably complete planning and execution has been accepted at RSS 2020! Code is also released.
+  (Apr 2020)  Our latest preprint on a fast efficient solver for trajectory optimization with non-differentiable cost functions is online!
+  (Mar 2020)  Our latest preprint on how to use inaccurate models for interleaving planning and execution efficiently is online!</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://vvanirudh.github.io/about/</link>
+      <pubDate>Fri, 02 Oct 2015 22:55:05 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/about/</guid>
+      <description>Anirudh is a graduate student in the Robotics Institute at Carnegie Mellon University. He works with Maxim Likhachev and Drew Bagnell on research areas at the intersection of planning and learning. He is supported by CMU Presidential Fellowship endowed by TCS.
+Anirudh tries to make robots move, grasp, think and plan.  He fails often but every once in a while, he stumbles onto something.
+When not doing aforementioned, he can be seen</description>
     </item>
     
     <item>
