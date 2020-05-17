@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>CMAX: Planning and Execution with Inaccurate Models</title>
+      <link>https://vvanirudh.github.io/blog/cmax/</link>
+      <pubDate>Wed, 06 May 2020 14:39:32 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/blog/cmax/</guid>
+      <description>Very recently, I submitted a paper to RSS (update: accepted!) on how to use inaccurate models for planning in robotic tasks. For many robotic tasks, we usually have access to a (inaccurate) model of the robot and the environment. For example, simulators that employ sophisticated physics engines such as MuJoCo or Bullet can be used as forward dynamical models for planning. These models capture some complexities of the real world well, while they fail to capture other subtleties.</description>
+    </item>
+    
+    <item>
       <title>AISTATS 2019</title>
       <link>https://vvanirudh.github.io/blog/aistats19/</link>
       <pubDate>Fri, 19 Apr 2019 15:59:13 -0400</pubDate>

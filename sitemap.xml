@@ -3,22 +3,32 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://vvanirudh.github.io/blog/</loc>
+    <lastmod>2020-05-06T14:39:32-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://vvanirudh.github.io/categories/</loc>
+    <lastmod>2020-05-06T14:39:32-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://vvanirudh.github.io/blog/cmax/</loc>
+    <lastmod>2020-05-06T14:39:32-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://vvanirudh.github.io/categories/research/</loc>
+    <lastmod>2020-05-06T14:39:32-04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://vvanirudh.github.io/tags/aistats/</loc>
     <lastmod>2019-04-19T15:59:13-04:00</lastmod>
   </url>
   
   <url>
     <loc>https://vvanirudh.github.io/blog/aistats19/</loc>
-    <lastmod>2019-04-19T15:59:13-04:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://vvanirudh.github.io/blog/</loc>
-    <lastmod>2019-04-19T15:59:13-04:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://vvanirudh.github.io/categories/</loc>
     <lastmod>2019-04-19T15:59:13-04:00</lastmod>
   </url>
   
@@ -99,11 +109,6 @@
   
   <url>
     <loc>https://vvanirudh.github.io/tags/research/</loc>
-    <lastmod>2014-08-31T20:37:14+05:30</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://vvanirudh.github.io/categories/research/</loc>
     <lastmod>2014-08-31T20:37:14+05:30</lastmod>
   </url>
   
