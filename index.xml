@@ -12,6 +12,17 @@
     
     
     <item>
+      <title>Forward and Reverse KL Divergence</title>
+      <link>https://vvanirudh.github.io/notes/kl/</link>
+      <pubDate>Fri, 26 Jun 2020 23:47:09 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/notes/kl/</guid>
+      <description>KL-divergence is given by: $$ D_{KL}(P||Q) = \mathbb{E}_{x \sim P}\left[\log \frac{P(X)}{Q(X)}\right] $$
+It is not necessarily symmetric, so $D_{KL}(P||Q) \neq D_{KL}(Q||P)$, thus it cannot be used as a distance metric.
+It is always positive, i.e. $D_{KL} \geq 0$. Also, if there is a point $x$ where $Q(X) = 0$ but $P(X) \neq 0$, then $D_{KL}(P||Q) = \infty$. Thus, we need the support of $P$ to lie completely in $Q$ for a finite KL-divergence.</description>
+    </item>
+    
+    <item>
       <title>Hunter Thompson&#39;s letter on finding purpose</title>
       <link>https://vvanirudh.github.io/blog/letter/</link>
       <pubDate>Wed, 17 Jun 2020 14:39:32 -0400</pubDate>
