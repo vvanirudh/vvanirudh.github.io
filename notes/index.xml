@@ -6,10 +6,20 @@
     <description>Recent content in Notes on Anirudh Vemula</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Fri, 26 Jun 2020 23:47:09 -0400</lastBuildDate>
+    <lastBuildDate>Sat, 27 Jun 2020 22:15:13 -0400</lastBuildDate>
     
 	<atom:link href="https://vvanirudh.github.io/notes/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Frank-Wolfe a.k.a Conditional Gradient Descent</title>
+      <link>https://vvanirudh.github.io/notes/frank_wolfe/</link>
+      <pubDate>Sat, 27 Jun 2020 22:15:13 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/notes/frank_wolfe/</guid>
+      <description>An alternative approach to projected gradient descent for minimizing a smooth convex function $f$ over a compact, convex set $K$.
+At the $t$-th step, it considers the first-order taylor approximation $\hat{f}$ of $f$ around $x_t$, and minimizes $\hat{f}$ over $K$, obtaining a minimizer $y_t$. $$ \hat{f}(y) = f(x_t) + \langle \nabla f(x_t), y - x_t \rangle $$ $$ y_t = \arg\min_{y \in K} \hat{f}(y) = \arg\min_{y \in K} \langle \nabla f(x_t), y \rangle $$</description>
+    </item>
     
     <item>
       <title>Forward and Reverse KL Divergence</title>

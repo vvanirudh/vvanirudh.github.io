@@ -41,13 +41,13 @@
 
 
 <header class="row text-left title">
-  <h1 class="title">Forward and Reverse KL Divergence</h1>
+  <h1 class="title">Frank-Wolfe a.k.a Conditional Gradient Descent</h1>
 </header>
 <section id="category-pane" class="row meta">
   
   <div class="col-md-12">
     <h6 class="text-left meta">
-        PUBLISHED ON JUN 26, 2020 
+        PUBLISHED ON JUN 27, 2020 
       
     </h6>
   </div>
@@ -55,31 +55,26 @@
 </section>
 <section id="content-pane" class="row">
   <div class="col-md-12 text-justify content">
-    <p>KL-divergence is given by:
-$$ D_{KL}(P||Q) = \mathbb{E}_{x \sim P}\left[\log \frac{P(X)}{Q(X)}\right] $$</p>
-<p>It is not necessarily symmetric, so $D_{KL}(P||Q) \neq D_{KL}(Q||P)$, thus it cannot be used as a distance metric.</p>
-<p>It is always positive, i.e. $D_{KL} \geq 0$. Also, if there is a point $x$ where $Q(X) = 0$ but $P(X) \neq 0$, then $D_{KL}(P||Q) = \infty$. Thus, we need the support of $P$ to lie completely in $Q$ for a finite KL-divergence.</p>
-<p>For distributions $P, Q$ that are the same <em>almost everywhere</em> we have $D_{KL}(P||Q) = D_{KL}(Q||P) = 0$, and conversely if for any distributions $P, Q$ we have $D_{KL}(P||Q) = 0$ or $D_{KL}(Q||P) = 0$, then $P, Q$ are same almost everywhere.</p>
-<p>There is a relation between KL-divergence and cross entropy given by $D_{KL}(P||Q) = \mathbb{E}_{x \sim P}[-\log Q(X)] - H(P(X))$, where the first term is the well-known cross entropy term and the second term is the entropy. If we fix $P$, then optimizing KL-divergence is the same as optimizing the cross entropy.</p>
-<p>Say, we are minimizing the KL-divergence between a fixed <em>unknown</em> distribution $P$ and a parametric distribution $Q_{\theta}$. We aim to find parameters $\theta$ that minimizes the KL-divergence. Then we have two natural objectives:</p>
-<ol>
-<li>Forward KL: $D_{KL}(P||Q_\theta)$</li>
-<li>Reverse KL: $D_{KL}(Q_\theta||P)$</li>
-</ol>
-<h3 id="forward-kl">Forward KL</h3>
-<p>Simplifying the forward KL objective gives,
-$$D_{KL}(P||Q_\theta) = \mathbb{E}_{x \sim P}[-\log Q_{\theta}(X)] - H(P(X))$$
-Thus minimizing the forward KL objective w.r.t $\theta$ is the same as minimizing the cross entropy term. In other words, for points sampled from $P$, we want to maximize the likelihood of those points under $Q$.</p>
-<p>Thus, we are simply <em>maximizing the likelihood of $P$ under $Q$</em>. This results in a <strong>mean seeking</strong> behavior as $Q$ tries to cover all the high-probability regions of $P$ and thus could potentially spread itself across the modes of $P$.</p>
-<h3 id="reverse-kl">Reverse KL</h3>
-<p>Simplifying the reverse KL objective gives,
-$$D_{KL}(Q_\theta||P) = \mathbb{E}_{x \sim Q_\theta}[-\log P(X)] - H(Q_\theta(X))$$
-Thus minimizing the reverse KL objective w.r.t. $\theta$ tries to maximize the likelihood of points sampled from $Q$ under $P$ while maximizing the entropy of $Q$.</p>
-<p>Thus, we are simply <em>maximizing the likelihood of $Q$ under $P$ while also maximizing the entropy of $Q$</em>. The entropy term is crucial as it prevents $Q$ from collapsing into a delta distribution at the mode of $P$. This results in a <strong>mode seeking</strong> behavior where $Q$ tries to find a mode of $P$ with high probability and concentrate around it.</p>
-<h3 id="other-things-of-note">Other things of note</h3>
-<p>Forward KL requires only samples from unknown $P$ to optimize the objective, while reverse KL requires the capability of sampling from the parametric distribution $Q_\theta$ (which is typically possible) and a way to evaluate the likelihood under the unknown distribution $P$ (which is difficult.)</p>
+    <p>An alternative approach to projected gradient descent for minimizing a smooth convex function $f$ over a compact, convex set $K$.</p>
+<p>At the $t$-th step, it considers the first-order taylor approximation $\hat{f}$ of $f$ around $x_t$, and minimizes $\hat{f}$ over $K$, obtaining a minimizer $y_t$.
+$$ \hat{f}(y) = f(x_t) + \langle \nabla f(x_t), y - x_t \rangle $$
+$$ y_t = \arg\min_{y \in K} \hat{f}(y) = \arg\min_{y \in K} \langle \nabla f(x_t), y \rangle $$</p>
+<p>Then, it takes the new point $x_{t+1}$ to be the convex combination of $x_t$ and $y_t$ with parameter $\gamma_t \in [0, 1]$
+$$ x_{t+1} = (1 - \gamma_t) x_t + \gamma_t y_t $$
+Because this is a convex combination, $x_{t+1} \in K$.</p>
+<p><em>This way, instead of projecting onto $K$ at each iteration, we need to optimize the linear function $\hat{f}(y)$ over $K$, which may be easier.</em></p>
+<p>A major advantage of conditional gradient descent over projected gradient descent (other than th e lack of projection operation) is that the former can adapt to the smoothness (or lipschitzness of the gradient) of $f$ in an arbitrary norm.</p>
+<p><strong>Theorem</strong>: Let $f$ be convex, and $\beta$-smooth w.r.t. some norm $||\cdot||$, $R = \sup_{x, y \in K} ||x - y||$, and $\gamma_t = \frac{2}{t+1}$ for $t \geq 1$. Then for any $t \geq 2$ we have
+$$ f(x_t) - f(x^*) \leq \frac{2\beta R^2}{t+1} $$</p>
+<p><strong>Proof</strong>: Can be found in <a href="https://arxiv.org/pdf/1405.4980.pdf">Bubeck&rsquo;s Monograph</a> Theorem 3.8. Very easy and relies mostly on the smoothness property, the fact that $y_t$ is minimizer of $\langle \nabla f(x_t), y\rangle$, and the construction of $\gamma_t = \frac{2}{t+1}$.</p>
+<p>In addition to being projection-free and &ldquo;norm-free&rdquo;, the conditional gradient descent produces <em>sparse iterates</em> in the vertex representation of $K$. Observe that any iterate $x_t$ is a convex combination of $t$ vertices (assume $x_1$ is a vertex), and $t &lt; &lt; n$ where $K \subset \mathbb{R}^n$.</p>
+<p>Thus, conditional gradient descent has the following properties: dimension-free, projection-free, norm-free, and sparse iterates in the vertex representation.</p>
+<p><a href="https://arxiv.org/pdf/1405.4980.pdf">Bubeck</a> presents a cool application of Franke-Wolfe on a least squares regression problem with structured sparsity (Section 3.3)</p>
 <h3 id="references">References</h3>
-<p>Mostly followed this great <a href="https://dibyaghosh.com/blog/probability/kldivergence.html">blog post</a> and this <a href="https://wiseodd.github.io/techblog/2016/12/21/forward-reverse-kl/">one</a>.</p>
+<ol>
+<li><a href="https://arxiv.org/pdf/1405.4980.pdf">Bubeck&rsquo;s Monograph on Convex Optimization</a> Section 3.3</li>
+<li><a href="https://www.cs.yale.edu/homes/vishnoi/Nisheeth-VishnoiFall2014-ConvexOptimization.pdf">Nisheeth Vishnoi&rsquo;s notes on Convex Optimization</a> Section 1.7.8</li>
+</ol>
 
   </div>
 </section>
@@ -99,11 +94,11 @@ Thus minimizing the reverse KL objective w.r.t. $\theta$ tries to maximize the l
 <section id="menu-pane" class="row menu text-center">
   
   
+  <span><a class="menu-item" href="https://vvanirudh.github.io/notes/kl/">&lt; prev | </a></span>
+  
   
   <span><a class="menu-item" href="/notes">notes</a></span>
   
-  
-  <span><a class="menu-item" href="https://vvanirudh.github.io/notes/frank_wolfe/"> | next &gt;</a></span>
   
   
   <h4 class="text-center"><a class="menu-item" href="https://vvanirudh.github.io">home</a></h4>
