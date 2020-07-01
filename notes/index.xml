@@ -6,10 +6,21 @@
     <description>Recent content in Notes on Anirudh Vemula</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Sat, 27 Jun 2020 22:15:13 -0400</lastBuildDate>
+    <lastBuildDate>Wed, 01 Jul 2020 12:57:48 -0400</lastBuildDate>
     
 	<atom:link href="https://vvanirudh.github.io/notes/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Online Gradient Descent</title>
+      <link>https://vvanirudh.github.io/notes/ogd/</link>
+      <pubDate>Wed, 01 Jul 2020 12:57:48 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/notes/ogd/</guid>
+      <description>Similar to SGD but different: loss functions are different at each time step
+Algorithm Projected Online Gradient Descent: $x_1 \in V \subseteq \mathbb{R}^d$ where $V$ is a closed, convex set and $\eta_1, \cdots, \eta_T &amp;gt; 0$
+ for $t = 1, \cdots, T$ Play $x_t$ Receive $\ell_t: \mathbb{R}^d \rightarrow (-\infty, \infty]$ and pay $\ell_t(x_t)$ Set $g_t = \nabla \ell_t(x_t)$ $x_{t+1} = \Pi_V(x_t - \eta_t g_t) = \arg\min_{y \in V}||x_t - \eta_tg_t - y||_2$ end  Regret Analysis Crucial to the analysis is the following simple lemma:</description>
+    </item>
     
     <item>
       <title>Frank-Wolfe a.k.a Conditional Gradient Descent</title>
