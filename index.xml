@@ -12,6 +12,17 @@
     
     
     <item>
+      <title>Online Gradient Descent with Strongly Convex Functions</title>
+      <link>https://vvanirudh.github.io/notes/strong_convexity/</link>
+      <pubDate>Fri, 03 Jul 2020 16:52:01 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/notes/strong_convexity/</guid>
+      <description>Turns out we can do better $\sqrt{T}$ regret we saw for OGD analysis for convex lipschitz losses if they possess some curvature that can be exploited.
+Strong Convexity $f$ is $\mu$-strongly convex over convex set $V$ w.r.t norm $||\cdot||$ if $\forall x, y \in V$ and $g \in \partial f(x)$ $$ f(y) \geq f(x) + \langle g, y - x\rangle +\frac{\mu}{2}||x - y||^2$$
+In other words, a strongly convex function is lower bounded by a quadratic (instead of linear like convex functions).</description>
+    </item>
+    
+    <item>
       <title>Online Gradient Descent</title>
       <link>https://vvanirudh.github.io/notes/ogd/</link>
       <pubDate>Wed, 01 Jul 2020 12:57:48 -0400</pubDate>
