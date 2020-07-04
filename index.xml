@@ -12,6 +12,18 @@
     
     
     <item>
+      <title>Online Newton Step</title>
+      <link>https://vvanirudh.github.io/notes/ons/</link>
+      <pubDate>Sat, 04 Jul 2020 11:12:37 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/notes/ons/</guid>
+      <description>Exp-concave Functions OGD achieves logarithmic regret for strongly convex and lipschitz functions (see this note), but this is a rather strong condition.
+For twice-differentiable strongly convex functions, we require that the hessian is positive definite and has full rank!
+However, sometimes the hessian might not be full rank (sometimes, even rank one) but is large in the direction of the gradient. This is a property of exp-concave functions.
+Exp-concave Definition: A convex function $f:\mathbb{R}^n \rightarrow \mathbb{R}$ is $\alpha$-exp-concave over $K \subseteq \mathbb{R}^n$ if the function $g$ is concave, where $g:K \rightarrow \mathbb{R}$ is $$ g(x) = \exp(-\alpha f(x)) $$</description>
+    </item>
+    
+    <item>
       <title>Online Gradient Descent with Strongly Convex Functions</title>
       <link>https://vvanirudh.github.io/notes/strong_convexity/</link>
       <pubDate>Fri, 03 Jul 2020 16:52:01 -0400</pubDate>
@@ -109,7 +121,7 @@ It is always positive, i.e. $D_{KL} \geq 0$. Also, if there is a point $x$ where
  Preprints Conference Publications Workshop Publications
 Journal Publications Technical Reports Theses
  Preprints   TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions Anirudh Vemula, J. Andrew Bagnell
-(arxiv, code, bibtex)
+(arxiv, presentation, code, bibtex)
   Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv, bibtex)</description>
     </item>
     
