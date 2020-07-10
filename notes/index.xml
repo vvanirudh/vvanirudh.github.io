@@ -6,10 +6,20 @@
     <description>Recent content in Notes on Anirudh Vemula</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Sat, 04 Jul 2020 11:12:37 -0400</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jul 2020 22:33:34 -0400</lastBuildDate>
     
 	<atom:link href="https://vvanirudh.github.io/notes/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Online Learning for Adversaries with Past Memory</title>
+      <link>https://vvanirudh.github.io/notes/ol_memory/</link>
+      <pubDate>Thu, 09 Jul 2020 22:33:34 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/notes/ol_memory/</guid>
+      <description>The framework of OCO with memory is:
+ At each round $t$, player chooses $x_t \in K \subset \mathbb{R}^n$ Then, a loss $f_t: K^{m+1} \rightarrow \mathbb{R}$ is revealed and player suffers loss of $f_t(x_{t-m}, \cdots, x_t)$ Assume $0 \in K$, and $f_(x_0, \cdots, x_m) \in [0,1]$ for any $x_0, \cdots, x_m \in K$ Assume that after $f_t$ is revealed, the player is aware of the loss she would suffer had she played any sequence of decisions $x_{t-m}, \cdots, x_t$ (counterfactual feedback model)  Minimize policy regret $$R_{T, m} = \sum_{t=m}^T f_t(x_{t-m}, \cdots, x_t) - \min_{x \in K} \sum_{t=m}^T f_t(x, \cdots, x) $$</description>
+    </item>
     
     <item>
       <title>Online Newton Step</title>
