@@ -104,6 +104,15 @@ It is always positive, i.e. $D_{KL} \geq 0$. Also, if there is a point $x$ where
     </item>
     
     <item>
+      <title>AISTATS 2019</title>
+      <link>https://vvanirudh.github.io/blog/rss_2020/</link>
+      <pubDate>Fri, 19 Apr 2019 15:59:13 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/blog/rss_2020/</guid>
+      <description>Day 2  Deep Drone Acrobatics: Cool idea that shows that if you choose the right level of abstraction  </description>
+    </item>
+    
+    <item>
       <title>New York City</title>
       <link>https://vvanirudh.github.io/blog/newyork_pics/</link>
       <pubDate>Mon, 02 Oct 2017 15:59:13 -0400</pubDate>
@@ -130,9 +139,7 @@ It is always positive, i.e. $D_{KL} \geq 0$. Also, if there is a point $x$ where
       <description>Check out news page for latest updates and my scholar page for a complete list.
  Preprints Conference Publications Workshop Publications
 Journal Publications Technical Reports Theses
- Preprints   TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions Anirudh Vemula, J. Andrew Bagnell
-(arxiv, presentation, code, bibtex)
-  Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv, bibtex)</description>
+ Preprints  Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv, bibtex)  Conference Publications   TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions Anirudh Vemula, J. Andrew Bagnell</description>
     </item>
     
     <item>
