@@ -104,15 +104,6 @@ It is always positive, i.e. $D_{KL} \geq 0$. Also, if there is a point $x$ where
     </item>
     
     <item>
-      <title>AISTATS 2019</title>
-      <link>https://vvanirudh.github.io/blog/rss_2020/</link>
-      <pubDate>Fri, 19 Apr 2019 15:59:13 -0400</pubDate>
-      
-      <guid>https://vvanirudh.github.io/blog/rss_2020/</guid>
-      <description>Day 2  Deep Drone Acrobatics: Cool idea that shows that if you choose the right level of abstraction  </description>
-    </item>
-    
-    <item>
       <title>New York City</title>
       <link>https://vvanirudh.github.io/blog/newyork_pics/</link>
       <pubDate>Mon, 02 Oct 2017 15:59:13 -0400</pubDate>
@@ -163,9 +154,9 @@ The following are a few highlights:
       <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/news/</guid>
-      <description>2020   (May 2020)  Our paper on using inaccurate models for provably complete planning and execution has been accepted at RSS 2020! Code is also released.
-  (Apr 2020)  Our latest preprint on a fast efficient solver for trajectory optimization with non-differentiable cost functions is online!
-  (Mar 2020)  Our latest preprint on how to use inaccurate models for interleaving planning and execution efficiently is online!</description>
+      <description>2020   (July 2020)  My paper on a fast efficient solver for trajectory optimization with non-differentiable cost functions has been accepted at CDC 2020! Code is also released on github.
+  (May 2020)  New blog post on my RSS 2020 paper with additional insights and connections to recent related work
+  (May 2020)  Our paper on using inaccurate models for provably complete planning and execution has been accepted at RSS 2020!</description>
     </item>
     
     <item>
