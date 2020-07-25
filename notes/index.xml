@@ -6,10 +6,19 @@
     <description>Recent content in Notes on Anirudh Vemula</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Thu, 09 Jul 2020 22:33:34 -0400</lastBuildDate>
+    <lastBuildDate>Thu, 23 Jul 2020 19:09:28 -0400</lastBuildDate>
     
 	<atom:link href="https://vvanirudh.github.io/notes/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Regret Analysis of Stochastic Bandit Problems</title>
+      <link>https://vvanirudh.github.io/notes/stochastic_bandits/</link>
+      <pubDate>Thu, 23 Jul 2020 19:09:28 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/notes/stochastic_bandits/</guid>
+      <description>$K$ arms, $T$ rounds (assume known $K$ and $T$) Goal is to maximize total reward over $T$ rounds  Assumptions  Bandit Feedback: only observe reward for the arm played IID rewards: For each arm $a$, $\exists$ a reward distribution $D_a$ which is unknown Per-round rewards are bounded, i.e. $r_t \in [0, 1]$ for $t \in [T]$   We are primarily interested in mean vector $\mu \in [0, 1]^K$ where $\mu(a) = \mathbb{E}[D_a]$  Notation  Set of arms $\mathcal{A}$ Best mean reward $\mu^* = \max_{a \in \mathcal{A}} \mu(a)$ Gap of arm $a$: $\Delta(a) = \mu^* - \mu(a)$ Optimal arm $a^* $, i.</description>
+    </item>
     
     <item>
       <title>Online Learning for Adversaries with Past Memory</title>
