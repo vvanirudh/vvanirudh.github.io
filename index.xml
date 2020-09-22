@@ -139,7 +139,8 @@ It is always positive, i.e. $D_{KL} \geq 0$. Also, if there is a point $x$ where
       <description>Check out news page for latest updates and my scholar page for a complete list.
  Preprints Conference Publications Workshop Publications
 Journal Publications Technical Reports Theses
- Preprints  Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv, bibtex)  Conference Publications   TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions Anirudh Vemula, J. Andrew Bagnell</description>
+ Preprints   CMAX++ : Leveraging Experience in Planning and Execution using Inaccurate Models Anirudh Vemula, J. Andrew Bagnell, Maxim Likhachev (arxiv, code)
+  Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv, bibtex)</description>
     </item>
     
     <item>
@@ -163,9 +164,9 @@ The following are a few highlights:
       <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/news/</guid>
-      <description>2020   (July 2020)  My paper on a fast efficient solver for trajectory optimization with non-differentiable cost functions has been accepted at CDC 2020! Code is also released on github.
-  (May 2020)  New blog post on my RSS 2020 paper with additional insights and connections to recent related work
-  (May 2020)  Our paper on using inaccurate models for provably complete planning and execution has been accepted at RSS 2020!</description>
+      <description>2020   (Sep 2020)  New preprint on how to leverage experience in planning and execution using inaccurate models without ever updating the model is online! Code is also available.
+  (July 2020)  My paper on a fast efficient solver for trajectory optimization with non-differentiable cost functions has been accepted at CDC 2020! Code is also released on github.
+  (May 2020)  New blog post on my RSS 2020 paper with additional insights and connections to recent related work</description>
     </item>
     
     <item>
