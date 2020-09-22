@@ -152,10 +152,9 @@ Journal Publications Technical Reports Theses
       <description>Most of my code is open sourced under GPL v3.0 license.
 Implementations of my papers and other related works can be found at my personal or lab&amp;rsquo;s github profiles.
 The following are a few highlights:
+  CMAX++: Leveraging Experience in Planning and Execution using Inaccurate Models
   TRON: A Fast Solver for Trajectory Optimization with Non-Smooth Cost Functions
-  Planning and Execution using Inaccurate Models with Provable Guarantees
-  iLQR planning for a differential drive robot C++
-  Contrasting Exploration in Parameter and Action Space</description>
+  CMAX: Planning and Execution using Inaccurate Models with Provable Guarantees</description>
     </item>
     
     <item>
