@@ -94,7 +94,7 @@
 <h2 id="penalized-model">Penalized Model</h2>
 <p>We borrow the notion of penalized model from <a href="https://nanjiang.cs.illinois.edu/files/aaai18-pac.pdf">Jiang 2018</a>. Given a deterministic shortest path problem $M = (\mathbb{S}, \mathbb{A}, \mathbb{G}, f, c)$ where $\mathbb{S}$ is the state space, $\mathbb{A}$ is the <em>discrete</em> action space, $\mathbb{G} \subset \mathbb{S}$ is the goal space, $f: \mathbb{S} \times \mathbb{A} \rightarrow \mathbb{S}$ is the unknown deterministic dynamics, and $c: \mathbb{S} \times \mathbb{A} \rightarrow [0, 1]$ is the cost function, we assume that we have access to an approximate model $\hat{f}: \mathbb{S} \times \mathbb{A} \rightarrow \mathbb{S}$ that is potentially inaccurate.</p>
 <p>Given an &ldquo;incorrect&rdquo; set (set of incorrect transitions - transitions where $f$ and $\hat{f}$ differ) $\mathcal{X} \subset \mathbb{S} \times \mathbb{A}$, the penalized model is given as $M_\mathcal{X} = (\mathbb{S}, \mathbb{A}, \mathbb{G}, \hat{f}, c_{\mathcal{X}})$ where $c_\mathcal{X}(s, a) = c(s, a)$ for any $(s, a) \notin \mathcal{X}$, and $c(s, a) = |\mathbb{S}|$ (or any super large value) for $(s, a) \in \mathcal{X}$. In simple words, the cost of any transition known to be incorrect is inflated to a very high value. Thus, the name CMAX for our approach. We use the penalized model $M_\mathcal{X}$ for planning.</p>
-<h2 id="warm-up-cmax-in-small-state-spaces">Warm Up: CMAX in small state spaces</h2>
+<h2 id="assumption">Warm Up: CMAX in small state spaces</h2>
 <p>Small state spaces are great! Planning is super fast and we can hope to plan all the way to the goal (has a complexity that scales with $|\mathbb{S}|$) In addition to fast planning, we can also maintain the set of incorrect transitions discovered so far $\mathcal{X}_t$ at each time step $t$ explicitly. This makes CMAX a very simple algorithm that is summarized as follows:</p>
 <pre><code>1. while s_t not in G:
 2.    Get the best action a_t to execute at s_t by planning from s_t to any goal in G
@@ -112,9 +112,9 @@
 <li>we cannot maintain tabular value estimates for all states (too large!)</li>
 <li>we cannot maintain the incorrect set $\mathcal{X}_t$ so far explicitly (too large! slow lookup)</li>
 </ol>
-<h2 id="cmax-in-large-state-spaces">CMAX in large state spaces</h2>
+<h2 id="large">CMAX in large state spaces</h2>
 <p>We will deal with each of the above challenges individually. First, planning&hellip;</p>
-<h3 id="limited-expansion-search-for-planning">Limited-expansion search for planning</h3>
+<h3 id="limited">Limited-expansion search for planning</h3>
 <p>Limited expansion heuristic based search methods are often used for real-time planning applications where the amount of computation at each time step should not depend on the size of the state space. Popular examples include <a href="https://www.sciencedirect.com/science/article/abs/pii/0004370290900544?via%3Dihub">LRTA*</a>, <a href="https://www.sciencedirect.com/science/article/pii/000437029400011O?via%3Dihub">RTDP</a> and <a href="https://dl.acm.org/doi/10.1145/1160633.1160682">RTAA*</a> which have been successfully deployed in real-time applications.</p>
 <p>We use a variant of RTAA* as the planner in CMAX for large state spaces. By using RTAA* with a fixed number $K &lt; &lt; |\mathbb{S}|$ expansions at each time step, we avoid expending computation of the order $O(|\mathbb{S}|)$ in each planning call. On a (very) high-level at each time step,</p>
 <ol>

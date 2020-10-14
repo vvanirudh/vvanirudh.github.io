@@ -12,6 +12,16 @@
     
     
     <item>
+      <title>CMAX&#43;&#43;: Leveraging Experience for Planning and Execution with Inaccurate Models</title>
+      <link>https://vvanirudh.github.io/blog/cmaxpp/</link>
+      <pubDate>Tue, 13 Oct 2020 14:39:32 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/blog/cmaxpp/</guid>
+      <description>In this blog post, I will summarize the key contributions of my recent submission on CMAX++. This work mainly improves upon my previous work, CMAX (highly recommended to read a summary of CMAX in this blog post.)
+The broad theme of both these approaches is to use simplified and inaccurate dynamical models to significantly reduce the amount of real world experience needed by the robot to complete a task. The setting we consider is a goal-oriented task setting where the robot needs to reach the goal online, without any resets.</description>
+    </item>
+    
+    <item>
       <title>Regret Analysis of Stochastic Bandit Problems</title>
       <link>https://vvanirudh.github.io/notes/stochastic_bandits/</link>
       <pubDate>Thu, 23 Jul 2020 19:09:28 -0400</pubDate>
