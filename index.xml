@@ -149,7 +149,7 @@ It is always positive, i.e. $D_{KL} \geq 0$. Also, if there is a point $x$ where
       <description>Check out news page for latest updates and my scholar page for a complete list.
  Preprints Conference Publications Workshop Publications
 Journal Publications Technical Reports Theses
- Preprints  Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv, bibtex)  Conference Publications   CMAX++: Leveraging Experience in Planning and Execution using Inaccurate Models Anirudh Vemula, J. Andrew Bagnell, Maxim Likhachev AAAI 2021 (blog, arxiv, code)</description>
+ Preprints  Task-informed Fidelity Management for Speeding up Robotics Simulation Abhijeet Tallavajhula*, Adrian Schoisengeier*, Sung-Kyun Kim, Anirudh Vemula, Levi Lister, Oren Salzman (arxiv, bibtex)  Conference Publications   CMAX++: Leveraging Experience in Planning and Execution using Inaccurate Models Anirudh Vemula, J. Andrew Bagnell, Maxim Likhachev AAAI 2021 (blog, arxiv, code, poster)</description>
     </item>
     
     <item>
@@ -172,9 +172,9 @@ The following are a few highlights:
       <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
       
       <guid>https://vvanirudh.github.io/news/</guid>
-      <description>2020   (Nov 2020)  Our paper on integrating model-free learning with model-based planning to deal with inaccurate models has been accepted at AAAI 2021
+      <description>2021  (May 2021)  I will be working at the Apple Special Projects Group on something incredibly cool over the summer!  2020   (Nov 2020)  Our paper on integrating model-free learning with model-based planning to deal with inaccurate models has been accepted at AAAI 2021
   (Nov 2020)  Successfully passed my thesis proposal! On track to defend my thesis next year.
-  (Sep 2020)  New preprint on how to leverage experience in planning and execution using inaccurate models without ever updating the model is online! Code is also available.</description>
+  (Oct 2020)  New blog post on my latest work on leveraging experience in planning with inaccurate models</description>
     </item>
     
     <item>
