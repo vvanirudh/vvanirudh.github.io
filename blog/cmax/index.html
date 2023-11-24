@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CMAX: Planning and Execution with Inaccurate Models | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">about</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">CMAX: Planning and Execution with Inaccurate Models</span></h1>
+
+<h2 class="date">2020/05/06</h2>
+</div>
+
+<main>
+<p>Very recently, I submitted a <a href="https://arxiv.org/abs/2003.04394">paper</a> to <a href="https://roboticsconference.org/">RSS</a> (update: accepted!) on how to use inaccurate models for planning in robotic tasks. For many robotic tasks, we usually have access to a (inaccurate)  model of the robot and the environment. For example, simulators that employ sophisticated physics engines such as <a href="http://www.mujoco.org/">MuJoCo</a> or <a href="https://pybullet.org/wordpress/">Bullet</a> can be used as forward dynamical models for planning. These models capture some complexities of the real world well, while they fail to capture other subtleties. However, they are still very useful sources of information on real-world dynamics that can be exploited to plan a good policy.</p>
+<p>This <a href="https://ai.stanford.edu/~ang/papers/icml06-usinginaccuratemodelsinrl.pdf">paper from Abbeel, Quigley and Ng</a> is one of my favourite papers in this domain. They have this really nice example and I quote</p>
+<blockquote>
+<p><em>For example, if in a car our current policy drives a maneuver too far to the left, then driving in real-life will be what tells us that we are driving too far to the left. However, even a very poor model of the car can then be used to tell us that the change we should make is to turn the steering wheel clockwise (rather than anti-clockwise) to correct for this error.</em></p>
+</blockquote>
+<p>This example perfectly summarises our motivation for this work. I strongly believe that not using an existing (inaccurate) model and purely using model-free approaches is like <a href="https://en.wikipedia.org/wiki/Don%27t_throw_the_baby_out_with_the_bathwater"><em>throwing out the baby with the bath water</em></a>. If anything, using an existing model is a useful way to inject domain knowledge about the world into our approaches.</p>
+<p>My paper is a small take on the following problem: <strong>Given an inaccurate dynamical model for a goal-oriented robotic task, how do we ensure that the robot provably reaches the goal online without any access to resets?</strong> Note that we tackle the no-reset setting as resets typically require human intervention, and this setting is more practical. We also consider deterministic dynamics and extension to stochastic dynamics is left open (potential future work.)</p>
+<p>Let&rsquo;s understand the problem through an example:</p>
+<br>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/PZObvCWfw1Q" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<br>
+<p>In the above video, we see a robot that is trying to move the light object from the start location to a goal location while avoiding collision with the obstacle. In this case, assume that we have access to a perfect dynamical model (true knowledge of the object weight, positions of obstacle etc.) With the perfect model, the planner comes up with an optimal path that takes the object above the obstacle and reaches the goal successfully. <em>What if the object in reality was heavy, but is modeled as a light object?</em></p>
+<br>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/JVbsi5mDG40" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<br>
+<p>It is not difficult to understand why the robot is stuck &ndash; since the model has not changed, the planner still computes the same path. But when the robot tries to follow the computed path it fails to lift the object beyond a certain height as the torque limits of the robot joints have been met and it cannot muster the required torque anymore. Thus, the robot (and the planner) is stuck. <em>How do we solve this?</em></p>
+<p>Most of the existing approaches tackle this by updating the dynamics of the model and replanning. Countless works along the lines of <a href="https://dl.acm.org/doi/10.1145/122344.122377">Dyna</a>, and other model-based RL papers take this approach. However, with complex forward models (such as simulators, or <a href="https://ieeexplore.ieee.org/document/5509685">analytical motion primitives</a> among others) the dynamics cannot be changed arbitrarily online. These models tend to be inflexible and even in cases where they can be updated, it is a computationally expensive process that cannot be done online without sacrificing real-time capabilities. In addition, we also show that these approaches require a large number of online executions to reach the goal in our experiments.</p>
+<p>Another set of works such as <a href="https://ieeexplore.ieee.org/document/7139552">this paper</a> and <a href="https://ieeexplore.ieee.org/document/8206343">this one</a> explore ideas of using residual dynamical models that are learned online to substantiate for the inaccuracies of existing models. However, these approaches are restricted heavily by the residual formulation (in most cases, its a simple additive correction on the next state.) Beside these two sets of approaches, the final set of approaches completely discard any existing model and try to learn a dynamical model from scratch (almost all of the current &ldquo;deep&rdquo; model-based approaches.) However, under our no-reset online setting they can take a really large number of samples before learning anything useful. More importantly, <strong>we care about reaching the goal quickly, and not on learning the true dynamics of the environment</strong>. In other words, we desire goal-oriented behavior in our approach.</p>
+<p>Our approach uses the following key idea: <em>Instead of learning the true dynamics online, CMAX maintains a running estimate of the set of transitions where the dynamics are inaccurate (we call these &ldquo;incorrect&rdquo; transitions,) and biases the planner to avoid these transitions in future replanning.</em> The idea is very simple (some might say too simple) and we are not the first ones to discover it. It has often been used in practice as a hack! For instance, <a href="https://works.swarthmore.edu/cgi/viewcontent.cgi?referer=https://scholar.google.com/&amp;httpsredir=1&amp;article=1029&amp;context=fac-engineering">Zucker et. al. 2011</a> &ldquo;poisoned&rdquo; the cost function used by their footprint planner to ensure that the robot does not venture into poorly modeled terrain for their littleDog experiments. On the theoretical side, <a href="https://nanjiang.cs.illinois.edu/files/aaai18-pac.pdf">Jiang 2018</a> on PAC RL with imperfect models (Section 6) explored this idea in the discrete setting with access to resets. We extend this idea to the challenging no-reset setting and also present a practical algorithm for large (possibly, continuous) state spaces.</p>
+<h2 id="penalized-model">Penalized Model</h2>
+<p>We borrow the notion of penalized model from <a href="https://nanjiang.cs.illinois.edu/files/aaai18-pac.pdf">Jiang 2018</a>. Given a deterministic shortest path problem $M = (\mathbb{S}, \mathbb{A}, \mathbb{G}, f, c)$ where $\mathbb{S}$ is the state space, $\mathbb{A}$ is the <em>discrete</em> action space, $\mathbb{G} \subset \mathbb{S}$ is the goal space, $f: \mathbb{S} \times \mathbb{A} \rightarrow \mathbb{S}$ is the unknown deterministic dynamics, and $c: \mathbb{S} \times \mathbb{A} \rightarrow [0, 1]$ is the cost function, we assume that we have access to an approximate model $\hat{f}: \mathbb{S} \times \mathbb{A} \rightarrow \mathbb{S}$ that is potentially inaccurate.</p>
+<p>Given an &ldquo;incorrect&rdquo; set (set of incorrect transitions - transitions where $f$ and $\hat{f}$ differ) $\mathcal{X} \subset \mathbb{S} \times \mathbb{A}$, the penalized model is given as $M_\mathcal{X} = (\mathbb{S}, \mathbb{A}, \mathbb{G}, \hat{f}, c_{\mathcal{X}})$ where $c_\mathcal{X}(s, a) = c(s, a)$ for any $(s, a) \notin \mathcal{X}$, and $c(s, a) = |\mathbb{S}|$ (or any super large value) for $(s, a) \in \mathcal{X}$. In simple words, the cost of any transition known to be incorrect is inflated to a very high value. Thus, the name CMAX for our approach. We use the penalized model $M_\mathcal{X}$ for planning.</p>
+<h2 id="assumption">Warm Up: CMAX in small state spaces</h2>
+<p>Small state spaces are great! Planning is super fast and we can hope to plan all the way to the goal (has a complexity that scales with $|\mathbb{S}|$) In addition to fast planning, we can also maintain the set of incorrect transitions discovered so far $\mathcal{X}_t$ at each time step $t$ explicitly. This makes CMAX a very simple algorithm that is summarized as follows:</p>
+<pre><code class="language-python">1. while s_t not in G:
+2.    Get the best action a_t to execute at s_t by planning from s_t to any goal in G
+3.    Execute a_t in the environment and get successor s_{t+1} = f(s_t, a_t)
+4.    if s_{t+1} differs from successor predicted by penalized model:
+5.        Update incorrect set X_{t+1} by adding (s_t, a_t) to X_t
+6.        Update penalized model to M_{X_{t+1}}
+</code></pre>
+<p>It is important to note that we never update the dynamics of the model, only the cost function. For this simple algorithm, we can establish guarantees under the following assumption:</p>
+<p><strong>Assumption</strong>: There always exists a path from current state $s_t$ to a goal state that <strong>does not</strong> contain any transition that is known to be incorrect i.e. $(s, a) \in \mathcal{X}_t$</p>
+<p>On close observation, we can deduce that this assumption is not as restrictive as the assumption that requires that there exists a path with only correct transitions. In other words, as long as the path does not contain a transition that is already discovered to be incorrect, the assumption is valid. This makes our assumption less restrictive, and our approach practically applicable. Under this assumption we have the following completeness guarantee:</p>
+<p><strong>Guarantee</strong> (Completeness): If initial value estimates are admissible (underestimates the optimal value at all states) and consistent (satisfies triangle inequality), then the robot is guaranteed to reach a goal state in at most $|\mathbb{S}|(|\mathcal{X}| + 1)$ time steps, where $\mathcal{X}$ is the set of all incorrect transitions.</p>
+<p>In simple words, given enough time the robot is guaranteed to reach a goal! That is amazing and indicates that this approach is theoretically sound. However, to apply it in practice we need to move away from small state space land (Oh no!) to large state spaces, where</p>
+<ol>
+<li>we cannot plan all the way to the goal at every time step (too expensive!)</li>
+<li>we cannot maintain tabular value estimates for all states (too large!)</li>
+<li>we cannot maintain the incorrect set $\mathcal{X}_t$ so far explicitly (too large! slow lookup)</li>
+</ol>
+<h2 id="large">CMAX in large state spaces</h2>
+<p>We will deal with each of the above challenges individually. First, planning&hellip;</p>
+<h3 id="limited">Limited-expansion search for planning</h3>
+<p>Limited expansion heuristic based search methods are often used for real-time planning applications where the amount of computation at each time step should not depend on the size of the state space. Popular examples include <a href="https://www.sciencedirect.com/science/article/abs/pii/0004370290900544?via%3Dihub">LRTA*</a>, <a href="https://www.sciencedirect.com/science/article/pii/000437029400011O?via%3Dihub">RTDP</a> and <a href="https://dl.acm.org/doi/10.1145/1160633.1160682">RTAA*</a> which have been successfully deployed in real-time applications.</p>
+<p>We use a variant of RTAA* as the planner in CMAX for large state spaces. By using RTAA* with a fixed number $K &lt; &lt; |\mathbb{S}|$ expansions at each time step, we avoid expending computation of the order $O(|\mathbb{S}|)$ in each planning call. On a (very) high-level at each time step,</p>
+<ol>
+<li>we expand $K$ states to compute best action to execute for current state, and</li>
+<li>Update value estimates $V(s)$ for all expanded states.</li>
+</ol>
+<p>The approach is summarized in the following figure (refer to the original paper for low-level details.)</p>
+<center>
+<figure>
+<img src="../../rtaa.png" style="width:650px" vspace=10>
+<figcaption> <p style="font-size: 15px">Fig. 1: Limited-expansion search as a planner. (Top) Leaves of the tree are expanded acc. to their g + V values. (Bottom left) After $K$ expansions, we choose the best leaf node acc. to the g + V value again. We backtrack from the best node all the way back to the start node to get the best action to execute at the start node (Bottom right) After figuring out the best action, we update the value estimates of all expanded states using the value estimate of the best node so that future replanning involving these states is more efficient.</p></figcaption>
+</figure>
+</center>
+<p>However, by using a limited-expansion search as a planner the performance of CMAX heavily relies on the quality of value estimates. But in large state spaces, we cannot maintain tabular value estimates for all states and will have to resort to function approximation techniques.</p>
+<h3 id="global-function-approximation-for-value-estimates">Global Function Approximation for Value Estimates</h3>
+<p>Starting with the very popular <a href="https://www.nature.com/articles/nature14236">DQN</a> paper, there have been a very large number of works that have relied on global function approximation (e.g. neural networks) to maintain the value function in large state spaces. Although these techniques can make dynamic programming unstable <a href="http://www.cs.cmu.edu/~ggordon/ml95-stable-dp.pdf">in theory</a>, they have shown amazing empirical performance. We borrow these ideas and use a neural network $V_\theta: \mathbb{S} \rightarrow \mathbb{R}$ parameterized by $\theta \in \mathbb{R}^n$ to maintain value estimates and perform approximate batch value updates:</p>
+<p>$$\theta_{t+1} \leftarrow \theta_t - \frac{\eta}{2N} \nabla_\theta \sum_{i=1}^N (V_\theta(s_i) - (g(s_{best}) + V(s_{best}) - g(s_i))^2$$</p>
+<p>where $\eta$ is the learning rate, and $\{s_i\}_{i=1}^N$ is a sampled mini-batch of states from a replay buffer. Crucially, unlike DQN we do not do one-step lookahead as we can simply use our approximate penalized model $M_{\mathcal{X}_t}$ to plan using $K$ expansions to get the target values $g(s_{best}) + V(s_{best}) - g(s_i)$ for each $i \in {1, \cdots, N}$. This speeds up fitting the value function approximation greatly as we backup value estimates from longer lookaheads.</p>
+<h3 id="local-function-approximation-for-incorrect-set-mathcalx_t">Local Function Approximation for Incorrect Set $\mathcal{X}_t$</h3>
+<p>In large state spaces, the incorrect set $\mathcal{X}_t$ can be very large in size, and maintaining it explicitly can be expensive in both memory and computation during lookup. Thus, we need an efficient way to maintain it. CMAX achieves this by using local (or memory-based) function approximation using hyperspheres in state space. Specifically for every action $a \in \mathbb{A}$, we maintain a set of hyperspheres in state space $\mathbb{S}$ to represent $\mathcal{X}_t$.</p>
+<center>
+<figure>
+<img src="../../hyperspheres.png" style="width:400px" vspace=10>
+<figcaption> <p style="font-size:15px">Fig. 2: Point robot navigation in the presence of obstacle. The dynamical model has no knowledge of the presence of the obstacle. During execution, any action that moves the robot into the obstacle keeps it in-place. The actions in red are incorrect transitions. Thus, we introduce hyperspheres at the corresponding states and the robot stops executing the action going into the obstacle until it gets out of the hypersphere, thereby reducing the number of steps taken to reach the goal.</p></figcaption>
+</figure>
+</center>
+<p>During online execution, whenever we encounter an incorrect state-action pair $(s, a)$ a hypersphere of radius $\delta &gt; 0$ centered at $s$. This hypersphere is added to the set of hyperspheres corresponding to action $a$. In any future replanning, any state-action pair $(\bar{s}, \bar{a})$  with $\bar{a} = a$ and $||\bar{s} - s||_2 \leq \delta$ has its cost inflated to a high value. The advantage of using hyperspheres is that lookup can be very efficiently implemented using KDTrees ($O(\log n)$ average complexity for lookup where $n$ is the number of hyperspheres.) Refer to Fig. 2 above for a simple example where we can quickly prune away the state space and find the path to the goal quickly. However, the radius $\delta$ is a very important parameter (that needs to be tuned &ndash; limitation of CMAX) since for small $\delta$ it might take a large number of online executions to reach the goal, and for large $\delta$ it might block the only path to the goal which can be disastrous.</p>
+<h2 id="summary">Summary</h2>
+<p>Let&rsquo;s summarize the key ideas in CMAX:</p>
+<ol>
+<li>Inflate the cost of any incorrect transition discovered to bias planner away from using these transitions in future replanning</li>
+<li>Use limited-expansion search as the planner to limit amount of computation at each time step. Thus, it can be used in large state spaces</li>
+<li>Employ global function approximation techniques to maintain value estimates for all states</li>
+<li>Maintain incorrect set $\mathcal{X}_t$ using local function approximation in state space</li>
+</ol>
+<h2 id="experiments">Experiments</h2>
+<p>Going back to our motivating example of a 3D pick-and-place task with a heavy object, let us see how CMAX performs:
+<br>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/NZt4ORzo6jo" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<br>
+Upon recognizing the discrepancy in dynamics between the model and the environment, CMAX (instead of learning the true dynamics and correcting the model) quickly adapts and finds an alternative path that takes the object behind the obstacle to the goal. This kind of highly goal-oriented behavior at the expense of less number of executions is exactly the behavior we want.</p>
+<p>We also test CMAX in large state spaces in our 7D arm planning task where the objective is to move the 7D arm from a start configuration to a goal configuration such that its end effector is within a specified 3D goal region. However, the catch is that one of its joint is broken, and it has to still find a path to the goal despite the inaccuracy of the model.
+<br>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/oP8EJ4mboso" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<br>
+Again, CMAX quickly &ldquo;covers&rdquo; the state-action space that is modeled incorrectly with hyperspheres, to find a path that uses the unbroken joints to move the end-effector to the goal region.</p>
+<p>For a quantitative comparison, we compare the number of time steps it takes for CMAX to reach the goal against baselines that are both model-based (updating residual model and replanning), and model-free. Specifically, we compare CMAX against the baselines on a 4D simulated planar pushing task.</p>
+<figure>
+<center>
+<img src="../../fetchpush.png" style="width:400px" vspace=10>
+<figcaption><p style="font-size:15px"> Fig. 3: 4D simulated planar pushing. (left) The approximate model available for planning that does not contain any obstacles so the robot has to discover the obstacles through online executions in the environment (right) which contains obstacles. The goal for the gripper is to push the object (black box) from its current position to the goal location (red sphere). When the gripper (or) the object is pushed into an obstacle, they stay in place. </p></figcaption>
+</center>
+</figure>
+For our model-based baselines, we have two variants - one which uses a global function approximation (neural network) to learn the residual dynamics similar to previous works, and the other which uses a local function approximation (nearest neighbor regressors) to learn the residual dynamics. The model-free baseline is DQN which learns a residual component for the value function on top of an initial hardcoded value function that is obtained through extensive planning on the approximate model. Thus, all approaches start with the same initial value estimates. Finally, we also compare with a pure planning baseline that always uses the accurate model.
+<figure>
+<center>
+<img src="../../planar-pushing.png" style="width:600px" vspace=10>
+<figcaption><p style="font-size:15px"> Fig. 4: 4D planar pushing results. The first column is the number of time steps it takes to reach the goal when planning and executing in the environment with no obstacles. The second column is the number of time steps it takes to reach the goal when planning using the model with no obstacles and executing in environment with obstacles. Success rate is computed using the ratio of successful runs where a run is successful if the object reaches the goal in under 1000 time steps.</p></figcaption>
+</center>
+</figure>
+As we can see when the model is accurate (so there is nothing to be learned), all the approaches have the same performance validating that our initial value estimates are good. However, when we have an inaccurate model (the environment has obstacles) suddenly there is a wide gap between CMAX and the other baselines. While the model-free Q-learning baseline requires large number of online executions, surprisingly the model-based baselines do not perform much better. Especially, the baseline that uses a neural network to learn the residual dynamical model requires a prohibitively large number of executions to learn an accurate model before exploiting it to find a path. In comparison, the nearest neighbor baseline is quicker to learn a good enough residual dynamics with less number of online executions. Compared to all baselines, CMAX uses less number of samples and has a higher success rate that is close to the pure planning with accurate model baseline, proving its sample efficiency.
+<h2 id="discussion">Discussion</h2>
+<p>CMAX achieves all of this while never attempting to learn the true dynamics! And the true strength of CMAX lies in that. This can be better understood by a simple argument: to learn accurate dynamics for a transition in $N$-D state space we need at least $N$ samples in worst case, whereas CMAX needs only $1$ sample to observe a discrepancy and inflate the cost. CMAX also can be applied to problems where the approximate model is inflexible and cannot be updated arbitrarily online (think of complex physics engines). It does not rely on any knowledge of how the approximate model is inaccurate. Finally, in the extreme case where we can never hope to learn the true dynamics using any sort of function approximation (think of deformable object dynamics,) <em>CMAX can still be applied!</em></p>
+<p>However, we do not get all of these advantages for free.  The crucial assumption that there always exists a path with no transitions that are known to be incorrect, or <em>model optimism</em> as <a href="https://nanjiang.cs.illinois.edu/files/aaai18-pac.pdf">Jiang 2018</a> calls it, is essential. Apart from the tuning of radius $\delta$, this assumption is the biggest limitation of CMAX. One can easily come up with robotic tasks where this assumption is violated : for instance, consider the task of opening a spring loaded door which is not modeled as spring loaded, we would notice discrepancy in every transition and the assumption is not valid anymore. However, I still believe that CMAX is very useful in a lot of practical scenarios (as our experiments show) and it is a very easy-to-implement baseline that everyone should compare against.</p>
+<!-- Add connections to Jiang model optimism assumption - exactly the same in small state spaces with exact planning, but not the same in large state spaces with limited-expansion planning -->
+<!-- Add connections to the pessimistic MDP paper by Arvind - very similar and it is interesting to see bounds on the performance of the final policy from offline setting -->
+<h2 id="epilogue">Epilogue</h2>
+<p>(May 15 2020) Few clarifications are in order regarding the assumption presented above (Thanks to <a href="https://www.ri.cmu.edu/ri-people/alexander-spitzer/">Alex Spitzer</a> for the questions.) A keen observer would notice that the assumption, as it is presented, is actually an assumption on both the approximate dynamical model $\hat{f}$ and the execution trace of CMAX (since the assumption is conditioned on the current state $s_t$.) This can be a little confusing since such an assumption is hard to verify prior to execution and unfortunately, that is indeed the case here. However, we can strengthen the assumption in the small state cases using the <em>model optimism</em> assumption from <a href="https://nanjiang.cs.illinois.edu/files/aaai18-pac.pdf">Jiang 2018</a>. Specifically, an optimistic dynamical model is a model whose optimal value under approximate dynamics $\hat{f}$ at each state $s \in \mathbb{S}$ underestimates the optimal value under true dynamics $f$. In small state cases where we can afford to plan all the way to the goal at each time step and obtain the best action, <em>model optimism</em> is a sufficient assumption to ensure the above completeness guarantee. Put simply, if our approximate dynamical model is optimistic we will never encounter states where the above assumption is invalid. However, it gets complicated in large state spaces (as things often do.) Since we perform limited-expansion search with potentially suboptimal value estimates (and thus, there is no guarantee that we execute the best action,) <em>model optimism</em> is not sufficient anymore and we require the assumption on the execution trace of CMAX.</p>
+<p>(May 25 2020) <a href="https://homes.cs.washington.edu/~aravraj/">Arvind Rajeswaran</a>, <a href="https://rahulkidambi.github.io/">Rahul Kidambi</a> and collaborators have recently released a <a href="https://arxiv.org/abs/2005.05951">paper</a> that has very similar ideas to CMAX and <a href="https://nanjiang.cs.illinois.edu/files/aaai18-pac.pdf">Jiang 2018</a>, but in the offline RL setting. They also propose construction of a &ldquo;pessimistic&rdquo; MDP from offline trajectories which divides the state-action space into a &ldquo;known&rdquo; (correct) and &ldquo;unknown&rdquo; (incorrect) region. Subsequently, they plan for a policy in the pessimistic MDP that enters into a low reward (high cost) absorbing state upon executing an &ldquo;unknown&rdquo; transition. Thus, the policy learns to stay in the &ldquo;known&rdquo; region and exhibit CMAX-like behavior. The paper also presents bounds on the performance of the optimal policy obtained from planning in the pessimistic MDP under idealistic assumptions. Another very recent work from <a href="https://cs.stanford.edu/~tianheyu/">Tianhe Yu</a> and collaborators from Stanford presents a very <a href="https://arxiv.org/abs/2005.13239">similar idea</a>, again in the offline RL setting. Rather than a hard penalty for state-action pairs in the unknown region, they apply a soft penalty based on how large an estimate of the modeling error is. From a pure planning perspective (like CMAX,) <a href="https://robotics.umich.edu/profile/dale-mcconachie/">Dale McConcachie</a> and collaborators have also recently used a very <a href="https://arxiv.org/abs/2001.11051">similar idea</a> to bias the planner away from incorrect transitions. However, unlike CMAX, during online execution they employ a offline trained classifier to predict whether any transition is incorrect, thus relying on the accuracy of the trained classifier to ensure probabilistic completeness.</p>
+<p>CMAX and all of the above works indicate that we can achieve impressive practical results with good theoretical foundation for model-based planning with imperfect models. I am hopeful that the community takes this forward and develops algorithms that relax some of the assumptions made by these works.</p>
+
+</main>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2023 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+

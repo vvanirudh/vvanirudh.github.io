@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Online Newton Step | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">about</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Online Newton Step</span></h1>
+
+<h2 class="date">2020/07/04</h2>
+</div>
+
+<main>
+<h3 id="exp-concave-functions">Exp-concave Functions</h3>
+<p>OGD achieves logarithmic regret for strongly convex and lipschitz functions (see this <a href="../../notes/strong_convexity.md">note</a>), but this is a rather strong condition.</p>
+<p>For twice-differentiable strongly convex functions, we require that the hessian is positive definite and has full rank!</p>
+<p>However, sometimes the hessian might not be full rank (sometimes, even rank one) but is large in the direction of the gradient. This is a property of exp-concave functions.</p>
+<p><strong>Exp-concave Definition</strong>: A convex function $f:\mathbb{R}^n \rightarrow \mathbb{R}$ is $\alpha$-exp-concave over $K \subseteq \mathbb{R}^n$ if the function $g$ is concave, where $g:K \rightarrow \mathbb{R}$ is
+$$ g(x) = \exp(-\alpha f(x)) $$</p>
+<p><em>Exp-concavity implies strong convexity in the direction of the gradient</em></p>
+<p>We can show some properties of exp-concave functions</p>
+<p><strong>Lemma</strong>: A twice differentiable function $f:\mathbb{R}^n \rightarrow \mathbb{R}$ is $\alpha$-exp-concave iff
+$$ \nabla^2 f(x) \succcurlyeq \alpha \nabla f(x) \nabla f(x)^T $$</p>
+<p>We can also prove a stronger lower bound which holds even if $f$ is not twice-differentiable,</p>
+<p><strong>Lemma</strong>: Let $f: K \rightarrow \mathbb{R}$ is $\alpha$-exp-concave. The following holds for all $\gamma \leq \frac{1}{2} \min\{\frac{1}{4LD}, \alpha\}$ and all $x, y \in K$,
+$$ f(x) \geq f(y) + \nabla f(y)^T(x - y) + \frac{\gamma}{2} (x-y)^T \nabla f(y) \nabla f(y)^T (x - y)$$
+where $D$ is the diameter of $K$ and $L$ is the lipschitz constant of $f$ (and thus the upper bound on the norm of subgradients of $f$.)</p>
+<p><strong>Proof</strong>: Since $f$ is $\alpha$-exp-concave and $\gamma \leq 2 \alpha$, we have that $h(x) = \exp(-2\gamma f(x))$ is concave. Using first-order concavity condition we have,
+$$ h(x) \leq h(y) + \nabla h(y)^T(x - y) $$</p>
+<p>We can compute $\nabla h(y)$ as $\nabla h(y) = -2\gamma \exp(-2\gamma f(y)) \nabla f(y)$ giving us,
+$$ \exp(-2\gamma f(x)) \leq \exp(-2\gamma f(y))[1 - 2\gamma \nabla f(y)^T(x - y)] $$
+Taking logarithm on both sides and simplifying we get
+$$ f(x) \geq f(y) - \frac{1}{2\gamma} \log(1 - 2\gamma \nabla f(y)^T (x - y)) $$</p>
+<p>We can bound $|2\gamma \nabla f(y)^T(x-y)| \leq 2\gamma LD \leq \frac{1}{4}$ where we obtained the first inequality using cauchy-schwarz and the second one using the bound on $\gamma$.</p>
+<p>Next, note that for $|z| \leq \frac{1}{4}$, we have $-\log (1 - z) \geq z + \frac{z^2}{4}$. Applying this inequality for $z = 2\gamma \nabla f(y)^T(x - y)$ we get
+$$ f(x) \geq f(y) + \nabla f(y)^T(x - y) + \frac{\gamma}{2} (x-y)^T \nabla f(y) \nabla f(y)^T (x - y) $$
+$\square$</p>
+<h3 id="algorithm">Algorithm</h3>
+<p><strong>Online Newton Step</strong>: convex set $K$, $T$, $x_1 \in K \subseteq \mathbb{R}^n$, parameters $\gamma, \epsilon &gt; 0$, $A_0 = \epsilon \mathbb{I}_n$</p>
+<ol>
+<li>for $t = 1, \cdots, T$</li>
+<li>Play $x_t$</li>
+<li>Receive $\ell_t: K \rightarrow \mathbb{R}$ and pay $\ell_t(x_t)$</li>
+<li>Rank-1 update: $A_t = A_{t-1} + \nabla \ell_t(x_t) \nabla \ell_t(x_t)^T$</li>
+<li>Newton step: $y_{t+1} = x_t - \frac{1}{\gamma} A_t^{-1}\nabla \ell_t(x_t)$</li>
+<li>Projection: $x_{t+1} = \Pi_{K}^{A_t} y_{t+1}$</li>
+<li>end</li>
+</ol>
+<p>A quasi-newton approach that approximates the second derivative in more than one dimension. <em>However, strictly speaking it is first-order since it only uses gradient information</em></p>
+<p>At each iteration, the algorithm chooses a direction that is reminiscent of the Newton-Raphson method if it were an offline optimization for the previous loss function.</p>
+<p>Since the update might take it out of $K$, we need a projection step. Unlike OGD, this is not a euclidean projection. Instead, it is the projection according to the norm defined by matrix $A_t$.</p>
+<h3 id="regret-analysis">Regret Analysis</h3>
+<p><strong>Regret Guarantee for ONS</strong>: Online Newton Step with $\alpha$-exp-concave loss functions $\ell_t$ and parameters $\gamma = \frac{1}{2} \min\{\frac{1}{4LD}, \alpha\}$, $\epsilon = \frac{1}{\gamma^2D^2}$ and $T &gt; 4$ guarantees:
+$$ R_T(u) = \sum_{t=1}^T (\ell_t(x_t) - \ell_t(u)) \leq 5(\frac{1}{\alpha} + LD)n\log T $$</p>
+<p><strong>Proof</strong>: Quite involved. Refer to <a href="https://ocobook.cs.princeton.edu/OCObook.pdf">Elad Hazan&rsquo;s Monograph</a> for the proof.</p>
+<h3 id="running-time">Running time</h3>
+<p>ONS requires $O(n^2)$ space to store the matrix $A_t$.</p>
+<p>Each iteration requires computing $A_t^{-1}$. In the case where $A_t$ is invertible we can use the matrix inversion lemma given by,
+$$ (A + xx^T)^{-1} = A^{-1} - \frac{A^{-1}xx^TA^{-1}}{1+ x^TA^{-1}x} $$
+to compute $A_t^{-1}$ given $A_{t-1}^{-1}$ and $\nabla \ell_t(x_t)$ in $O(n^2)$ time using only matrix-vector and vector-vector products.</p>
+<p>Ignoring the cost of projection, ONS takes $O(n^2)$ time and space.</p>
+<h3 id="references">References</h3>
+<ol>
+<li><a href="https://ocobook.cs.princeton.edu/OCObook.pdf">Elad Hazan&rsquo;s Monograph</a></li>
+</ol>
+
+</main>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2023 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+

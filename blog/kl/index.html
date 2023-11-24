@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Forward and Reverse KL Divergence | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">about</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Forward and Reverse KL Divergence</span></h1>
+
+<h2 class="date">2020/06/26</h2>
+</div>
+
+<main>
+<p>KL-divergence is given by:
+$$ D_{KL}(P||Q) = \mathbb{E}_{x \sim P}\left[\log \frac{P(X)}{Q(X)}\right] $$</p>
+<p>It is not necessarily symmetric, so $D_{KL}(P||Q) \neq D_{KL}(Q||P)$, thus it cannot be used as a distance metric.</p>
+<p>It is always positive, i.e. $D_{KL} \geq 0$. Also, if there is a point $x$ where $Q(X) = 0$ but $P(X) \neq 0$, then $D_{KL}(P||Q) = \infty$. Thus, we need the support of $P$ to lie completely in $Q$ for a finite KL-divergence.</p>
+<p>For distributions $P, Q$ that are the same <em>almost everywhere</em> we have $D_{KL}(P||Q) = D_{KL}(Q||P) = 0$, and conversely if for any distributions $P, Q$ we have $D_{KL}(P||Q) = 0$ or $D_{KL}(Q||P) = 0$, then $P, Q$ are same almost everywhere.</p>
+<p>There is a relation between KL-divergence and cross entropy given by $D_{KL}(P||Q) = \mathbb{E}_{x \sim P}[-\log Q(X)] - H(P(X))$, where the first term is the well-known cross entropy term and the second term is the entropy. If we fix $P$, then optimizing KL-divergence is the same as optimizing the cross entropy.</p>
+<p>Say, we are minimizing the KL-divergence between a fixed <em>unknown</em> distribution $P$ and a parametric distribution $Q_{\theta}$. We aim to find parameters $\theta$ that minimizes the KL-divergence. Then we have two natural objectives:</p>
+<ol>
+<li>Forward KL: $D_{KL}(P||Q_\theta)$</li>
+<li>Reverse KL: $D_{KL}(Q_\theta||P)$</li>
+</ol>
+<h3 id="forward-kl">Forward KL</h3>
+<p>Simplifying the forward KL objective gives,</p>
+<p>$$D_{KL}(P||Q_\theta) = \mathbb{E}_{x \sim P}[-\log Q_{\theta}(X)] - H(P(X))$$</p>
+<p>Thus minimizing the forward KL objective w.r.t $\theta$ is the same as minimizing the cross entropy term. In other words, for points sampled from $P$, we want to maximize the likelihood of those points under $Q$.</p>
+<p>Thus, we are simply <em>maximizing the likelihood of $P$ under $Q$</em>. This results in a <strong>mean seeking</strong> behavior as $Q$ tries to cover all the high-probability regions of $P$ and thus could potentially spread itself across the modes of $P$.</p>
+<h3 id="reverse-kl">Reverse KL</h3>
+<p>Simplifying the reverse KL objective gives,</p>
+<p>$$D_{KL}(Q_\theta||P) = \mathbb{E}_{x \sim Q_\theta}[-\log P(X)] - H(Q_\theta(X))$$</p>
+<p>Thus minimizing the reverse KL objective w.r.t. $\theta$ tries to maximize the likelihood of points sampled from $Q$ under $P$ while maximizing the entropy of $Q$.</p>
+<p>Thus, we are simply <em>maximizing the likelihood of $Q$ under $P$ while also maximizing the entropy of $Q$</em>. The entropy term is crucial as it prevents $Q$ from collapsing into a delta distribution at the mode of $P$. This results in a <strong>mode seeking</strong> behavior where $Q$ tries to find a mode of $P$ with high probability and concentrate around it.</p>
+<h3 id="other-things-of-note">Other things of note</h3>
+<p>Forward KL requires only samples from unknown $P$ to optimize the objective, while reverse KL requires the capability of sampling from the parametric distribution $Q_\theta$ (which is typically possible) and a way to evaluate the likelihood under the unknown distribution $P$ (which is difficult.)</p>
+<h3 id="references">References</h3>
+<p>Mostly followed this great <a href="https://dibyaghosh.com/blog/probability/kldivergence.html">blog post</a> and this <a href="https://wiseodd.github.io/techblog/2016/12/21/forward-reverse-kl/">one</a>.</p>
+
+</main>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2023 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+

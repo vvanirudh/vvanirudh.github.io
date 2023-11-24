@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdaGrad | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">about</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">AdaGrad</span></h1>
+
+<h2 class="date">2020/11/18</h2>
+</div>
+
+<main>
+<p><a href="https://arxiv.org/abs/1912.13213">Francesco Orabona&rsquo;s monograph</a> on online learning has a very neat and intuitive way of looking at AdaGrad. I found it to be really useful.</p>
+<h3 id="looking-back-at-ogd">Looking back at OGD</h3>
+<p>From our <a href="../../notes/ogd">note</a> on online (sub)gradient descent, we had the following regret bound</p>
+<p>$$R_T(u) \leq \frac{D^2}{2\eta_T} + \sum_{t=1}^T \frac{\eta_t}{2} ||g_t||_2^2 $$</p>
+<p>where $D$ is the diameter of the closed, convex set $V$. If we assume a fixed learning rate for all time steps and optimizing we get the optimal learning rate as</p>
+<p>$$ \eta^* = \frac{D}{\sqrt{\sum_{t=1}^T ||g_t||_2^2}} $$</p>
+<p>But the above choice of learning rate requires us to peek into the future subgradients! A reasonable approximation would be to consider using the subgradients that we have seen so far.</p>
+<p>$$ \eta_t = \frac{D}{\sqrt{\sum_{i=1}^{t} ||g_i||_2^2}} $$</p>
+<p>Let us try to see what regret we can achieve using the above learning rate scheme. In the OGD regret bound above, we can see that the first term is unchanged as $\eta_T = \eta^* $. The second term, on the other hand, using the optimal learning rate $\eta^* $ gives us</p>
+<p>$$ \frac{1}{2}\sum_{t=1}^T \eta^* ||g_t||_2^2 = \frac{D}{2} \sqrt{\sum_{t=1}^T ||g_t||_2^2} $$</p>
+<p>Using the chosen learning rate scheme, we obtain the second term as</p>
+<p>$$ \frac{1}{2}\sum_{t=1}^T \eta_t ||g_t||_2^2 = \frac{D}{2}\sum_{t=1}^T \frac{||g_t||_2^2}{\sqrt{\sum_{i=1}^t ||g_i||_2^2}} $$</p>
+<p>The above term can be bounded using the following lemma</p>
+<p><strong>Bounding Discrete Sums using Integrals</strong>: Let $a_0 \geq 0$ and $f:[0, \infty) \rightarrow [0, \infty)$ be a non-increasing function. Then
+$$ \sum_{t=1}^T a_t f(a_0 + \sum_{i=1}^t a_i) \leq \int_{a_0}^{\sum_{t=0}^T a_t} f(x) dx $$</p>
+<p>Using the above lemma, we bound the above term as</p>
+<p>$$ \frac{D}{2}\sum_{t=1}^T \frac{||g_t||_2^2}{\sqrt{\sum_{i=1}^t ||g_i||_2^2}} \leq D\sqrt{\sum_{t=1}^T ||g_t||_2^2} $$</p>
+<p>Thus, substituting this second term in the regret bound (and computing the first term as before), we get the following regret bound
+$$ R_T(u) \leq \frac{3D}{2}\sqrt{\sum_{t=1}^T ||g_t||_2^2} $$</p>
+
+</main>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2023 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+

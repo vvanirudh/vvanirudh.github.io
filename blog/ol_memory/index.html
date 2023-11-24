@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Online Learning for Adversaries with Past Memory | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">about</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Online Learning for Adversaries with Past Memory</span></h1>
+
+<h2 class="date">2020/07/09</h2>
+</div>
+
+<main>
+<p>The framework of OCO with memory is:</p>
+<ul>
+<li>At each round $t$, player chooses $x_t \in K \subset \mathbb{R}^n$</li>
+<li>Then, a loss $f_t: K^{m+1} \rightarrow \mathbb{R}$ is revealed and player suffers loss of $f_t(x_{t-m}, \cdots, x_t)$</li>
+<li>Assume $0 \in K$, and $f_t(x_0, \cdots, x_m) \in [0,1]$ for any $x_0, \cdots, x_m \in K$</li>
+<li>Assume that after $f_t$ is revealed, the player is aware of the loss she would suffer had she played any sequence of decisions $x_{t-m}, \cdots, x_t$ (counterfactual feedback model)</li>
+</ul>
+<p>Minimize policy regret
+$$R_{T, m} = \sum_{t=m}^T f_t(x_{t-m}, \cdots, x_t) - \min_{x \in K} \sum_{t=m}^T f_t(x, \cdots, x) $$</p>
+<p>The functions $f_t$ are convex loss function with memory, i.e. the function $\tilde{f}_t = f_t(x, \cdots, x)$ is convex in $x$.</p>
+<h3 id="algorithm">Algorithm</h3>
+<p>The algorithm is simply online gradient descent</p>
+<p><strong>Online Gradient Descent with Memory</strong>: Step size $\eta$, functions $\{f_t\}_{t=m}^T$</p>
+<ol>
+<li>Initialize $x_0, \cdots, x_{m-1} \in K$ arbitrarily</li>
+<li>for $t=m, \cdots, T$</li>
+<li>Play $x_t$, suffer loss $f_t(x_{t-m}, \cdots, x_t)$</li>
+<li>Set $x_{t+1} = \Pi_{K}(x_t - \eta\nabla \tilde{f}_t(x))$</li>
+<li>end</li>
+</ol>
+<h3 id="regret-analysis">Regret Analysis</h3>
+<p>The functions $\{f_t\}_{t=1}^T$ are coordinate-wise lipschitz continuous i.e. for any $j$
+$$|f_t(x_0, \cdots, x_j, \cdots, x_m) - f_t(x_0, \cdots,\tilde{x}_j, \cdots, y_m)| \leq L ||x_j - \tilde{x}_j|| $$</p>
+<p>Denote
+$$G = \sup_{t \in \{1, \cdots, T\}, x \in K} ||\nabla \tilde{f}_t(x)||$$
+$$D = \sup_{x, y \in K} ||x - y||$$</p>
+<p><strong>Regret Guarantee</strong>: The algorithm generates a sequence $x_1, \cdots, x_T$ such that
+$$R_{T, m} \leq \frac{D^2}{\eta} + TG^2\eta + Lm^2\eta GT$$
+Furthermore, setting $\eta = \frac{D}{\sqrt{G(G + Lm^2)T}}$ implies that
+$$R_{T, m} \leq O(D\sqrt{G(G + Lm^2)T})$$</p>
+<p><strong>Proof</strong>: From OGD analysis we have for lipschitz loss functions (refer to this <a href="notes/ogd">note</a>)
+$$\sum_{t=m}^T \tilde{f}_t(x_t) - \min_{x \in K} \sum_{t=m}^T \tilde{f}_t(x) \leq \frac{D^2}{\eta} + TG^2\eta$$</p>
+<p>We know from the coordinate-wise lipschitz assumption
+$$\begin{aligned}
+|f_t(x_{t-m}, \cdots, x_t) - f_t(x_t, \cdots, x_t)| &amp;\leq L\sum_{j=1}^m||x_t - x_{t-j}|| \leq L\sum_{j=1}^m\sum_{l=1}^j||x_{t-l+1} - x_{t-l}|| \\
+&amp;\leq L\sum_{j=1}^m\sum_{l=1}^j\eta||\nabla \tilde{f}_{t-l}(x_{t-l})|| \leq Lm^2\eta G
+\end{aligned}$$</p>
+<p>The first inequality is using the coordinate-wise lipschitz assumption, the second inequality is simply a version of triangle inequality, the third inequality is using the projection lemma (refer to this <a href="../../notes/ogd">note</a>) and the final inequality from lipschitzness of $\tilde{f}_t$.</p>
+<p>Summing up we get
+$$|\sum_{t=m}^T f_t(x_{t-m}, \cdots, x_t) - \sum_{t=m}^T f_t(x_t, \cdots, x_t)| \leq Lm^2\eta GT$$
+Combining the above with the guarantee we have from OGD analysis we get
+$$\sum_{t=m}^T f_t(x_{t-m}, \cdots, x_t) - \min_{x \in K} \sum_{t=m}^T f_t(x, \cdots, x) \leq \frac{D^2}{\eta} + TG^2\eta + Lm^2\eta GT$$
+$\square$</p>
+<h3 id="references">References</h3>
+<ol>
+<li><a href="https://arxiv.org/abs/1302.6937">Online Convex Optimization Against Adversaries with Memory and Application to Statistical Arbitrage</a></li>
+<li><a href="https://arxiv.org/abs/1902.08721">Online Control with adversarial disturbances</a></li>
+</ol>
+
+</main>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2023 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+

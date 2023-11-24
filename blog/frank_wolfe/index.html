@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Frank-Wolfe a.k.a Conditional Gradient Descent | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">about</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Frank-Wolfe a.k.a Conditional Gradient Descent</span></h1>
+
+<h2 class="date">2020/06/27</h2>
+</div>
+
+<main>
+<p>An alternative approach to projected gradient descent for minimizing a smooth convex function $f$ over a compact, convex set $K$.</p>
+<p>At the $t$-th step, it considers the first-order taylor approximation $\hat{f}$ of $f$ around $x_t$, and minimizes $\hat{f}$ over $K$, obtaining a minimizer $y_t$.
+$$ \hat{f}(y) = f(x_t) + \langle \nabla f(x_t), y - x_t \rangle $$
+$$ y_t = \arg\min_{y \in K} \hat{f}(y) = \arg\min_{y \in K} \langle \nabla f(x_t), y \rangle $$</p>
+<p>Then, it takes the new point $x_{t+1}$ to be the convex combination of $x_t$ and $y_t$ with parameter $\gamma_t \in [0, 1]$
+$$ x_{t+1} = (1 - \gamma_t) x_t + \gamma_t y_t $$
+Because this is a convex combination, $x_{t+1} \in K$.</p>
+<p><em>This way, instead of projecting onto $K$ at each iteration, we need to optimize the linear function $\hat{f}(y)$ over $K$, which may be easier.</em></p>
+<p>A major advantage of conditional gradient descent over projected gradient descent (other than th e lack of projection operation) is that the former can adapt to the smoothness (or lipschitzness of the gradient) of $f$ in an arbitrary norm.</p>
+<p><strong>Theorem</strong>: Let $f$ be convex, and $\beta$-smooth w.r.t. some norm $||\cdot||$, $R = \sup_{x, y \in K} ||x - y||$, and $\gamma_t = \frac{2}{t+1}$ for $t \geq 1$. Then for any $t \geq 2$ we have
+$$ f(x_t) - f(x^*) \leq \frac{2\beta R^2}{t+1} $$</p>
+<p><strong>Proof</strong>: Can be found in <a href="https://arxiv.org/pdf/1405.4980.pdf">Bubeck&rsquo;s Monograph</a> Theorem 3.8. Very easy and relies mostly on the smoothness property, the fact that $y_t$ is minimizer of $\langle \nabla f(x_t), y\rangle$, and the construction of $\gamma_t = \frac{2}{t+1}$.</p>
+<p>In addition to being projection-free and &ldquo;norm-free&rdquo;, the conditional gradient descent produces <em>sparse iterates</em> in the vertex representation of $K$. Observe that any iterate $x_t$ is a convex combination of $t$ vertices (assume $x_1$ is a vertex), and $t &lt; &lt; n$ where $K \subset \mathbb{R}^n$.</p>
+<p>Thus, conditional gradient descent has the following properties: dimension-free, projection-free, norm-free, and sparse iterates in the vertex representation.</p>
+<p><a href="https://arxiv.org/pdf/1405.4980.pdf">Bubeck</a> presents a cool application of Franke-Wolfe on a least squares regression problem with structured sparsity (Section 3.3)</p>
+<h3 id="references">References</h3>
+<ol>
+<li><a href="https://arxiv.org/pdf/1405.4980.pdf">Bubeck&rsquo;s Monograph on Convex Optimization</a> Section 3.3</li>
+<li><a href="https://www.cs.yale.edu/homes/vishnoi/Nisheeth-VishnoiFall2014-ConvexOptimization.pdf">Nisheeth Vishnoi&rsquo;s notes on Convex Optimization</a> Section 1.7.8</li>
+</ol>
+
+</main>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2023 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+

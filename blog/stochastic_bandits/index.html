@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Regret Analysis of Stochastic Bandit Problems | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">about</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Regret Analysis of Stochastic Bandit Problems</span></h1>
+
+<h2 class="date">2020/07/23</h2>
+</div>
+
+<main>
+<ul>
+<li>$K$ arms, $T$ rounds (assume known $K$ and $T$)</li>
+<li>Goal is to maximize total reward over $T$ rounds</li>
+</ul>
+<h3 id="assumptions">Assumptions</h3>
+<ol>
+<li>Bandit Feedback: only observe reward for the arm played</li>
+<li>IID rewards: For each arm $a$, $\exists$ a reward distribution $D_a$ which is unknown</li>
+<li>Per-round rewards are bounded, i.e. $r_t \in [0, 1]$ for $t \in [T]$</li>
+</ol>
+<ul>
+<li>We are primarily interested in mean vector $\mu \in [0, 1]^K$ where $\mu(a) = \mathbb{E}[D_a]$</li>
+</ul>
+<h3 id="notation">Notation</h3>
+<ul>
+<li>Set of arms $\mathcal{A}$</li>
+<li>Best mean reward $\mu^* = \max_{a \in \mathcal{A}} \mu(a)$</li>
+<li>Gap of arm $a$: $\Delta(a) = \mu^* - \mu(a)$</li>
+<li>Optimal arm $a^* $, i.e. $\mu(a^*) = \mu^*$</li>
+</ul>
+<h3 id="regret">Regret</h3>
+<p>$$ R(T) = \mu^*T - \sum_{t=1}^T \mu(a_t) $$</p>
+<ul>
+<li>$a_t$ is the arm played at round $t$</li>
+<li>Note that regret is a random variable</li>
+<li>We will mostly deal with expected regret $\mathbb{E}[R(T)]$</li>
+</ul>
+<p>Let us start with a naive algorithm that explores first for a fixed number of rounds and then exploits</p>
+<h3 id="explore-first">Explore-First</h3>
+<ul>
+<li>parameter $N$ fixed in advance</li>
+</ul>
+<p><strong>Algorithm</strong>:</p>
+<ol>
+<li>Exploration phase: try each arm $N$ times</li>
+<li>Select the arm $\hat{a}$ with highest average reward (arbitrary tie-breaks)</li>
+<li>Exploitation phase: play arm $\hat{a}$ for the remaining rounds</li>
+</ol>
+<p>Let us try to analyze the regret of the above algorithm. To aid us in the analysis, it is useful to know Hoeffding&rsquo;s inequality given by
+$$ \mathbb{P}[|\bar{\mu}(a) - \mu(a)| \leq r(a)] \geq 1 - \frac{2}{T^4} $$
+where $\bar{\mu}(a)$ is the average reward for arm $a$ after exploration phase, $r(a) = \sqrt{\frac{2\log T}{N}}$ is the confidence radius. In other words, <em>the probability that the average would deviate from the true expectation will be small</em>.</p>
+<p>Another trick that simplifies the regret analysis is the <em>clean event trick</em> where we define a clean event and a bad event (which is simply the complement of the clean event.) For the purposes of analyzing the regret of Explore-first we define the following clean event:
+$$ \mathcal{E}: |\bar{\mu}(a) - \mu(a)| \leq r(a), \forall a \in \mathcal{A} $$</p>
+<p><strong>Regret Guarantee</strong>: Explore-first achieves regret $\mathbb{E}[R(T)] \leq T^{\frac{2}{3}}\mathcal{O}(K\log T)^{\frac{1}{3}}$</p>
+<p><strong>Proof</strong>: First, consider that the clean event $\mathcal{E}$ holds. Say at the end of exploration phase, we chose $\hat{a}$ as the best arm but $\hat{a} \neq a^* $. So at each step in the exploitation phase we incur regret. But for $\hat{a}$ to have been chosen, the following should be true: $\bar{\mu}(\hat{a}) \geq \bar{\mu}(a^*)$.</p>
+<p>Since it is a clean event we have,
+$$\begin{aligned}
+\mu(\hat{a}) + r(\hat{a}) &amp;\geq \bar{\mu}(\hat{a}) \geq \bar{\mu}(a^*) \geq \mu(a^*) - r(a^*) \\
+\mu^* - \mu(\hat{a}) &amp;\leq r(\hat{a}) + r(a^*) = \mathcal{O}\left(\sqrt{\frac{\log T}{N}}\right)
+\end{aligned}$$</p>
+<p>Thus, we can bound the regret as
+\begin{align}
+R(T) &amp;\leq KN + (T - KN) \mathcal{O}\left(\sqrt{\frac{\log T}{N}}\right) \\
+&amp;\leq KN + T \mathcal{O}\left(\sqrt{\frac{\log T}{N}}\right)
+\end{align}
+where the first term in the first line of the above set of equations comes from the exploration phase (assuming worst case.) Minimizing the right hand side over $N$ we get $N = \left(\frac{T}{K}\right)^{\frac{2}{3}}\mathcal{O}(\log T)^{\frac{1}{3}}$ and $R(T) \leq T^{\frac{2}{3}}\mathcal{O}(K\log T)^{\frac{1}{3}}$.</p>
+<p>But we need to also consider the bad event. However, its probability is so small (thanks to Hoeffding&rsquo;s!) that it won&rsquo;t affect expected regret
+\begin{align}
+\mathbb{E}[R(T)] &amp;= \mathbb{E}[R(T)|\mathcal{E}]\mathbb{P}[\mathcal{E}] + \mathbb{E}[R(T)|\bar{\mathcal{E}}]\mathbb{P}[\bar{\mathcal{E}}] \\
+&amp;\leq \mathbb{E}[R(T)|\mathcal{E}] + T * \mathcal{O}(T^{-4}) \\
+&amp;\leq T^{\frac{2}{3}} \mathcal{O}(K\log T)^{\frac{1}{3}}
+\end{align}
+$\square$</p>
+<p>An issue with explore-first, that the regret accrued in the exploration phase is terrible! Maybe its better to interleave exploration with exploitation.</p>
+<h3 id="epsilon-greedy">Epsilon-Greedy</h3>
+<ul>
+<li>parameters $\epsilon_1, \epsilon_2, \cdots$ fixed in advance</li>
+<li>idea is to spread exploration more uniformly over time</li>
+</ul>
+<p><strong>Algorithm</strong>:</p>
+<ol>
+<li>For each round $t=1, 2, \cdots$ do</li>
+<li>Toss a coin with success probability $\epsilon_t$</li>
+<li>If success, explore: choose arm uniformly at random and play it</li>
+<li>Else, exploit: choose arm with highest average reward so far and play it</li>
+<li>End for</li>
+</ol>
+<p>Since exploration is spread more uniformly, we can derive meaningful regret bounds even for small $t$ (unlike explore-first which required $T &gt; KN$)</p>
+<p>Let us focus on $\epsilon_t \sim t^{\frac{-1}{3}}$ so that expected number of exploration rounds upto time $t$ is of the order of $t^{\frac{2}{3}}$, same as in explore-first</p>
+<p><strong>Regret Guarantee</strong>: Epsilon-greedy with $\epsilon_t = t^{\frac{-1}{3}}(K\log t)^{\frac{1}{3}}$ achieves regret $\mathbb{E}[R(t)] \leq t^{\frac{2}{3}}\mathcal{O}(K\log t)^{\frac{1}{3}}$ <em>for each round</em> $t$</p>
+<p><strong>Proof</strong>: Fix round $t$ and let us compute $\mathbb{E}[\Delta(a_t)]$.
+Let us try to define the clean event for ease of analysis. Let $n_t(a)$ be the number of times arm $a$ was played until round $t$. If $n_t(a)$ were fixed in advance (like in explore-first) then we can simply use Hoeffding&rsquo;s
+$$ \mathbb{P}[|\bar{\mu}_t(a) - \mu(a)| \leq r_t(a)] \geq 1 - \frac{2}{T^4} $$
+where $r_t(a) = \sqrt{\frac{2\log T}{n_t(a)}}$. But $n_t(a)$ is a random variable and depends on past rewards, thus conditioned on $n_t(a)$ samples of $a$ are not necessarily independent.</p>
+<p>We can get around this by ensuring Hoeffding&rsquo;s holds for all $j \leq t$, i.e.
+$$ \forall j, \mathbb{P}[|\bar{\mu}_t(a) - \mu(a)| \leq r_t(a)] \geq 1 - \frac{2}{T^4} $$
+Using union bound (and assuming number of arms $K \leq T$) we have
+$$ \mathbb{P}[\forall a, \forall j, |\bar{\mu}_t(a) - \mu(a)| \leq r_t(a)] \geq 1 - \frac{2}{T^2} $$</p>
+<p>We will define this as the  clean event $\mathcal{E}$:
+$$ \mathcal{E}: {\forall a, \forall t, |\bar{\mu}_t(a) - \mu(a)| \leq r_t(a)} $$
+It is clear from the above arguments that
+$$ \mathbb{P}[\mathcal{E}] \geq 1 - \frac{2}{T^2} $$</p>
+<p>Now let&rsquo;s move onto the regret analysis of epsilon-greedy.
+Consider clean event $\mathcal{E}$ holds.</p>
+<p>At any round $t$, if we exploit and the arm played $a_t \neq a^* $, then we know $\bar{\mu}(a_t) \geq \bar{\mu}(a^*)$. Since it is a clean event we have</p>
+<p>\begin{align}
+\mu(a_t) + r(a_t) &amp;\geq \bar{\mu}(a_t) \geq \bar{\mu}(a^*) \geq \mu(a^*) - r(a^*) \\
+\mu^* - \mu(a_t) &amp;\leq r(a_t) + r(a^*) \\
+\mu^* - \mu(a_t) &amp;\leq \mathcal{O}\left(\sqrt{\frac{\log T}{n_t(a^*)}}\right) + \mathcal{O}\left(\sqrt{\frac{\log T}{n_t(a_t)}}\right)
+\end{align}</p>
+<p>Note that $\mathbb{E}[n_t(a)] \geq \frac{\epsilon_t}{K} t$ if we only count the exploration rounds. Thus, we have
+$$ \mathbb{E}[\mu^* - \mu(a_t)] \leq \mathcal{O}\left( \sqrt{\frac{K\log T}{\epsilon_t t}}\right) $$</p>
+<p>Now consider $\mathbb{E}[\Delta(a_t)]$ where $\Delta(a_t)$ is the suboptimality gap of arm $a_t$
+\begin{align}
+\mathbb{E}[\Delta(a_t)] &amp;\leq \epsilon_t + (1 - \epsilon_t)\mathbb{E}[\mu^* - \mu(a_t)] \\
+&amp;\leq \epsilon_t + (1 - \epsilon_t)\mathcal{O}\left( \sqrt{\frac{K\log T}{\epsilon_t t}}\right)
+\end{align}
+In the first equation among the above set of equations, we account for both exploration (assuming worst case regret) and exploitation.</p>
+<p>Now we can decompose expected regret in terms of the expected suboptimality gaps
+$$ \mathbb{E}[R(t)] = \sum_t \mathbb{E}[\Delta(a_t)] \leq \epsilon_t t + (1 - \epsilon_t)\mathcal{O}\left( \sqrt{\frac{Kt\log T}{\epsilon_t}}\right) $$
+Optimizing over $\epsilon_t$ we get $\epsilon_t = t^{-\frac{1}{3}}(K\log t)^{\frac{1}{3}}$ which results in
+$$ \mathbb{E}[R(t)] \leq t^{\frac{2}{3}}\mathcal{O}(K\log t)^{\frac{1}{3}} $$</p>
+<p>Note that we have only considered clean event, but we can easily show that the probability of bad event is so small that it doesn&rsquo;t affect expected regret.
+$\square$</p>
+<h3 id="successive-elimination">Successive Elimination</h3>
+<ul>
+<li>The problem with both explore-first and epsilon-greedy is that exploration schedule does not depend on history of observed rewards. Clearly it is better to adapt. This is what Successive elimination does.</li>
+<li>Idea is to alternate among arms until we find that an arm is better than other in terms of confidence bounds</li>
+</ul>
+<p>Before we move onto the algorithm, let us define what upper/lower confidence bounds are:
+$$ \mathtt{UCB}_t(a) = \bar{\mu}_t(a) + r_t(a) $$
+$$ \mathtt{LCB}_t(a) = \bar{\mu}_t(a) - r_t(a) $$
+The interval $[\mathtt{LCB}_t(a), \mathtt{UCB}_t(a)]$ is called the <em>confidence interval</em>.</p>
+<p><strong>Algorithm</strong>:</p>
+<ol>
+<li>Initially all arms are set to &ldquo;active&rdquo;</li>
+<li>Each phase:</li>
+<li>Try all arms that are active</li>
+<li>Deactivate all arms $a$ such that there exists arm $a&rsquo;$ with $\mathtt{UCB}_t(a) \leq \mathtt{LCB}_t(a)$</li>
+<li>Repeat until end of all rounds</li>
+</ol>
+<p><strong>Regret Guarantee</strong>: Successive elimination achieves regret
+$$ \mathbb{E}[R(t)] = \mathcal{O}(\sqrt{Kt\log T}) $$
+for all rounds $t \leq T$ (Note that we achieve a $\sqrt{t}$ dependence over $T^{\frac{2}{3}}$ dependence that explore-first/epsilon-greedy achieve and this is due to adaptive-exploration)</p>
+<p><strong>Proof</strong>: Consider any arm $a$ that is not optimal i.e. $\mu(a) \neq \mu^* $. Let $t$ be the last round before $a$ is deactivated. Define the clean event $\mathcal{E}$ the same way as we did for epsilon-greedy regret analysis.
+Consider clean event $\mathcal{E}$ holds. Then,
+$$ \Delta(a) = \mu^* - \mu(a) \leq 2(r_t(a^*) + r_t(a)) = \mathcal{O}(r_t(a)) $$
+The above inequality is true since confidence intervals of $a^*$ and $a$ must overlap as $a$ is not eliminated yet. And the final equality (above) is true because $n_t(a)$ and $n_t(a^*)$ differ at most by $1$ since we are alternating among arms.</p>
+<p>But for arm $a$, $n_t(a) = n_T(a)$ which implies $r_t(a) = r_T(a)$. Thus we have,
+$$ \Delta(a) \leq \mathcal{O}(r_T(a)) = \mathcal{O}\left(\sqrt{\frac{\log T}{n_T(a)}}\right) $$
+for all arms $a$ such that $\mu(a) &lt; \mu^*$.</p>
+<p><em>Thus, an arm that is played a lot of times cannot be bad</em></p>
+<p>Consider regret of arm $a$ until round $t$
+$$ R(t, a) = \Delta(a) n_t(a) \leq n_t(a) \mathcal{O}\left(\sqrt{\frac{\log T}{n_T(a)}}\right) \leq \mathcal{O}(\sqrt{n_t(a)\log T}) $$
+Consider the set $\mathcal{A}^+ = \{a: \mu(a) &lt; \mu^*\}$. Then
+$$ R(t) = \sum_{a \in \mathcal{A}^+} R(t, a) \leq \mathcal{O}(\sqrt{\log T})\sum_{a \in \mathcal{A}^+} \sqrt{n_t(a)} \leq \mathcal{O}(\sqrt{\log T}) \sum_{a \in \mathcal{A}} \sqrt{n_t(a)} $$
+Note that the function $f(x) = \sqrt{x}$ is a concave function, so from Jensen&rsquo;s we have
+$$ \frac{1}{K}\sum \sqrt{x} \leq \sqrt{\frac{\sum x}{K}} $$</p>
+<p>Hence,
+$$R(t) \leq \mathcal{O}(\sqrt{\log T}) \sqrt{K\sum_{a \in \mathcal{A}}n_t(a)} = \mathcal{O}(\sqrt{Kt\log T})$$</p>
+<p>Thus, when the clean event $\mathcal{E}$ holds we have shown that the above regret bound is true. Similar to previous analyses we can also show that the regret contribution from the bad event $\bar{\mathcal{E}}$ is small and does not affect the regret bound. $\square$</p>
+<p>In addition to the above regret bound with absolute constants, we can additionally show an instance-dependent bound for successive elimination as follows</p>
+<p><strong>Instance-dependent Regret Guarantee</strong>: Successive Elimination achieves regret
+\begin{align}
+\mathbb{E}[R(T)] &amp;\leq \mathcal{O}(\log T) \left[ \sum_{a \in \mathcal{A}^+} \frac{1}{\Delta(a)} \right] \\
+&amp;= \mathcal{O}(\log T) \left[\sum_{a: \mu(a) &lt; \mu^*} \frac{1}{\mu^* - \mu(a)} \right]
+\end{align}</p>
+<p><strong>Proof</strong>:From the above proof we know
+$$ \Delta(a) \leq \mathcal{O}\left(\sqrt{\frac{\log T}{n_T(a)}}\right) $$
+which gives
+$$ n_T(a) \leq \mathcal{O}\left(\frac{\log T}{(\Delta(a))^2}\right) $$</p>
+<p>So we have,
+$$ R(T, a) = n_T(a)\Delta(a) \leq \mathcal{O}\left(\frac{\log T}{\Delta(a)}\right) $$
+and
+$$R(T) = \sum_{a \in \mathcal{A}^+} R(T, a) \leq \mathcal{O}(\log T)\left[\sum_{a \in \mathcal{A}^+} \frac{1}{\Delta(a)} \right]$$
+$\square$</p>
+<p>The regret bound is logarithmic in $T$ with an instance-dependent constant whereas the previous regret bound is achievable with an absolute constant.</p>
+<h3 id="ucb1">UCB1</h3>
+<ul>
+<li>Optimism under uncertainty: assume each arm is as good as it can possibly be given observations so far and choose the best arm based on these optimistic estimates</li>
+</ul>
+<p><strong>Algorithm</strong>:</p>
+<ol>
+<li>Try each arm once</li>
+<li>for each round $t$</li>
+<li>Pick arm $\arg\max_{a \in \mathcal{A}} \mathtt{UCB}_t(a)$ and play it</li>
+<li>end for</li>
+</ol>
+<p>It is quite clear that UCB1 has an implicit exploration strategy since an arm $a$ is chosen either if it has a high average reward estimate $\bar{\mu}(a)$ or has a high confidence radius $r_t(a)$.</p>
+<p><strong>Regret Guarantee</strong>: UCB1 achieves the following regret bound for all rounds $t \leq T$
+$$ \mathbb{E}[R(t)] = \mathcal{O}(\sqrt{Kt\log T}) $$
+In addition, we can also show a instance-dependent bound as follows
+$$\mathbb{E}[R(T)] \leq \mathcal{O}(\log T) \left[\sum_{a \in \mathcal{A}^+} \frac{1}{\Delta(a)}\right]$$</p>
+<p><strong>Proof</strong>: Note that the regret bounds are the same as successive elimination. We will mostly borrow the same analysis and keep it simple.</p>
+<p>Say arm $a_t$ is chosen in round $t$, then we know
+$$\mathtt{UCB}_t(a_t) \geq \mathtt{UCB}_t(a^*) \geq \mu^*$$
+But we know that under the clean event $\mathcal{E}$ (defined the same as successive elimination)
+\begin{align}
+\mu(a_t) &amp;\geq \bar{\mu}(a_t) - r(a_t) \\
+\bar{\mu}(a_t) &amp;\leq \mu(a_t) + r(a_t)
+\end{align}
+Therefore,
+$$\mu(a_t) + 2r(a_t) \geq \bar{\mu}(a_t) + r(a_t) = \mathtt{UCB}_t(a_t) \geq \mu^*$$
+$$ \Delta(a_t) \leq 2r(a_t) = 2\sqrt{\frac{2\log T}{n_t(a_t)}} $$
+The above trick is often used in the analyses for UCB-style algorithms.</p>
+<p>Now, choosing $t$ as the last round where arm $a$ was played will give us the same property that we had in the proof for successive elimination and the rest of the analysis follows $\square$</p>
+<h3 id="references">References</h3>
+<p>All the above proofs, intuitions and algorithms are taken from Aleksandrs Slivkins&rsquo; great <a href="https://arxiv.org/pdf/1904.07272.pdf">monograph</a> on multi-armed bandits.</p>
+
+</main>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2023 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Online Gradient Descent | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">about</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Online Gradient Descent</span></h1>
+
+<h2 class="date">2020/07/01</h2>
+</div>
+
+<main>
+<p>Similar to SGD but different: loss functions are different at each time step</p>
+<h3 id="algorithm">Algorithm</h3>
+<p><strong>Projected Online Gradient Descent</strong>: $x_1 \in V \subseteq \mathbb{R}^d$ where $V$ is a closed, convex set and $\eta_1, \cdots, \eta_T &gt; 0$</p>
+<ol>
+<li>for $t = 1, \cdots, T$</li>
+<li>Play $x_t$</li>
+<li>Receive $\ell_t: \mathbb{R}^d \rightarrow (-\infty, \infty]$ and pay $\ell_t(x_t)$</li>
+<li>Set $g_t = \nabla \ell_t(x_t)$</li>
+<li>$x_{t+1} = \Pi_V(x_t - \eta_t g_t) = \arg\min_{y \in V}||x_t - \eta_tg_t - y||_2$</li>
+<li>end</li>
+</ol>
+<h3 id="regret-analysis">Regret Analysis</h3>
+<p>Crucial to the analysis is the following simple lemma:</p>
+<p><strong>Projection Lemma</strong>: $\forall x \in \mathbb{R}^d, y \in V$ where $V$ is closed, convex set we have
+$$ ||\Pi_V(x) - y||_2 \leq ||x - y||_2 $$
+In other words, <em>projection always decreases the distance of the point to the set it is being projected on</em>.</p>
+<p><strong>Proof</strong>: Very simple. Relies on the first-order constrained optimality condition. Refer to <a href="https://arxiv.org/abs/1912.13213">Francesco Orabona&rsquo;s Notes</a>.</p>
+<p>Next, we will try to bound the instantaneous regret of OGD</p>
+<p><strong>Instantaneous Regret Lemma</strong>: $\ell_t: V \rightarrow \mathbb{R}$ be convex and differentiable and $g_t = \nabla \ell_t(x_t)$. Then $\forall u \in V$ we have
+$$ \eta_t(\ell_t(x_t) - \ell_t(u)) \leq \eta_t \langle g_t, x_t - u \rangle \leq \frac{1}{2}||x_t - u||_2^2 - \frac{1}{2}||x_{t+1} - u||_2^2 + \frac{\eta_t^2}{2}||g_t||_2^2 $$</p>
+<p><strong>Proof</strong>: Regret analyses typically involve constructing a potential term, and observing how the potential evolves over iterations. For OGD, let&rsquo;s consider $||x_t - u||_2^2$ as the potential term and observe how it decreases in an iteration:
+\begin{align}
+||x_{t+1} - u||_2^2 - ||x_t - u||_2^2 &amp;\leq ||x_t - \eta_t g_t - u||_2^2 - ||x_t - u||_2^2 \\
+&amp;= -2\eta_t \langle g_t, x_t - u \rangle + \eta_t^2 ||g_t||_2^2 \\
+&amp;\leq -2\eta_t (\ell_t(x_t) - \ell_t(u)) + \eta_t^2 ||g_t||_2^2
+\end{align}
+Rearranging the above inequality gives us the statement of the lemma. The first inequality uses the projection lemma and the second one uses the first-order convexity condition. $\square$</p>
+<p>Now it is very simple to use telescoping using the instantaneous regret lemma to obtain the following regret guarantee</p>
+<p><strong>Regret Guarantee for OGD</strong>: If $V$ is closed, convex set with diameter $D$, i.e. $\max_{x, y \in V}||x - y||_2 \leq D$. If $\ell_1, \cdots, \ell_T$ are differentiable convex loss functions, pick any $x_1 \in V$ and $\eta_{t+1} \leq \eta_t$ for all $t=1, \cdots, T-1$ then for all $u \in V$ we have</p>
+<p>$$ R_T(u) = \sum_{t=1}^T (\ell_t(x_t) - \ell_t(u)) \leq \frac{D^2}{2\eta_T} + \sum_{t=1}^T \frac{\eta_t}{2} ||g_t||_2^2$$</p>
+<p>If $\eta_t = \eta$ for all $t = 1, \cdots, T$, then we have</p>
+<p>$$ \sum_{t=1}^T (\ell_t(x_t) - \ell_t(u)) \leq \frac{||u - x_1||_2^2}{2\eta} + \frac{\eta}{2}\sum_{t=1}^T ||g_t||_2^2$$</p>
+<p><strong>Proof</strong>: Using the instantaneous regret lemma and telescoping we get,
+$$\begin{aligned}
+\sum_{t=1}^T (\ell_t(x_t) - \ell_t(u_t)) &amp;\leq \frac{1}{2\eta_1}||x_1 - u||_2^2 + \sum_{t=2}^T (\frac{1}{2\eta_t} - \frac{1}{2\eta_{t-1}}) ||x_t - u||_2^2 + \sum_{t=1}^T \frac{\eta_t}{2} ||g_t||_2^2 \\
+&amp;\leq \frac{D^2}{2\eta_1} + \sum_{t=2}^T (\frac{1}{2\eta_t} - \frac{1}{2\eta_{t-1}}) D^2 + \sum_{t=1}^T \frac{\eta_t}{2} ||g_t||_2^2 \\
+&amp;= \frac{D^2}{2\eta_1} + \frac{D^2}{2\eta_T} - \frac{D^2}{2\eta_1} + \sum_{t=1}^T \frac{\eta_t}{2} ||g_t||_2^2 \\
+&amp;= \frac{D^2}{2\eta_T} \sum_{t=1}^T \frac{\eta_t}{2} ||g_t||_2^2
+\end{aligned}$$
+It is easy to see that if $\eta_t = \eta$ then from the first step above that
+$$ \sum_{t=1}^T (\ell_t(x_t) - \ell_t(u)) \leq \frac{||x_1 - u||_2^2}{2\eta} + \frac{\eta}{2}\sum_{t=1}^T ||g_t||_2^2$$
+$\square$</p>
+<p>In the case of constant learning rate, we can find an upper bound on the regret by minimizing the above expression using $\eta = \frac{||x_1 - u||}{\sqrt{\sum_{t=1}^T ||g_t||_2^2}}$ giving us the bound $R_T(u) \leq ||u - x_1||_2 \sqrt{\sum_{t=1}^T ||g_t||_2^2}$. But this $\eta$ requires the knowledge of all future gradients!</p>
+<p>We can come up with a loose upper bound by assuming that the norm of the gradients are bounded (i.e. $\ell_t$ are $L$-lipschitz continuous) and assuming that the domain $V$ is bounded (i.e. $\max_{x, y \in V}||x-y||_2 \leq D$) to get
+$$\eta^* = \arg\min_{\eta} \frac{D^2}{2\eta} + \frac{\eta L^2 T}{2} = \frac{D}{L\sqrt{T}} $$
+which gives a regret bound of $R_T(u) \leq DL\sqrt{T}$, which is sublinear!</p>
+<p>Hence, OGD is <em>no-regret</em>.</p>
+<h3 id="observations">Observations</h3>
+<p><a href="https://arxiv.org/abs/1912.13213">Orabona</a> makes a few interesting observations:</p>
+<ul>
+<li>If we want to use time-varying learning rate, the above regret guarantee indicates that you need a bounded domain $V$</li>
+<li>However, in stochastic setting you can still use a time-varying learning rate in SGD with an unbounded domain if you use non-uniform averaging</li>
+<li>Although , the optimal $\eta$ requires knowledge of future gradients, we can achieve similar rates using adaptive algorithms</li>
+</ul>
+<h3 id="online-subgradient-method">Online Subgradient Method</h3>
+<p>Note that the only property of $g_t$ we have used is the first-order convexity condition, which is true even if $g_t$ is simply a subgradient of $\ell_t$ at $x_t$. Thus, the same regret guarantees hold for online subgradient method!</p>
+<p>Thus, OGD can also be used for non-differentiable convex functions using subgradients instead of gradients.</p>
+<h3 id="references">References</h3>
+<ol>
+<li><a href="http://www.cs.cmu.edu/~maz/publications/techconvex.pdf">Zinkevich 2003 original paper</a></li>
+<li><a href="https://ocobook.cs.princeton.edu/OCObook.pdf">Elad Hazan&rsquo;s monograph</a></li>
+<li><a href="https://arxiv.org/abs/1912.13213">Francesco Orabona&rsquo;s Notes</a></li>
+</ol>
+
+</main>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2023 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+

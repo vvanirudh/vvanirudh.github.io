@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Online Gradient Descent with Strongly Convex Functions | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">about</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Online Gradient Descent with Strongly Convex Functions</span></h1>
+
+<h2 class="date">2020/07/03</h2>
+</div>
+
+<main>
+<p>Turns out we can do better $\sqrt{T}$ regret we saw for OGD analysis for convex lipschitz losses if they possess some <em>curvature</em> that can be exploited.</p>
+<h3 id="strong-convexity">Strong Convexity</h3>
+<p>$f$ is $\mu$-strongly convex over convex set $V$ w.r.t norm $||\cdot||$ if $\forall x, y \in V$ and $g \in \partial f(x)$
+$$ f(y) \geq f(x) + \langle g, y - x\rangle +\frac{\mu}{2}||x - y||^2$$</p>
+<p>In other words, <em>a strongly convex function is lower bounded by a quadratic (instead of linear like convex functions)</em>. Hence, we have a tighter lower bound. Actually, several possible quadratic lower bounds since there can be more than one subgradient.</p>
+<p><strong>Lemma</strong>: If $f$ is twice-differentiable then a sufficient condition for $\mu$-strong convexity is that $\forall x, y, \in V$ we have
+$$ \langle \nabla^2 f(x) y, y\rangle \geq \mu||y||^2 $$</p>
+<h3 id="regret-analysis">Regret Analysis</h3>
+<p><strong>Theorem</strong>: Assume losses $\ell_t$ are $\mu_t$-strongly convex w.r.t $||\cdot||_2$ where $\mu_t &gt;0$. Using OGD with stepsizes equal to $\eta_t = \frac{1}{\sum_{i=1}^t \mu_i}$. Then for any $u \in V$,
+$$\sum_{t=1}^T (\ell_t(x_t) - \ell_t(u)) \leq \frac{1}{2}\sum_{t=1}^T \eta_t ||g_t||_2^2$$</p>
+<p><strong>Proof</strong>: Observe that
+\begin{align}
+\eta_1 &amp;= \frac{1}{\mu_1} \\
+\implies\frac{1}{2\eta_1} - \frac{\mu_1}{2} &amp;= 0 \\
+\implies\frac{1}{2\eta_t} - \frac{\mu_t}{2} &amp;= \frac{1}{2\eta_{t-1}}
+\end{align}
+for $t=2, \cdots, T$. We can use the instantaneous regret lemma (refer to this <a href="../../notes/ogd">note</a>) and the strong-convexity condition to get
+\begin{align}
+\sum_{t=1}^T &amp;(\ell_t(x_t) - \ell_t(u)) \leq \sum_{t=1}^T \frac{1}{2\eta_t}||x_t - u||_2^2 - \frac{1}{2\eta_t}||x_{t+1} - u||_2^2 - \frac{\mu_t}{2}||x_t - u||_2^2 + \frac{\eta_t}{2}||g_t||_2^2 \\
+&amp;= -\frac{1}{2\eta_1}||x_2 - u||_2^2 + \sum_{t=2}^T (\frac{1}{2\eta_{t-1}}||x_t - u||_2^2 - \frac{1}{2\eta_t}||x_{t+1} - u||_2^2) + \sum_{t=1}^T\frac{\eta_t}{2}||g_t||_2^2 \\
+&amp;= \frac{1}{2}\sum_{t=1}^T \eta_t||g_t||_2^2
+\end{align}
+$\square$</p>
+<p>We can obtain a more interpretable regret upper bound if the loss functions are lipschitz in addition to being strongly convex.</p>
+<p><strong>Corollary</strong>: If we have $\mu_t = \mu &gt; 0$ for all $t$ and $\ell_t$ is $L$-lipschitz w.r.t $||\cdot||_2$ for $t=1, \cdots T$. Then
+$$\sum_{t=1}^T (\ell_t(x_t) - \ell_t(u)) \leq \frac{L^2}{2\mu} (1 + \log T) $$</p>
+<p><strong>Proof</strong>: $\ell_t$ is $L$-lipschitz gives us $||g_t||_2^2 \leq L^2$ and thus, using the above theorem we have
+$$ \sum_{t=1}^T (\ell_t(x_t) - \ell_t(u)) \leq \frac{L^2}{2\mu}\sum_{t=1}^T \frac{1}{t} $$
+We can bound this using the inequality $\sum_{t=1}^T \frac{1}{t} \leq 1 + \log T$ to get
+$$ \sum_{t=1}^T (\ell_t(x_t) - \ell_t(u)) \leq \frac{L^2}{2\mu}(1 + \log T) $$
+$\square$</p>
+<p>Thus, OGD with strongly-convex and lipschitz loss functions has regret with a <em>logarithmic</em> dependence on $T$! Much better than $\sqrt{T}$ dependence for convex, lipschitz loss functions.</p>
+<p>Very important to see that corollary requires bounded domain otherwise loss functions will not be lipschitz given that they are also strongly-convex.</p>
+<h3 id="references">References</h3>
+<ol>
+<li><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.88.3483&amp;rep=rep1&amp;type=pdf">Logarithmic regret algorithms for online convex optimization</a></li>
+<li><a href="https://papers.nips.cc/paper/3319-adaptive-online-gradient-descent.pdf">Adaptive online gradient descent</a></li>
+<li><a href="https://arxiv.org/abs/1912.13213">Francesco Orabona&rsquo;s Notes</a></li>
+</ol>
+
+</main>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2023 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+
