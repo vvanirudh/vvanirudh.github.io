@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lessons from AlphaZero: Part 1 | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">home</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Lessons from AlphaZero: Part 1</span></h1>
+
+<h2 class="date">2023/11/24</h2>
+</div>
+
+<main>
+<p>I recently came across this <a href="https://web.mit.edu/dimitrib/www/LessonsfromAlphazero.pdf">book</a> from Bertsekas that looked very interesting. It promises to provide a novel (geometric) interpretation of the methods that underlie the success of AlphaZero, AlphaGo, and TD-Gammon. I thought it would be interesting to take this as an opportunity to read the book, and have a blog post series on the key takeaways.</p>
+<p>I think this will be a 3-part blog series with the following contents:</p>
+<ul>
+<li>Part 1 (this post): Notation, Bellman Operators, and geometric interpretation of value iteration.</li>
+<li>Part 2: Approximation in Value Space, one-step and multi-step lookahead, and certainty equivalent approximations.</li>
+<li>Part 3: Geometric interpretation of policy iteration, truncated rollout, and final remarks.</li>
+</ul>
+<p>With that, let&rsquo;s kick-off part 1.</p>
+<h2 id="overview">Overview</h2>
+<p>Before I dive into the book, let me lay out an overview of the methodology underlying AlphaZero and TD-Gammon. They were both trained off-line extensively using neural networks and an approximate version of policy iteration. However, note that the AlphaZero player that was obtained off-line is not directly used during on-line play. Instead, a separate on-line player is used to select moves, based on multi-step lookahead minimization and a terminal position evaluator that was trained using experience with the off-line player. In a similar fashion, TD-Gammon (on-line) uses an off-line neural network-trained terminal position evaluator, and extends its on-line lookahead by rollout using the one-step lookahead player based on the position evaluator.</p>
+<p>Bertsekas observes that</p>
+<blockquote>
+<ul>
+<li>The on-line player of AlphaZero plays much better than its extensively trained off-line player. This is due to the beneficial effect of exact policy improvement with long lookahead minimization, which corrects for the inevitable imperfections of the neural network-trained off-line player.</li>
+<li>The TD-Gammon player that uses long rollout plays much better than TD-Gammon without rollout. This is due to the beneficial effect of the rollout, which serves as a substitute for long lookahead minimization</li>
+</ul>
+</blockquote>
+<p>This book answers why <em>on-line player works so much better than directly using the off-line player.</em></p>
+<p>The answer can be summarized as:</p>
+<blockquote>
+<ul>
+<li><em>Approximation in value space with one-step lookahead minimization amounts to a step of Newton&rsquo;s method for solving Bellman&rsquo;s equation</em></li>
+<li><em>The starting point for the Newton step is based on the results of off-line training, and may be enhanced by longer lookahead minimization and on-line rollout</em></li>
+</ul>
+</blockquote>
+<p>Bertsekas also says the following which I believe is the major claim made in this book:</p>
+<blockquote>
+<p><strong>The major determinant of the quality of the on-line policy is the Newton step that is performed on-line, while off-line training plays a secondary role by comparison</strong></p>
+</blockquote>
+<p>With the motivation and the main contributions out of the way, its time for some notation to understand the insights behind the contributions.</p>
+<h2 id="notation">Notation</h2>
+<p>The following notation will be used in all of the blog posts concerning this book. This is the same notation that Bertsekas uses in the book. Oddly, it differs from the usual RL notation that we are used to, so I will try to draw parallels in this section.</p>
+<p>The dynamics are of the form,
+$$ x_{k+1} = f(x_k, u_k, w_k) $$</p>
+<ul>
+<li>States are denoted using $x_k \in X$ (same as $s$ in RL)</li>
+<li>Controls are denoted using $u_k \in U$ (same as $a$ in RL)</li>
+<li>The system has a random disturbance denoted by $w_k \in W$, which is governed by a probability distribution $P(\cdot|x_k, u_k)$ (we do not have a parallel for this as we assume the dynamics as a probability transition matrix, and $w$ serves the same purpose here)</li>
+<li>Stationary policies are denoted using $\mu \in M$ which map states to controls (same as $\pi$ in RL)</li>
+<li>Cost is denoted using $g(x_k, u_k, w_k)$ (same as $c(s, a)$ in RL, but note that the cost can depend on the noise as well here)</li>
+<li>Discount factor is denoted using $\alpha \in (0, 1]$ (same as $\gamma$ in RL)</li>
+</ul>
+<p>We are primarily interested in minimizing the expected total cost
+$$ J_\mu(x_0) = \lim_{N \rightarrow \infty} \mathbb{E}[\sum_{k=0}^{N-1} \alpha^k g(x_k, \mu(x_k), w_k)] $$</p>
+<ul>
+<li>We use $J_\mu$ to denote the cost function of the policy $\mu$.</li>
+<li>The optimal cost function is denoted using $J^*$ which satisfies $J^*(x) = \inf_{\mu}J_\mu(x)$ for all states $x$.</li>
+</ul>
+<h2 id="bellman-operators">Bellman Operators</h2>
+<p>To avoid unwieldy notation and to also encourage thinking of Bellman&rsquo;s equations as operators, we define the following Bellman operators. Understanding this notation and properties of these operators is crucial for understanding the main takeaways presented in these blog posts.</p>
+<ul>
+<li>We use $TJ$ to denote the function that appears in the right-hand side of the Bellman&rsquo;s equation, where for all $x$ we have
+$$ (TJ)(x) = \min_{u \in U(x)}\mathbb{E}[g(x, u, w) + \alpha J(f(x, u, w))] $$</li>
+<li>Also for each policy $\mu$, we introduce $T_\mu J$, which is defined at all $x$ as
+$$ (T_{\mu}J)(x) = \mathbb{E}[g(x, \mu(x), w)+ \alpha J(f(x, \mu(x), w))] $$</li>
+</ul>
+<p>These two operators have the following properties:</p>
+<ul>
+<li><strong>(Monotonic)</strong>: $T, T_\mu$ are monotonic, i.e. if $J(x) \geq J&rsquo;(x)$ for all $x$, then we have
+<ul>
+<li>$(TJ)(x) \geq (TJ&rsquo;)(x)$, and</li>
+<li>$(T_\mu J)(x) \geq (T_\mu J&rsquo;)(x)$</li>
+</ul>
+</li>
+<li><strong>(Linear Operator)</strong>: $T_\mu$ is a linear (actually, affine) operator in $J$</li>
+<li><strong>(Concavity)</strong>: $T$ is a concave function of $J$ since $(TJ)(x) = \min_{\mu \in M} (T_\mu J)(x)$ and pointwise minimum of linear functions is concave</li>
+</ul>
+<p>The linearity of $T_\mu$ and the concavity of $T$ are the two main properties that enable the interpretation of policy improvement in AlphaZero-like approaches as Newton steps. They will also be crucial in our geometric interpretations of popular RL methods.</p>
+<h2 id="geometric-interpretation-of-value-iteration">Geometric Interpretation of Value Iteration</h2>
+<p>Before we end part 1, I thought it would be nice for the readers to see how the above properties lend us a new (geometric) way of interpreting popular RL methods like value iteration. First, let&rsquo;s use the operator notation to describe the value iteration algorithm.</p>
+<p>We describe two versions of value iteration: the policy evaluation version, and the policy improvement version.</p>
+<ul>
+<li><strong>(Policy Evaluation VI)</strong>: $J_{k+1} = T_\mu J_k$ for iterations $k=0, 1, \cdots$</li>
+<li><strong>(Policy Improvement VI)</strong>: $J_{k+1} = TJ_k$ for iterations $k=0, 1, \cdots$</li>
+</ul>
+<p>Both of the above value iteration approaches have a <em>staircase-like</em> construction in their geometric interpretation as shown below. First, we will show the geometric interpretation of policy evaluation VI.</p>
+<h4 id="policy-evaluation-value-iteration">Policy Evaluation Value Iteration</h4>
+<center>
+<img src="../../lessons/policy_eval_vi.png" style="max-width:60%">
+</center>
+<p>The above graph is the first of many in this blog post series. For all of these graphs, both X- and Y-axis denote the space of all cost functions $J$. The (blue) line going through the origin is always the $y=x$ line.</p>
+<p>The above graph shows two iterations of the policy evaluation VI starting from $J_0$ and ending at $J_2$. The black line depicts the function that applies the operator $T_\mu$. Note that it is linear as we know $T_\mu$ is a linear operator. The point at which it intersects the $y=x$ line is represented by $J_\mu$, i.e. the cost of the policy $\mu$.</p>
+<p>Starting from $J_0$, the first iteration applies the operator $T_\mu$ to get the next iterate $J_1$, which subsequently undergoes the same operation $T_\mu$ once more to get to $J_2$. Note that this repeated operation converges to $J_\mu$ as it is the fixed point of the operation $J = T_\mu J$.</p>
+<p>Now, let&rsquo;s see the geometric interpretation of policy improvement VI.</p>
+<h4 id="policy-improvement-value-iteration">Policy Improvement Value Iteration</h4>
+<center>
+<img src="../../lessons/policy_improvement_vi.png" style="max-width:65%">
+</center>
+<p>Couple of things to note here:</p>
+<ul>
+<li>The red line denotes the operator $T$, which we know is concave. Note that the function depicted in the above graph is not linear, but is concave.</li>
+<li>The point at which the red line intersects the $y=x$ line is represented by the optimal cost $J^*$ as it is the solution to $J = TJ$.</li>
+</ul>
+<p>The above graph shows two iterations of the policy improvement VI. Starting from $J_0$, the first iteration applies the operator $T$ to get the next iterate $J_1$, which is used in the next iteration to apply $T$ once again to get $J_2$. This repeated operation would now converge to the optimal cost $J^*$ as it is the fixed point of the operation $J = TJ$.</p>
+<h4 id="remarks">Remarks</h4>
+<ul>
+<li>The above two graphs show a neat geometric interpretation of the VI algorithms that I found very interesting. Bertsekas builds on these interpretations to understand more complex approaches such as multi-step lookahead minimization and truncated rollout.</li>
+<li>The two graphs belie the main difference between the two VI approaches (besides the linearity of $T_\mu$ and concavity of $T$): computing $T_\mu J$ can be much less computationally demanding than computing $TJ$ as it does not involve minimization over the control dimension.</li>
+<li>Note that the line representing $T_\mu$ can have one of three cases:
+<ul>
+<li>The line has slope less than $45$ degrees, so it intersects the $y=x$ line at a unique point corresponding to $J_\mu$ which is a solution of $J = T_\mu J$</li>
+<li>The line has slope greater than $45$ degrees, so it intersects the $y=x$ line at a unique point corresponding to solution of $J = T_\mu J$ but not equal to $J_\mu$. $J_\mu$ is not real-valued and $\mu$ is an unstable policy</li>
+<li>The line has slope exactly $45$ degrees, in which case it either has infinite or no solution at all.</li>
+</ul>
+</li>
+</ul>
+<h2 id="epilogue">Epilogue</h2>
+<p>This is a good point to end this part of the series. The next two posts get to the meat of the insights from the book, and build upon these geometric interpretations. Stay tuned!</p>
+
+</main>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2023 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+
