@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lessons from AlphaZero: Part 2 | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">home</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Lessons from AlphaZero: Part 2</span></h1>
+
+<h2 class="date">2023/12/02</h2>
+</div>
+
+<main>
+<p>This is part 2 of the blog post series on this <a href="https://web.mit.edu/dimitrib/www/LessonsfromAlphazero.pdf">book</a> from Bertsekas, and its key takeaways.</p>
+<p>Let&rsquo;s pick it up from where we left off in <a href="../../blog/lessons_of_alphazero_1">part 1</a>. Will highly recommend readers to check out part 1 before continuing in part 2, as some important notation and ideas were described there, which will be relevant in this part.</p>
+<p>As a recap, here&rsquo;s the breakdown for the 3-part blog series:</p>
+<ul>
+<li><a href="../../blog/lessons_of_alphazero_1">Part 1</a>: Notation, Bellman Operators, and geometric interpretation of value iteration.</li>
+<li><a href="../../blog/lessons_of_alphazero_2">Part 2</a> (this post): Approximation in Value Space, one-step and multi-step lookahead, and certainty equivalent approximations.</li>
+<li>Part 3: Geometric interpretation of policy iteration, truncated rollout, and final remarks.</li>
+</ul>
+<p>With that, let&rsquo;s kick-off part 2.</p>
+<h2 id="approximation-in-value-space">Approximation in Value Space</h2>
+<p>Bertsekas calls the on-line player approach of AlphaZero, <em>approximation in value space</em>, as this involves a lookahead minimization combined with truncated rollout and a terminal position evaluator (a.k.a value estimator.) For the purposes of this post, let&rsquo;s ignore the truncated rollout part, and focus on effects of lookahead minimization and value estimator. We will examine the effect of truncated rollout in part 3.</p>
+<p>For readers who are unfamiliar with the AlphaZero online player approach, the following figure from the book is an apt summary:</p>
+<center>
+<img src="../../lessons/online_player.png" style="max-width:70%">
+</center>
+Given a position $x_0$ during on-line play, a lookahead tree is constructed by enumerating all possible actions and resulting states until a certain depth (we will use $\ell$ to refer to this depth.) Subsequently, the off-line trained policy is used to perform a truncated rollout from the leaves of the lookahead tree for a specified number of steps (we will se $m$ to refer to the length of truncated rollout.) Finally, we use the off-line trained cost estimator to approximate the cost-to-go of the leaf states.
+<p>The approach of using an approximate cost estimator for the leaf states to compute a policy at state $x_0$ is referred to as <em>approximation in value space</em>. This approach is motivated by re-examining Bellman&rsquo;s equation from <a href="../../blog/lessons_of_alphazero_1">part 1</a>:</p>
+<p>$$ \mu^*(x) \in \arg\min_{u \in U(x)}\mathbb{E}[g(x, u, w) + \alpha J^*(f(x, u, w))] $$</p>
+<p>where $J^*$ is the optimal cost-to-go function. However, the off-line trained cost estimator $\tilde{J}$ is an approximation of $J^*$. Substituting $\tilde{J}$ in place of $J^*$ in the Bellman&rsquo;s equation results in the one-step lookahead approximation in value space approach:</p>
+<p>$$ \tilde{\mu}(x) \in \arg\min_{u \in U(x)}\mathbb{E}[g(x, u, w) + \alpha \tilde{J}(f(x, u, w))] $$</p>
+<p>The above minimization yields a new stationary policy $\tilde{\mu}$ with cost-to-go $J_{\tilde{\mu}}$. <strong>Note that the cost of $\tilde{\mu}$ is not $\tilde{J}$</strong>. Instead it is $J_{\tilde{\mu}}$ which satisfies $T_{\tilde{\mu}}J_{\tilde{\mu}} = J_{\tilde{\mu}}$.</p>
+<p>The key observation from Bertsekas is that:</p>
+<blockquote>
+<p>The change from $\tilde{J}$ to $J_{\tilde{\mu}}$ will be interpreted as a step of Newton&rsquo;s method for solving Bellman&rsquo;s equation</p>
+</blockquote>
+<p>This will suggest that $J_{\tilde{\mu}}$ is closer to $J^*$ and obeys a superlinear convergence relation, i.e.</p>
+<p>$$ \lim_{\tilde{J} \rightarrow J^*} \frac{J_{\tilde{\mu}}(x) - J^*(x)}{\tilde{J}(x) - J^*(x)} = 0 $$</p>
+<p>Furthermore, he also makes another crucial observation:</p>
+<blockquote>
+<p>For $\ell$-step lookahead minimization, it can be interpreted as Newton&rsquo;s method for solving Bellman&rsquo;s equation, starting from $\hat{J}$, which is an &ldquo;improvement&rdquo; over $\tilde{J}$. In particular, $\hat{J}$ is obtained from $\tilde{J}$ by applying $(\ell-1)$ successive value iterations.</p>
+</blockquote>
+<p>We will spend the rest of this post understanding how the above two observations can be drawn from a geometric perspective, thereby understanding the core premise of the book which is to answer <em>why the on-line player works so much better than directly using the off-line player?</em></p>
+<h2 id="geometric-interpretation-of-one-step-lookahead-policy">Geometric Interpretation of One-step Lookahead Policy</h2>
+<p>The one-step lookahead policy is computed as follows for any state $x$:</p>
+<p>$$ \min_{u \in U(x)} \mathbb{E}[\underbrace{g(x, u, w)}_{\text{First step}} + \underbrace{\alpha \tilde{J}(f(x, u, w))}_{\text{Future}}] $$</p>
+<p>The above minimization yields a control $\tilde{u}$ at state $x$, which defines the one-step lookahead policy $\tilde{\mu}$ via $\tilde{\mu}(x) = \tilde{u}$. In other words, $\tilde{\mu}$ is defined using</p>
+<p>$$ \tilde{\mu}(x) \in \arg\min_{u \in U(x)} \mathbb{E}[g(x, u, w) + \alpha \tilde{J}(f(x, u, w))] $$</p>
+<p>which is the same as saying, <strong>$T_{\tilde{\mu}}\tilde{J} = T\tilde{J}$</strong>. Geometrically, the graph of $T_{\tilde{\mu}}J$ just touches the graph of $TJ$ at $\tilde{J}$. This can be interpreted geometrically using the following figure.</p>
+<center>
+<img src="../../lessons/one_step_lookahead.png" style="max-width:70%">
+</center>
+<p>The above figure can be understood through the following:</p>
+<ul>
+<li>From <a href="../../blog/lessons_of_alphazero_1">part 1</a>, we know that $T_{\tilde{\mu}}$ is a linear function (in $J$) and hence is represented using the blue line in the above graph,</li>
+<li>$T$ is a concave function and is represented using the red curve,</li>
+<li>The line corresponding to $T_{\tilde{\mu}}$ intersects the concave curve of $T$ at the starting point $\tilde{J}$,</li>
+<li>The blue line $T_{\tilde{\mu}}$ intersects the $y=x$ line at the point $J_{\tilde{\mu}}$ as it is the solution to the fixed point equation $T_{\tilde{\mu}}J = J$, and</li>
+<li>The red curve $T$ intersects the $y=x$ line at the point $J^*$ (the optimal cost) as it is the solution to the fixed point equation $TJ = J$.</li>
+</ul>
+<p>The update from starting point $\tilde{J}$ to $J_{\tilde{\mu}}$ can be seen as a result of applying <strong>one step of Newton&rsquo;s method</strong> for finding the fixed point of the equation $TJ = J$ at the start point $\tilde{J}$. This can be inferred from the following observations:</p>
+<ul>
+<li>$T_{\tilde{\mu}}$ is the linearization of $T$ at $\tilde{J}$</li>
+<li>$J_{\tilde{\mu}}$ corresponds to the point of intersection of the linearization $T_{\tilde{\mu}}$ with the line $y=x$, i.e. it is the solution for $T_{\tilde{\mu}}J = J$</li>
+</ul>
+<p>Thus, this is exactly like performing one step of Newton&rsquo;s method. Note that the new iterate $J_{\tilde{\mu}}$ is significantly closer to optimal cost $J^*$ than the start point $\tilde{J}$. Repeating this process over several iterations will quickly get us close to the optimal cost $J^*$.</p>
+<p>We can also make a similar geometric interpretation for the $\ell$-step lookahead policy.</p>
+<h2 id="geometric-interpretation-of-ell-step-lookahead-policy">Geometric Interpretation of $\ell$-step lookahead policy</h2>
+<p>The $\ell$-step lookahead policy is computed as follows for any state $x$:</p>
+<p>$$ \min_{u_k, \mu_{k+1}, \cdots, \mu_{k+\ell-1}} \mathbb{E}[\underbrace{g(x_k, u_k, w_k) + \sum_{i=k+1}^{k+\ell-1} \alpha^{i-k}g(x_i, \mu_i(x_i), w_i)}_{\text{First } \ell \text{ steps}} + \underbrace{\alpha^\ell \tilde{J}(x_{k+\ell})}_{\text{Future}}] $$</p>
+<p>The above minimization yields a control $\tilde{u}_k$ and a sequence of policies $\tilde{\mu}_{k+1}, \cdots, \tilde{\mu}_{k+\ell-1}$. The control $\tilde{u}_k$ is applied at state $x_k$, and defines the $\ell$-step lookahead policy $\tilde{\mu}$ via $\tilde{\mu}(x_k) = \tilde{u}_k$. The sequence of policies $\tilde{\mu}_{k+1}, \cdots, \tilde{\mu}_{k+\ell-1}$ is discarded.</p>
+<p>In other words, $\tilde{\mu}$ is defined using</p>
+<p>$$ \tilde{\mu}(x_k) \in \arg\min_{u_k \in U(x)} \min_{\mu_{k+1}, \cdots, \mu_{k+\ell-1}} \mathbb{E}[g(x_k, u_k, w_k) + \sum_{i=k+1}^{k+\ell-1} \alpha^{i-k}g(x_i, \mu_i(x_i), w_i) + \alpha^\ell \tilde{J}(x_{k+\ell})] $$</p>
+<p>which is the same as $T_{\tilde{\mu}}\tilde{J} = T^\ell\tilde{J} = T(T^{\ell-1}\tilde{J})$. We can reformulate this as $T_{\tilde{\mu}}\tilde{J} = T\hat{J}$ where $\hat{J} = T^{\ell-1}\tilde{J}$.</p>
+<p>Few remarks can be made from the above bellman operator interpretation:</p>
+<ul>
+<li>Note that the $\ell$-step lookahead minimization involves $\ell$ successive value iterations, but <em>only the first of these iterations has a Newton step interpretation</em></li>
+<li>The first step of lookahead is the Newton step (from $T^{\ell-1}\tilde{J}$ to $J_{\tilde{\mu}}$) and the rest of the steps are simply preparation for the Newton step (i.e. $\tilde{J}$ to $T^{\ell-1}\tilde{J}$.)</li>
+</ul>
+<p>The $\ell$-step lookahead minimization can be interpreted geometrically using the following figure.</p>
+<center>
+<img src="../../lessons/multi_step_lookahead.png" style="max-width:80%">
+</center>
+<p>The above figure can be understood through the following:</p>
+<ul>
+<li>The blue line corresponding to $T_{\tilde{\mu}}$ intersects the red curve of $T$ at $\hat{J} = T^{\ell-1}\tilde{J}$ ($= T^2\tilde{J}$ in this example) as it is the fixed point of the equation $T_{\tilde{\mu}}J = TJ$</li>
+<li>To get to $\hat{J} = T^{\ell-1}\tilde{J}$ from the start point $\tilde{J}$, we need to perform $(\ell-1)$ successive value iterations (as shown by the staircase construction above.)</li>
+<li>To perform the first step (from $\hat{J}$ to $J_{\tilde{\mu}}$,) we linearize $T$ at $\hat{J} = T^{\ell-1}\tilde{J}$ and compute its intersection with the $y=x$ line to give $J_{\tilde{\mu}}$.</li>
+</ul>
+<p>Thus, the update from $T^{\ell-1}\tilde{J}$ to $J_{\tilde{\mu}}$ corresponds to <strong>one-step of Newton&rsquo;s method</strong> for finding the fixed point of the equation $TJ = J$ at the point $T^{\ell-1}\tilde{J}$, which itself is constructed by performing $(\ell - 1)$ successive value iterations from the start point $\tilde{J}$.</p>
+<h2 id="remarks">Remarks</h2>
+<ul>
+<li>From the above two interpretations, Bertsekas claims that most of the benefit of the on-line player comes from the Newton&rsquo;s step that is performed through lookahead minimization</li>
+<li>The off-line training only prepares the starting point of the Newton step, and is not as essential as the on-line Newton step</li>
+<li>The effect of off-line training can be minimized by increasing the lookahead depth, as the $(\ell-1)$ successive value iterations can bring the very coarse approximation $\tilde{J}$ (from off-line training) close to $J^*$, thereby alleviating the need for accurate approximations from off-line training</li>
+<li>As we will see in part 3, truncated rollout is also another way to reduce the impact of off-line training and enhance the starting point of Newton step</li>
+<li>Finally it is to be noted that approximation in value space computes $J_{\tilde{\mu}}$ differently than policy iteration (as we will see in part 3.) It does not explicitly compute $J_{\tilde{\mu}}$; instead, the control is applied to the system and cost is accumulated accordingly. Thus, values of $J_{\tilde{\mu}}$ are <em>implicitly</em> computed only for those states $x$ that are encountered in the system trajectory generated on-line.</li>
+</ul>
+<h2 id="certainty-equivalent-approximations">Certainty Equivalent Approximations</h2>
+<p>The above interpretations can beg a new question: <em>Can we construct new approaches by using other approximations to $J^*$ in Bellman&rsquo;s equation?</em>. The answer is YES, and we will show an example in this section.</p>
+<p>We can replace the Bellman operators $T$ and $T_\mu$ with <em>deterministic</em> variants:</p>
+<p>$$ (\bar{T}J)(x) = \min_{u \in U(x)} g(x, u, \bar{w}) + \alpha J(f(x, u, \bar{w})) $$
+$$ (\bar{T}_\mu J)(x) = g(x, \mu(x), \bar{w}) + \alpha J(f(x, \mu(x), \bar{w})) $$
+where $\bar{w}$ is a deterministic variable, and unlike $w$ which was stochastic noise.</p>
+<p>Using the deterministic operators greatly simplifies $\ell$-step lookahead as there are no stochastic steps. However, it is to be noted that using deterministic steps for all $\ell$ steps  leads to a Newton step for <strong>fixed points of $\bar{T}$, not $T$</strong>, which is not what we want.</p>
+<p>This can be circumvented by using stochastic step for the first step, and deterministic steps for the remaining $(\ell-1)$ steps, i.e.</p>
+<p>$$ T_{\bar{\mu}}(\bar{T}^{\ell-1} \tilde{J}) = T(\bar{T}^{\ell-1}\tilde{J}) $$
+This performs a <strong>Newton step to find fixed point of $T$ starting from $\bar{T}^{\ell - 1}\tilde{J}$</strong>. The performance penalty is minimal if $\bar{T}^{\ell-1}\tilde{J}$ is &ldquo;close&rdquo; to $J^*$.</p>
+<p>We can similarly construct a more general approximation scheme where, we use any approximation $\hat{J}$ that is sufficiently &ldquo;close&rdquo; to $J^*$ and obtain a policy $\tilde{\mu}$ using</p>
+<p>$$ T_{\tilde{\mu}}\hat{J} = T\hat{J} $$</p>
+<p>which involves a Newton step from $\hat{J}$ to $J_{\tilde{\mu}}$.</p>
+<h2 id="epilogue">Epilogue</h2>
+<p>This part presented one of the major takeaways from Bertsekas book, namely understanding why lookahead minimization is performed in on-line play rather than directly using off-line trained policy. Furthermore, we also understand how much of an impact off-line training can have in approximation in value space approaches, and how to mitigate its effects using lookahead.</p>
+<p>In the next (and final) part, we will explore the other methodology used by AlphaZero, <em>truncated rollout</em>, to mitigate the effect of off-line training and also interpret policy iteration (another fundamental RL algorithm) geometrically. By the end of the next part, we will understand all the key takeaways from the book and also be equipped with an arsenal of geometric interpretations that we can use to analyze future RL algorithms.</p>
+
+</main>
+
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-vvanirudh-github-io" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2023 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+
