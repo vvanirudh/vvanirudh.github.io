@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lessons from AlphaZero: Part 3 | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">home</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+      <li><a href="../../blog">blog</a></li>
+      
+      <li><a href="../../news">news</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Lessons from AlphaZero: Part 3</span></h1>
+
+<h2 class="date">2023/12/13</h2>
+</div>
+
+<main>
+<p>We will continue with part 3 (and the final part) of the blog post series on this <a href="https://web.mit.edu/dimitrib/www/LessonsfromAlphazero.pdf">book</a> by Bertsekas. As always, I would highly recommend the readers to start with part 1 and part 2 before continuing in part 3, as all of the notation used in this post is introduced in the previous parts.</p>
+<p>As a recap, here&rsquo;s the breakdown for the 3-part blog series:</p>
+<ul>
+<li><a href="../../blog/lessons_of_alphazero_1">Part 1</a>: Notation, Bellman Operators, and geometric interpretation of value iteration.</li>
+<li><a href="../../blog/lessons_of_alphazero_2">Part 2</a>: Approximation in Value Space, one-step and multi-step lookahead, and certainty equivalent approximations.</li>
+<li><a href="../../blog/lessons_of_alphazero_3">Part 3</a> (this post): Geometric interpretation of policy iteration, truncated rollout, and final remarks.</li>
+</ul>
+<p>Let&rsquo;s begin!</p>
+<h2 id="policy-iteration">Policy Iteration</h2>
+<p>Another major class of RL approaches are based on <em>Policy Iteration</em> (PI), which involves repeated application of two steps:</p>
+<ul>
+<li>Policy Evaluation:
+<ul>
+<li>Given a policy $\mu$, evaluate its cost $J_\mu$</li>
+<li>This can be done by solving the Bellman equation for $\mu$: $J = T_\mu J$, or by Monte-carlo methods that involve rolling out the policy $\mu$ and averaging cost incurred, or by other sophisticated methods such as Temporal Difference (TD) methods</li>
+</ul>
+</li>
+<li>Policy Improvement:
+<ul>
+<li>Given cost $J_\mu$, perform one-step lookahead minimization (explained in part 2) to obtain a new policy $\tilde{\mu}$</li>
+</ul>
+</li>
+</ul>
+<p>The above procedure is summarized in the following figure from the book:</p>
+<center>
+<img src="../../lessons/pi.png" style="max-width:70%">
+</center>
+<p>Thus, PI generates a sequence of policies ${\mu^{k}}$ through:</p>
+<ul>
+<li>Policy Evaluation: $J_{\mu^k} = T_{\mu^k} J_{\mu^k}$</li>
+<li>Policy Improvement:$T_{\mu^{k+1}} J_{\mu^k} = TJ_{\mu^k}$</li>
+</ul>
+<p>Note that the policy improvement update is the one-step lookahead minimization that we explored in part 2. Thus, policy improvement can be interpreted as the Newton step starting from $J_{\mu^k}$ that yields policy $\mu^{k+1}$ as the one-step lookahead policy.</p>
+<h2 id="geometric-interpretation-of-policy-iteration">Geometric Interpretation of Policy Iteration</h2>
+<p>Since policy improvement is the same as one-step lookahead minimization, and the policy evaluation operation can be done by solving the Bellman equation for base policy $\mu$, we can borrow the tools we built in part 1 and 2 to come up with the following geometric interpretation.</p>
+<center>
+<img src="../../lessons/iteration_pi.png" style="max-width:70%">
+</center>
+<p>The above graph can be understood through the following:</p>
+<ul>
+<li>To evaluate the base policy $\mu$, we find the intersection of the line representing $T_\mu$ with the $y=x$ line, to give the cost $J_\mu$</li>
+<li>To perform policy improvement (a.k.a one-step lookahead minimization,) we linearize the curve representing $T$ at $x=J_\mu$ to get the line representing $T_{\tilde{\mu}}$ where $\tilde{\mu}$ is the one-step lookahead (or rollout) policy</li>
+<li>The line representing $T_{\tilde{\mu}}$ intersects the $y=x$ line at the cost of the lookahead policy giving us $J_{\tilde{\mu}}$</li>
+<li>Thus, the policy improvement operation is a Newton step from the cost of the base policy $J_\mu$ to the cost of the lookahead policy $J_{\tilde{\mu}}$</li>
+<li>Note that unlike VI and approximation in value space, the initial iterate of the Newton step $J_\mu$ always satisfies $J_\mu \geq J^*$ as it is the cost of a policy (and $J^*$ is the optimal cost)</li>
+</ul>
+<p>Note that if the curve $T$ is nearly linear (i.e. has small curvature,) then the lookahead policy&rsquo;s performance $J_{\tilde{\mu}}$ is close to optimal $J^*$, even if the base policy $\mu$ is far from optimal.</p>
+<p>Furthermore, the Newton step interpretation gives us an error rate</p>
+<p>$$ \lim_{J_\mu \rightarrow J^*} \frac{J_{\tilde{\mu}}(x) - J^*(x)}{J_\mu(x) - J^*(x)} \rightarrow 0 $$</p>
+<p>that has superlinear convergence.</p>
+<h2 id="truncated-rollout">Truncated Rollout</h2>
+<p>Truncated rollout is the final piece of the puzzle that enables the use of any cost approximation $\tilde{J}$ along with a base policy $\mu$ to approximate the cost $J_\mu$, thus avoiding the possibly expensive step of policy evaluation.</p>
+<p>Going back to the AlphaZero approach figure that we saw in part 2 (figure is from the book):</p>
+<center>
+<img src="../../lessons/online_player.png" style="max-width:70%">
+</center>
+We can observe that rather than using the cost of base policy $J_\mu$ at the end of lookahead minimization, we perform $m$ steps of rollout using the base policy $\mu$ after which we apply the terminal cost approximation $\tilde{J}$. In this section, we examine the effect of this approximation and its geometric interpretation.
+<p>Note that the cost obtained by using the base policy $\mu$ for $m$ steps followed by terminal cost approximation $\tilde{J}$, is given by $T_{\mu}^m \tilde{J}$, i.e it is the result of applying $m$ iterations of policy evaluation VI corresponding to $\mu$ starting from $\tilde{J}$.</p>
+<p>Thus, a one-step lookahead policy with $m$ steps of truncated rollout results in the policy $\tilde{\mu}$ that satisfies:</p>
+<p>$$ T_{\tilde{\mu}} (T_\mu^m \tilde{J}) = T (T_\mu^m \tilde{J}) $$</p>
+<p>This can also be extended to the general case of $\ell$-step lookahead (from part 2) as follows:</p>
+<p>$$ T_{\tilde{\mu}} (T^{\ell-1} T_\mu^m \tilde{J}) = T (T^{\ell - 1} T_\mu^m \tilde{J}) $$</p>
+<p>This can be interpreted geometrically using the following figure for ($m = 3$ and $\ell = 1$)</p>
+<center>
+<img src="../../lessons/truncated_rollout.png" style="max-width:90%">
+</center>
+<p>Observe that truncated lookahead with $ell$-step lookahead, followed by $m$-steps of base policy $\mu$ is an <strong>economical</strong> alternative to $(\ell+m)$-step lookahead.</p>
+<h2 id="final-remarks">Final Remarks</h2>
+<p>To conclude this blog post series, I wanted to list the main takeaways that I had from reading Bertsekas&rsquo; book:</p>
+<ul>
+<li>Larger values of $\ell$ for $\ell$-step lookahead is beneficial as it brings the starting point of the Newton step $T^{\ell-1}\tilde{J}$ closer to the optimal cost $J^*$</li>
+<li>However, it is <strong>only</strong> the first step of $\ell$-step lookahead that contributes to Newton step, while the remaining $(\ell-1)$ steps are far <strong>less-effective</strong> first order (or VI, in this case) iterations</li>
+<li>Larger values of $m$ for $m$-step truncated rollout brings the starting point of the Newton step $T_{\mu}^m\tilde{J}$ <strong>closer to $J_\mu$, and not $J^*$</strong></li>
+<li>Thus, increasing $m$ beyond a certain point can be counter-productive</li>
+<li>Lookahead minimization is considerably more computationally expensive than truncated rollout. This, it is always preferable (computationally) to use larger values of $m$ than larger values of $\ell$.</li>
+</ul>
+<h3 id="interesting-questions">Interesting Questions</h3>
+<p><em>Is lookahead by rollout an economic substitute for lookahead by minimization?</em></p>
+<p>YES. For a given computational budget, judiciously balancing $m$ and $\ell$ tends to give a much better lookahead policy than simply increasing $\ell$ as much as possible, while setting $m=0$.</p>
+<p><em>Why not just train a policy network and use it without online play?</em></p>
+<p>The question is asking, in other words, whether using only approximation in policy space to learn a policy that can be used online is good enough. It does have the advantage of fast online inference (directly invoking the learned policy.) However, the offline trained policy may not perform nearly as well as the corresponding one-step or multi-step lookahead policy because <strong>it lacks the power of the associated exact Newton step</strong></p>
+<p>This concludes the blog post series. Please reach out in the comments or directly to me if you have any questions or corrections.</p>
+
+</main>
+
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-vvanirudh-github-io" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2024 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+
