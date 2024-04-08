@@ -64,7 +64,7 @@ the density $p(x)$ is roughly constant over the region, then we have</p>
 <p>$$ P = p(x)V $$</p>
 <p>where $V$ is the volume of the region R. Combining the above two equations, we get</p>
 <p>$$ p(x) = \frac{K}{NV} $$</p>
-<p>The above result gives us two strategies to estimate $p(x)$ for any point $x \in \mathbb{R}^D$:</p>
+<p>The above result gives us <strong>two strategies</strong> to estimate $p(x)$ for any point $x \in \mathbb{R}^D$:</p>
 <ol>
 <li>We can fix $V$ and determine $K$ from data</li>
 <li>We can fix $K$ and determine $V$ from data</li>
@@ -138,6 +138,8 @@ observations, which is great if the data set is large and we have memory constra
 <p>As the dimensionality $D$ grows, the number of bins grows exponentially ($M$ bins in each
 dimension, results in a total of $M^D$ bins.) This exponential scaling makes histograms not the best for high-D
 density estimation, like realistic image generation. However, they are still a very useful tool to have in your arsenal.</p>
+<p>In the next post, I will describe a very popular nonparametric method, Kernel Density Estimation, that also
+follows strategy 1.</p>
 <p>The source code for this post can be found <a href="https://gist.github.com/vvanirudh/10df47c86f29698f7c9b12d8d3421ddf">here</a>.</p>
 
 </main>
