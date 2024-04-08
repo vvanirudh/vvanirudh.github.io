@@ -6,7 +6,17 @@
     <description>Recent content in Anirudh&#39;s Blog on Anirudh Vemula</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 13 Dec 2023 23:47:09 -0400</lastBuildDate><atom:link href="https://vvanirudh.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 07 Apr 2024 17:33:51 -0400</lastBuildDate><atom:link href="https://vvanirudh.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A Gentle Primer for Nonparametric Density Estimation: Histograms</title>
+      <link>https://vvanirudh.github.io/blog/nonparametric_density_estimation/</link>
+      <pubDate>Sun, 07 Apr 2024 17:33:51 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/blog/nonparametric_density_estimation/</guid>
+      <description>Parametric density estimation, a.k.a fitting probability distribution to observed data by tweaking the parameters of the distribution&amp;rsquo;s functional form, is all the rage now with generative modeling and LLMs. I think nonparametric methods deserve some love too and I hope to give a very small primer on these methods in a series of posts.
+What are Nonparametric methods? Looking at the name, you might have guessed that these are methods where you fit a probability distribution to data without any underlying parameters that are computed from the data itself.</description>
+    </item>
+    
     <item>
       <title>Lessons from AlphaZero: Part 3</title>
       <link>https://vvanirudh.github.io/blog/lessons_of_alphazero_3/</link>

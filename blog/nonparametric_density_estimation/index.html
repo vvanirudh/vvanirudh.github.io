@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>A Gentle Primer for Nonparametric Density Estimation: Histograms | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">blog</a></li>
+      
+      <li><a href="../../about">about me</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">A Gentle Primer for Nonparametric Density Estimation: Histograms</span></h1>
+
+<h2 class="date">2024/04/07</h2>
+
+<p>Reading time: 5 minutes.</p>
+</div>
+
+<main>
+<p>Parametric density estimation, a.k.a fitting probability distribution to observed
+data by tweaking the parameters of the distribution&rsquo;s functional form, is all the
+rage now with generative modeling and LLMs. I think nonparametric methods deserve
+some love too and I hope to give a very small primer on these methods in a series of
+posts.</p>
+<h3 id="what-are-nonparametric-methods">What are Nonparametric methods?</h3>
+<p>Looking at the name, you might have guessed that these are methods where you fit
+a probability distribution to data without any underlying parameters that are
+computed from the data itself.</p>
+<p><em>Why bother?</em> This is a very good question in the current age of deep learning
+where we have parametric function approximators (the neural networks) that can
+approximate any reasonable function (including a probability distribution.)
+However, in the regime of small data, where these large networks can easily overfit,
+these nonparametric methods are very useful. Furthermore, I often use them to
+quickly get an initial sense of my data &ndash; how many modes does the underlying
+distribution have, where does the mean lie, what sort of variance does the data
+exhibit, etc. In light of these advantages, I claim that it is useful to understand
+nonparametric methods and how to implement them.</p>
+<h3 id="density-estimation">Density Estimation</h3>
+<p>I learned this neat intuition from Chris Bishop&rsquo;s textbook.
+Suppose we are trying to estimate a probability density $p(x)$ where $x \in \mathbb{R}^D$.
+Given a region $R$, we can compute the probability mass associated with this region
+as</p>
+<p>$$ P = \int_{R} p(x) dx $$</p>
+<p>Given a dataset of $N$ points drawn from $p(x)$, the average number of points $K$
+that lie within region $R$ is</p>
+<p>$$ K = NP $$</p>
+<p>Now comes the crucial argument: If the region $R$ is small enough that we can assume
+the density $p(x)$ is roughly constant over the region, then we have</p>
+<p>$$ P = p(x)V $$</p>
+<p>where $V$ is the volume of the region R. Combining the above two equations, we get</p>
+<p>$$ p(x) = \frac{K}{NV} $$</p>
+<p>The above result gives us two strategies to estimate $p(x)$ for any point $x \in \mathbb{R}^D$:</p>
+<ol>
+<li>We can fix $V$ and determine $K$ from data</li>
+<li>We can fix $K$ and determine $V$ from data</li>
+</ol>
+<p>All nonparametric density estimation methods can be viewed through the lens of the
+above two strategies. We describe Histograms, a nonparametric method, below.</p>
+<h3 id="histograms">Histograms</h3>
+<p>Following strategy 1 above, let&rsquo;s discretize each of the $D$ dimensions of $\mathbb{R}^D$
+into bins of width $\Delta$. Note that each bin has a fixed volume $V = \Delta^D$. To compute
+the density $p(x)$, all we need to do is to determine $K$ from data.</p>
+<p>Let me demonstrate how histograms work with a 1-D example</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> scipy.stats <span style="color:#f92672">import</span> norm
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74">&#34;figure.figsize&#34;</span>] <span style="color:#f92672">=</span> (<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Mixture of 2 Gaussians</span>
+</span></span><span style="display:flex;"><span>pdf <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x: <span style="color:#ae81ff">0.7</span> <span style="color:#f92672">*</span> norm<span style="color:#f92672">.</span>pdf(x, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.1</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.3</span> <span style="color:#f92672">*</span> norm<span style="color:#f92672">.</span>pdf(x, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0.1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>xaxis <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0.25</span>, <span style="color:#ae81ff">1.25</span>, <span style="color:#ae81ff">1e-2</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(xaxis, list(map(pdf, xaxis)), label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;p(x)&#34;</span>)</span></span></code></pre></div>
+<center><img src="../../nonparam/density.png"></center>
+<p>The above plot shows the density $p(x)$ that we want to estimate. Remember, we do not
+know this distribution. However, we do have $N$ observations drawn from it. Let&rsquo;s plot
+these observations</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>N <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sample</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand() <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0.7</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0.1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>samples <span style="color:#f92672">=</span> [sample() <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(N)]
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(samples, np<span style="color:#f92672">.</span>zeros(len(samples)), <span style="color:#e6db74">&#39;x&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;samples&#34;</span>)</span></span></code></pre></div>
+<center><img src="../../nonparam/samples.png"></center>
+<p>The above plot shows the observations/samples that we have access to. As I said before,
+histograms bin each dimension, so let&rsquo;s bin the interval $[0.25, 1.25]$
+in the plot above</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>delta <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.1</span>
+</span></span><span style="display:flex;"><span>bin_edges <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0.25</span>, <span style="color:#ae81ff">1.25</span> <span style="color:#f92672">+</span> delta, delta)
+</span></span><span style="display:flex;"><span>ax<span style="color:#f92672">.</span>stem(bin_edges, [<span style="color:#ae81ff">3</span> <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(len(bin_edges))], markerfmt<span style="color:#f92672">=</span><span style="color:#e6db74">&#39; &#39;</span>, linefmt<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;k:&#39;</span>, basefmt<span style="color:#f92672">=</span><span style="color:#e6db74">&#39; &#39;</span>)</span></span></code></pre></div>
+<center><img src="../../nonparam/bins.png"></center>
+<p>Each of these bins have a fixed volume of $\Delta = 0.1$. Now, all that is left is to determine
+$K$, a.k.a number of observations in each bin. Say, bin $i$ has $n_i$ observations in it, then we can
+compute probability density $p_i$ of the bin as</p>
+<p>$$ p_i = \frac{n_i}{N\Delta} $$</p>
+<p>Thus, each bin has a probability mass of $p_i \Delta$ and summing the mass over all bins gives us $1$,
+as we would expect. Let&rsquo;s see how this looks like in our $1$-D example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>histogram <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(
+</span></span><span style="display:flex;"><span>    [sum([x <span style="color:#f92672">&gt;=</span> bin_edges[i] <span style="color:#f92672">and</span> x <span style="color:#f92672">&lt;</span> bin_edges[i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>] <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> samples]) 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(bin_edges)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)]
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>normalized_histogram <span style="color:#f92672">=</span> (histogram <span style="color:#f92672">/</span> (N <span style="color:#f92672">*</span> delta))
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>bar(bin_edges[:<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], normalized_histogram, align<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;edge&#39;</span>, width<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.3</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;g&#39;</span>)</span></span></code></pre></div>
+<center><img src="../../nonparam/histogram_fit.png"></center>
+<p>There you go! That&rsquo;s it. We have our estimate for $p(x)$. Note that our estimate has constant
+density within each bin and has discontinuities across the bin edges. Keeping this aside, the
+estimate is a good representation of the underlying true density. Now that we have this estimate,
+we can throw away the observations and use this estimate from now on.</p>
+<center><img src="../../nonparam/histogram_0.1.png"></center>
+<p>Our choice of $\Delta = 0.1$ was arbitrary and we could have chosen it to be anything. This is
+the distribution we get if we had chosen $\Delta = 0.01$.</p>
+<center><img src="../../nonparam/histogram_0.01.png"></center>
+<p>Observe that while $\Delta = 0.1$ resulted in a coarse smoothing estimate of $p(x)$, $\Delta = 0.01$ resulted in a
+finer but noisier estimate.
+Note that we did not compute this &ldquo;parameter&rdquo; from data, and instead it acts like a hyperparameter that
+can be chosen through domain knowledge or plain intuition. This makes the histogram method nonparametric.</p>
+<p>Histograms are great at giving you a quick and easy visualization of your data, but it is mostly useful
+for 1- or 2-D problems. Unlike other nonparametric methods, histograms do not require us to store the
+observations, which is great if the data set is large and we have memory constraints.</p>
+<p>As the dimensionality $D$ grows, the number of bins grows exponentially ($M$ bins in each
+dimension, results in a total of $M^D$ bins.) This exponential scaling makes histograms not the best for high-D
+density estimation, like realistic image generation. However, they are still a very useful tool to have in your arsenal.</p>
+<p>The source code for this post can be found <a href="https://gist.github.com/vvanirudh/10df47c86f29698f7c9b12d8d3421ddf">here</a>.</p>
+
+</main>
+
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-vvanirudh-github-io" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2024 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+
