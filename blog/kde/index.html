@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>A Gentle Primer for Nonparametric Density Estimation: Kernel Density Estimation | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">blog</a></li>
+      
+      <li><a href="../../about">about me</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">A Gentle Primer for Nonparametric Density Estimation: Kernel Density Estimation</span></h1>
+
+<h2 class="date">2024/04/13</h2>
+
+<p>Reading time: 7 minutes.</p>
+</div>
+
+<main>
+<p>In my <a href="../../blog/nonparametric_density_estimation">previous post</a>, we discussed a neat intuition for
+nonparametric density estimation and introduced a nonparametric method, histograms. This post
+describes another (very popular) density estimation method called Kernel Density Estimation (KDE).</p>
+<h3 id="revisit-intuition">Revisit Intuition</h3>
+<p>Let&rsquo;s revisit the intuition that we developed for nonparametric density estimation. Given a region
+$R \subset \mathbb{R}^D$ of volume $V$, and that contains $K$ points from a sampled dataset of size $N$,
+we can estimate $p(x)$ for any point $x \in R$ as</p>
+<p>$$ p(x) = \frac{K}{NV} $$</p>
+<p>We have shown that this intuition lends us two strategies for estimating
+$p(x)$:</p>
+<ol>
+<li>We can fix $V$ and determine $K$ from data</li>
+<li>We can fix $K$ and determine $V$ from data</li>
+</ol>
+<p>Histograms, as described in the <a href="../../blog/nonparametric_density_estimation">previous post</a>, use strategy 1
+where we fix the bin volume and determine how many points fall within each bin from the data. Kernel Density
+Estimation, as we will see, follows the same strategy with two major differences:</p>
+<ol>
+<li>Regions $R$ (or the bins) are centered on data points</li>
+<li>Use of kernel functions to represent density in region $R$</li>
+</ol>
+<h3 id="kernel-density-estimation">Kernel Density Estimation</h3>
+<p>Extending the binning idea
+of histograms, let&rsquo;s take the region $R$ to be a small hypercube of side $\Delta$ centered at any
+$x \in \mathbb{R}^D$. Note that in histograms, the regions were always centered at the discretization of $\mathbb{R}^D$ space.</p>
+<p>Using the same 1-D example as the <a href="../../blog/nonparametric_density_estimation">previous post</a> we can visualize how
+this hypercube would look like at an arbitrary $x$</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>delta <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.1</span>
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>
+</span></span><span style="display:flex;"><span>ax<span style="color:#f92672">.</span>stem([x <span style="color:#f92672">-</span> delta<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>, x <span style="color:#f92672">+</span> delta<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>], [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>], markerfmt<span style="color:#f92672">=</span><span style="color:#e6db74">&#39; &#39;</span>, linefmt<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;k:&#39;</span>, basefmt<span style="color:#f92672">=</span><span style="color:#e6db74">&#39; &#39;</span>)</span></span></code></pre></div>
+<center><img src="../../nonparam/hypercube.png"></center>
+<p>Looks exactly like a histogram bin, except it is defined at any arbitrary $x$ (and not the discretization points, like
+in histogram.)
+To count the number of points ($K$) falling within $R$, we can define
+the function $k(u)$,</p>
+<p>$$ k(u) = \begin{cases} 1, &amp; \text{if } |u_i| \leq \frac{1}{2}, \forall i=1,\cdots,D \\ 0, &amp; \text{otherwise} \end{cases} $$</p>
+<p>We can now count the number of points $K$ within $R$ by noting that the quantity $k(\frac{x - x_n}{\Delta})$ is $1$ if
+data point $x_n$ is inside the hypercube $R$ and $0$ otherwise.</p>
+<p>Let&rsquo;s plot $k(\frac{x - x_n}{\Delta})$ for all samples $x_n$ in the above example,</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>k <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> u: <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">if</span> abs(u) <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0.5</span> <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>sorted_samples <span style="color:#f92672">=</span> sorted(samples)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(
+</span></span><span style="display:flex;"><span>    sorted_samples, 
+</span></span><span style="display:flex;"><span>    [k((x_n <span style="color:#f92672">-</span> x) <span style="color:#f92672">/</span> delta) <span style="color:#66d9ef">for</span> x_n <span style="color:#f92672">in</span> sorted_samples], 
+</span></span><span style="display:flex;"><span>    label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;k((x - x_n)/delta)&#39;</span>, 
+</span></span><span style="display:flex;"><span>    color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div>
+<center><img src="../../nonparam/box.png"></center>
+<p>Looks like a box, doesn&rsquo;t it? Now we can simply count the number of points $K$ inside this box to estimate the
+density at $x$.
+Thus, we can estimate $K$ as</p>
+<p>$$ K = \sum_{i=1}^N k\left(\frac{x - x_n}{\Delta}\right) $$</p>
+<p>Substituting the above equation into the nonparametric density estimation intuition equation, we get</p>
+<p>$$ p(x) = \frac{1}{N\Delta^D} \sum_{i=1}^N k\left(\frac{x - x_n}{\Delta}\right) $$</p>
+<p>where we used the fact that the volume of the $D$-dimensional hypercube of side $\Delta$ is $V = \Delta^D$.
+Let&rsquo;s plot $p(x)$ for our 1-D example,</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>K <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x: sum([k((x <span style="color:#f92672">-</span> x_n) <span style="color:#f92672">/</span> delta) <span style="color:#66d9ef">for</span> x_n <span style="color:#f92672">in</span> samples])
+</span></span><span style="display:flex;"><span>p <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x: K(x) <span style="color:#f92672">/</span> (N <span style="color:#f92672">*</span> delta)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(xaxis, list(map(p, xaxis)), label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;p(x) estimate&#34;</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>)</span></span></code></pre></div>
+<center><img src="../../nonparam/box_estimate.png"></center>
+<p>Not a bad estimate! Looks a little noisy but approximates the true density quite well.</p>
+<p>However, the interpretation
+of placing a region at every point $x$ and counting number of points in the region sounds cumbersome. We can
+use a <em>symmetry argument</em> by noting that our function $k$ is symmetric (i.e. $k(u) = k(-u)$) to
+reinterpret our density estimate, not as a single hypercube centered at $x$ but as the <strong>sum over $N$ cubes centered
+on each of the $N$ data points $x_n$!</strong></p>
+<!-- If the above argument does not convince you, let me convince you through code
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>box_at_x_n <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x, x_n: k((x <span style="color:#f92672">-</span> x_n) <span style="color:#f92672">/</span> delta)
+</span></span><span style="display:flex;"><span>sum_of_N_boxes <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x: sum([box_at_x_n(x, x_n) <span style="color:#66d9ef">for</span> x_n <span style="color:#f92672">in</span> samples])
+</span></span><span style="display:flex;"><span>p <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x: sum_of_N_boxes(x) <span style="color:#f92672">/</span> (N <span style="color:#f92672">*</span> delta)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(xaxis, list(map(p, xaxis)), label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;p(x) estimate&#34;</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>)</span></span></code></pre></div>
+
+<center><img src="../../nonparam/box_estimate_reinterpret.png"></center> -->
+<p>Thus, so far, the only difference from histograms was that the bin centers are on the data points themselves! As a
+result of this, the bins can overlap and we compute the density estimate at $x$ as the sum of density estimates from
+all overlapping bins. This eliminates the need to discretize the input space, as needed in histograms, and gives us
+a more smooth (and less discrete) density estimate than histograms.</p>
+<h4 id="kernel-functions">Kernel Functions</h4>
+<p>The density estimate from the above plot still looks &ldquo;choppy&rdquo; (its actually discontinuous and they would be
+visible at inifinitesimally small resolution.) This is because, the density estimate &ldquo;jumps&rdquo; at the hypercube boundaries
+as the &ldquo;influence&rdquo; of a data point on the estimate begins/terminates.</p>
+<p>We can fix this by changing the function $k(u)$ that we used. $k(u)$ is an example of a <em>kernel function</em>, specifically a box
+kernel. We can choose any kernel function $k(u)$ to ensure that the resulting estimate is a valid probability distribution as long as,</p>
+<p>$$ k(u) \geq 0 $$</p>
+<p>$$ \int k(u) du = 1 $$</p>
+<p>To avoid the discontinuities, we can choose a smoother kernel function that has &ldquo;soft&rdquo; boundaries, such as a Gaussian kernel</p>
+<p>$$ k(u) = \frac{1}{(2\pi)^{\frac{D}{2}}} \exp\left(-\frac{||u||^2}{2}\right) $$</p>
+<p>Let&rsquo;s plot $k(\frac{x - x_n}{\Delta})$ for all samples $x_n$ in our 1-D example at a specific $x$ and visualize it
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>
+</span></span><span style="display:flex;"><span>gaussian_k <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> u: (<span style="color:#ae81ff">1</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>math<span style="color:#f92672">.</span>pi)<span style="color:#f92672">**</span><span style="color:#ae81ff">0.5</span>) <span style="color:#f92672">*</span> math<span style="color:#f92672">.</span>exp(<span style="color:#f92672">-</span><span style="color:#ae81ff">0.5</span> <span style="color:#f92672">*</span> u<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(
+</span></span><span style="display:flex;"><span>    sorted_samples,
+</span></span><span style="display:flex;"><span>    [gaussian_k((x_n <span style="color:#f92672">-</span> x) <span style="color:#f92672">/</span> delta) <span style="color:#66d9ef">for</span> x_n <span style="color:#f92672">in</span> sorted_samples],
+</span></span><span style="display:flex;"><span>    label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;k((x - x_n)/delta)&#39;</span>, 
+</span></span><span style="display:flex;"><span>    color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div></p>
+<center><img src="../../nonparam/gaussian.png"></center>
+Looks like a gaussian PDF as expected. Let's see how our estimate of $p(x)$ looks like if we used a Gaussian kernel instead of a box kernel.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>K <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x: sum([gaussian_k((x <span style="color:#f92672">-</span> x_n) <span style="color:#f92672">/</span> delta) <span style="color:#66d9ef">for</span> x_n <span style="color:#f92672">in</span> samples])
+</span></span><span style="display:flex;"><span>p <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x: K(x) <span style="color:#f92672">/</span> (N <span style="color:#f92672">*</span> delta)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(xaxis, list(map(p, xaxis)), label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;p(x) estimate&#34;</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>)</span></span></code></pre></div>
+<center><img src="../../nonparam/gaussian_estimate_0.1.png"></center>
+<p>Voila! We have a smooth estimate of the density function that approximates the underlying density reasonably well. Thus, our density
+model is obtained by placing a Gaussian over each of the $N$ data points, adding up their contributions over the entire dataset, and dividing
+by $N$ to get a normalized density estimate.</p>
+<p>We can make
+the approximation more accurate by tweaking $\Delta$, which in the context of a Gaussian kernel is the variance of the kernel.
+Using $\Delta = 0.05$, we get the following plot which already looks very much like the true density</p>
+<center><img src="../../nonparam/gaussian_estimate_0.05.png"></center>
+<p>We see that similar to histograms, $\Delta$ plays the role of a smoothing parameter and we obtain over-smoothing for large values of $\Delta$
+and sensitivity to noise in the dataset for small values. Thus, the parameter $\Delta$ controls the complexity of the
+density model. As an example, here&rsquo;s the estimate with $\Delta = 0.01$ that shows sensitivity to noise.</p>
+<center><img src="../../nonparam/gaussian_estimate_0.01.png"></center>
+<p>And that&rsquo;s Kernel Density Estimation. The only differences from histogram were:</p>
+<ol>
+<li>Using regions centered on data points</li>
+<li>Flexibility to use any kernel function to represent the density in a region</li>
+</ol>
+<p>Interested readers can check out this super cool interactive <a href="https://mathisonian.github.io/kde/">blog post</a> that allows you to
+play with different kernel functions
+and different values of $\Delta$ to visualize resulting density estimates and the influence of data points on the estimate.</p>
+<h3 id="why-not-kernel-density-estimation">Why (not) Kernel Density Estimation?</h3>
+<p>Similar to histograms, KDE is a nonparametric method that does not compute any parameters from data. While our post has explored two kernel
+functions: box and Gaussian kernel, there are a lot of kernel functions, and using them gives user a wide range of modeling choices
+that is not available with histograms.</p>
+<p>The greatest merit of KDE over histograms is that it scales well to higher dimensional density estimation, as the number of &ldquo;regions&rdquo;
+do not scale exponentially in input dimension, unlike histograms. Furthermore, there is virtually no computation involved in
+the &ldquo;training&rdquo; phase for KDE as we simply require the training data to be stored to be used at inference time.</p>
+<p>However, this means
+that the computational complexity (and the number of &ldquo;regions&rdquo;) of KDE scales linearly with the data size, which makes it prohibitive
+to use for large datasets. This is compounded in high dimensions, where we require a large number of data points to reliably
+estimate the density, making KDE computationally more expensive as a result.</p>
+
+</main>
+
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-vvanirudh-github-io" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2024 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+

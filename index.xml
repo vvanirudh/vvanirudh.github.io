@@ -6,7 +6,17 @@
     <description>Recent content in Anirudh&#39;s Blog on Anirudh Vemula</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 07 Apr 2024 17:33:51 -0400</lastBuildDate><atom:link href="https://vvanirudh.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 13 Apr 2024 16:53:39 -0400</lastBuildDate><atom:link href="https://vvanirudh.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A Gentle Primer for Nonparametric Density Estimation: Kernel Density Estimation</title>
+      <link>https://vvanirudh.github.io/blog/kde/</link>
+      <pubDate>Sat, 13 Apr 2024 16:53:39 -0400</pubDate>
+      
+      <guid>https://vvanirudh.github.io/blog/kde/</guid>
+      <description>In my previous post, we discussed a neat intuition for nonparametric density estimation and introduced a nonparametric method, histograms. This post describes another (very popular) density estimation method called Kernel Density Estimation (KDE).
+Revisit Intuition Let&amp;rsquo;s revisit the intuition that we developed for nonparametric density estimation. Given a region $R \subset \mathbb{R}^D$ of volume $V$, and that contains $K$ points from a sampled dataset of size $N$, we can estimate $p(x)$ for any point $x \in R$ as</description>
+    </item>
+    
     <item>
       <title>A Gentle Primer for Nonparametric Density Estimation: Histograms</title>
       <link>https://vvanirudh.github.io/blog/nonparametric_density_estimation/</link>
