@@ -35,29 +35,20 @@
 <p>Very recently, I submitted a <a href="https://arxiv.org/abs/2003.04394">paper</a> to <a href="https://roboticsconference.org/">RSS</a> (update: accepted!) on how to use inaccurate models for planning in robotic tasks. For many robotic tasks, we usually have access to a (inaccurate)  model of the robot and the environment. For example, simulators that employ sophisticated physics engines such as <a href="http://www.mujoco.org/">MuJoCo</a> or <a href="https://pybullet.org/wordpress/">Bullet</a> can be used as forward dynamical models for planning. These models capture some complexities of the real world well, while they fail to capture other subtleties. However, they are still very useful sources of information on real-world dynamics that can be exploited to plan a good policy.</p>
 <p>This <a href="https://ai.stanford.edu/~ang/papers/icml06-usinginaccuratemodelsinrl.pdf">paper from Abbeel, Quigley and Ng</a> is one of my favourite papers in this domain. They have this really nice example and I quote</p>
 <blockquote>
-<p><em>For example, if in a car our current policy drives a maneuver too far to the left, then driving in real-life will be what tells us that we are driving too far to the left. However, even a very poor model of the car can then be used to tell us that the change we should make is to turn the steering wheel clockwise (rather than anti-clockwise) to correct for this error.</em></p>
-</blockquote>
+<p><em>For example, if in a car our current policy drives a maneuver too far to the left, then driving in real-life will be what tells us that we are driving too far to the left. However, even a very poor model of the car can then be used to tell us that the change we should make is to turn the steering wheel clockwise (rather than anti-clockwise) to correct for this error.</em></p></blockquote>
 <p>This example perfectly summarises our motivation for this work. I strongly believe that not using an existing (inaccurate) model and purely using model-free approaches is like <a href="https://en.wikipedia.org/wiki/Don%27t_throw_the_baby_out_with_the_bathwater"><em>throwing out the baby with the bath water</em></a>. If anything, using an existing model is a useful way to inject domain knowledge about the world into our approaches.</p>
 <p>My paper is a small take on the following problem: <strong>Given an inaccurate dynamical model for a goal-oriented robotic task, how do we ensure that the robot provably reaches the goal online without any access to resets?</strong> Note that we tackle the no-reset setting as resets typically require human intervention, and this setting is more practical. We also consider deterministic dynamics and extension to stochastic dynamics is left open (potential future work.)</p>
 <p>Let&rsquo;s understand the problem through an example:</p>
 <br>
-
-
-    
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/PZObvCWfw1Q?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
-      ></iframe>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/PZObvCWfw1Q?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"></iframe>
     </div>
 
 <br>
 <p>In the above video, we see a robot that is trying to move the light object from the start location to a goal location while avoiding collision with the obstacle. In this case, assume that we have access to a perfect dynamical model (true knowledge of the object weight, positions of obstacle etc.) With the perfect model, the planner comes up with an optimal path that takes the object above the obstacle and reaches the goal successfully. <em>What if the object in reality was heavy, but is modeled as a light object?</em></p>
 <br>
-
-
-    
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/JVbsi5mDG40?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
-      ></iframe>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/JVbsi5mDG40?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"></iframe>
     </div>
 
 <br>
@@ -128,24 +119,16 @@
 <h2 id="experiments">Experiments</h2>
 <p>Going back to our motivating example of a 3D pick-and-place task with a heavy object, let us see how CMAX performs:
 <br>
-
-
-    
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/NZt4ORzo6jo?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
-      ></iframe>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/NZt4ORzo6jo?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"></iframe>
     </div>
 
 <br>
 Upon recognizing the discrepancy in dynamics between the model and the environment, CMAX (instead of learning the true dynamics and correcting the model) quickly adapts and finds an alternative path that takes the object behind the obstacle to the goal. This kind of highly goal-oriented behavior at the expense of less number of executions is exactly the behavior we want.</p>
 <p>We also test CMAX in large state spaces in our 7D arm planning task where the objective is to move the 7D arm from a start configuration to a goal configuration such that its end effector is within a specified 3D goal region. However, the catch is that one of its joint is broken, and it has to still find a path to the goal despite the inaccuracy of the model.
 <br>
-
-
-    
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/oP8EJ4mboso?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
-      ></iframe>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/oP8EJ4mboso?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"></iframe>
     </div>
 
 <br>
@@ -211,7 +194,7 @@ As we can see when the model is accurate (so there is nothing to be learned), al
 <script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
   
   <hr/>
-  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2024 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2025 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
   
   </footer>
   </body>

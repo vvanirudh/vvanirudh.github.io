@@ -47,20 +47,17 @@
 <ul>
 <li>The on-line player of AlphaZero plays much better than its extensively trained off-line player. This is due to the beneficial effect of exact policy improvement with long lookahead minimization, which corrects for the inevitable imperfections of the neural network-trained off-line player.</li>
 <li>The TD-Gammon player that uses long rollout plays much better than TD-Gammon without rollout. This is due to the beneficial effect of the rollout, which serves as a substitute for long lookahead minimization</li>
-</ul>
-</blockquote>
+</ul></blockquote>
 <p>This book answers why <em>on-line player works so much better than directly using the off-line player.</em></p>
 <p>The answer can be summarized as:</p>
 <blockquote>
 <ul>
 <li><em>Approximation in value space with one-step lookahead minimization amounts to a step of Newton&rsquo;s method for solving Bellman&rsquo;s equation</em></li>
 <li><em>The starting point for the Newton step is based on the results of off-line training, and may be enhanced by longer lookahead minimization and on-line rollout</em></li>
-</ul>
-</blockquote>
+</ul></blockquote>
 <p>Bertsekas also says the following which I believe is the major claim made in this book:</p>
 <blockquote>
-<p><strong>The major determinant of the quality of the on-line policy is the Newton step that is performed on-line, while off-line training plays a secondary role by comparison</strong></p>
-</blockquote>
+<p><strong>The major determinant of the quality of the on-line policy is the Newton step that is performed on-line, while off-line training plays a secondary role by comparison</strong></p></blockquote>
 <p>With the motivation and the main contributions out of the way, its time for some notation to understand the insights behind the contributions.</p>
 <h2 id="notation">Notation</h2>
 <p>The following notation will be used in all of the blog posts concerning this book. This is the same notation that Bertsekas uses in the book. Oddly, it differs from the usual RL notation that we are used to, so I will try to draw parallels in this section.</p>
@@ -177,7 +174,7 @@ $$ (T_{\mu}J)(x) = \mathbb{E}[g(x, \mu(x), w)+ \alpha J(f(x, \mu(x), w))] $$</li
 <script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
   
   <hr/>
-  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2024 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2025 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
   
   </footer>
   </body>

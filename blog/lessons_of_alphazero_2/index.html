@@ -55,14 +55,12 @@ Given a position $x_k$ during on-line play, a lookahead tree is constructed by e
 <p>The above minimization yields a new stationary policy $\tilde{\mu}$ with cost-to-go $J_{\tilde{\mu}}$. <strong>Note that the cost of $\tilde{\mu}$ is not $\tilde{J}$</strong>. Instead it is $J_{\tilde{\mu}}$ which satisfies $T_{\tilde{\mu}}J_{\tilde{\mu}} = J_{\tilde{\mu}}$.</p>
 <p>The key observation from Bertsekas is that:</p>
 <blockquote>
-<p>The change from $\tilde{J}$ to $J_{\tilde{\mu}}$ will be interpreted as a step of Newton&rsquo;s method for solving Bellman&rsquo;s equation</p>
-</blockquote>
+<p>The change from $\tilde{J}$ to $J_{\tilde{\mu}}$ will be interpreted as a step of Newton&rsquo;s method for solving Bellman&rsquo;s equation</p></blockquote>
 <p>This will suggest that $J_{\tilde{\mu}}$ is closer to $J^*$ and obeys a superlinear convergence relation, i.e.</p>
 <p>$$ \lim_{\tilde{J} \rightarrow J^*} \frac{J_{\tilde{\mu}}(x) - J^*(x)}{\tilde{J}(x) - J^*(x)} = 0 $$</p>
 <p>Furthermore, he also makes another crucial observation:</p>
 <blockquote>
-<p>For $\ell$-step lookahead minimization, it can be interpreted as Newton&rsquo;s method for solving Bellman&rsquo;s equation, starting from $\hat{J}$, which is an &ldquo;improvement&rdquo; over $\tilde{J}$. In particular, $\hat{J}$ is obtained from $\tilde{J}$ by applying $(\ell-1)$ successive value iterations.</p>
-</blockquote>
+<p>For $\ell$-step lookahead minimization, it can be interpreted as Newton&rsquo;s method for solving Bellman&rsquo;s equation, starting from $\hat{J}$, which is an &ldquo;improvement&rdquo; over $\tilde{J}$. In particular, $\hat{J}$ is obtained from $\tilde{J}$ by applying $(\ell-1)$ successive value iterations.</p></blockquote>
 <p>We will spend the rest of this post understanding how the above two observations can be drawn from a geometric perspective, thereby understanding the core premise of the book which is to answer <em>why the on-line player works so much better than directly using the off-line player?</em></p>
 <h2 id="geometric-interpretation-of-one-step-lookahead-policy">Geometric Interpretation of One-step Lookahead Policy</h2>
 <p>The one-step lookahead policy is computed as follows for any state $x$:</p>
@@ -172,7 +170,7 @@ This performs a <strong>Newton step to find fixed point of $T$ starting from $\b
 <script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
   
   <hr/>
-  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2024 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2025 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
   
   </footer>
   </body>
