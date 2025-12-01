@@ -6,8 +6,15 @@
     <description>Recent content in Anirudh&#39;s Blog on Anirudh Vemula</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 13 Apr 2024 16:53:39 -0400</lastBuildDate>
+    <lastBuildDate>Mon, 01 Dec 2025 11:53:39 -0400</lastBuildDate>
     <atom:link href="https://vvanirudh.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Revisiting Racket: Advent of Code 2025 Day 1</title>
+      <link>https://vvanirudh.github.io/blog/advent_of_code_2025_day_1/</link>
+      <pubDate>Mon, 01 Dec 2025 11:53:39 -0400</pubDate>
+      <guid>https://vvanirudh.github.io/blog/advent_of_code_2025_day_1/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve been meaning to revisit &lt;a href=&#34;https://docs.racket-lang.org/guide/index.html&#34;&gt;Racket&lt;/a&gt; for a very long time. It was the functional programming language that was taught in IIT Bombay &lt;em&gt;Programming Paradigms&lt;/em&gt; course, which was my favorite computer science course of all time.&lt;/p&gt;&#xA;&lt;p&gt;When I heard that &lt;a href=&#34;https://adventofcode.com/&#34;&gt;Advent of Code&lt;/a&gt; was starting soon, I thought this was the best time to revisit Racket, and re-learn the language while solving all the puzzles.&lt;/p&gt;&#xA;&lt;p&gt;Day 1 puzzles (two of them) were straightforward and can be found &lt;a href=&#34;https://adventofcode.com/2025/day/1&#34;&gt;here&lt;/a&gt;. Read the problem statement before proceeding further as I discuss my solution in Racket below.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>A Gentle Primer for Nonparametric Density Estimation: Kernel Density Estimation</title>
       <link>https://vvanirudh.github.io/blog/kde/</link>

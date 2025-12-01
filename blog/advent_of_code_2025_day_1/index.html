@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Revisiting Racket: Advent of Code 2025 Day 1 | Anirudh Vemula</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="../../">blog</a></li>
+      
+      <li><a href="../../about">about me</a></li>
+      
+      <li><a href="../../research">research</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Revisiting Racket: Advent of Code 2025 Day 1</span></h1>
+
+<h2 class="date">2025/12/01</h2>
+
+<p>Reading time: 6 minutes.</p>
+</div>
+
+<main>
+<p>I&rsquo;ve been meaning to revisit <a href="https://docs.racket-lang.org/guide/index.html">Racket</a> for a very long time. It was the functional programming language that was taught in IIT Bombay <em>Programming Paradigms</em> course, which was my favorite computer science course of all time.</p>
+<p>When I heard that <a href="https://adventofcode.com/">Advent of Code</a> was starting soon, I thought this was the best time to revisit Racket, and re-learn the language while solving all the puzzles.</p>
+<p>Day 1 puzzles (two of them) were straightforward and can be found <a href="https://adventofcode.com/2025/day/1">here</a>. Read the problem statement before proceeding further as I discuss my solution in Racket below.</p>
+<p>I wanted to start off with trying to write the fibonacci function in Racket, just for practice. I love that instead of saying <strong>how</strong> to compute the fibonacci sequence, you can actually write <strong>what</strong> it is, and that is enough for computation. I dredged this function out of my memory as this was the first thing that was taught in the course.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-racket" data-lang="racket"><span style="display:flex;"><span>(<span style="color:#66d9ef">define</span> (fib n)
+</span></span><span style="display:flex;"><span>  (<span style="color:#66d9ef">cond</span>
+</span></span><span style="display:flex;"><span>    [(= n <span style="color:#ae81ff">1</span>) <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    [(= n <span style="color:#ae81ff">2</span>) <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">else</span> (+ (fib (- n <span style="color:#ae81ff">1</span> )) (fib (- n <span style="color:#ae81ff">2</span>)))]))</span></span></code></pre></div>
+<p>Note how I had to define what the base cases are (<code>n = 1</code> and <code>n = 2</code>), and write the induction (or recursion in this case) for the general case. This is all that is needed for computing the <code>n</code>-th number in the fibonacci sequence.</p>
+<p>Now, for the day 1 puzzles. I had to google a bit and frequently refer to the Racket <a href="https://docs.racket-lang.org/guide/index.html">guide</a>, which is brilliant, to refresh my memory on the syntax and the &ldquo;Racket-y&rdquo; way of doing things.</p>
+<h1 id="puzzle-1">Puzzle 1</h1>
+<h2 id="parsing">Parsing</h2>
+<p>First, I had to parse the txt file containing the puzzle input. I thought this might be an arduous thing to do in a functional language, but Racket makes it super simple to do it in a single-line.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-racket" data-lang="racket"><span style="display:flex;"><span>(<span style="color:#66d9ef">define</span> input (string-split (file-&gt;string <span style="color:#e6db74">&#34;input.txt&#34;</span>) <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>))</span></span></code></pre></div>
+<p><code>file-&gt;string</code> simply returns the contents of the entire file in a single string, while <code>string-&gt;split</code> splits the string using the given delimiter <code>&quot;\n&quot;</code>, resulting in a list of strings. In this case, it results in a list like so <code>'(&quot;R10&quot;, &quot;L39&quot;, ...)</code>.</p>
+<p>Okay, that was super simple. So, onwards!</p>
+<h2 id="recursion">Recursion</h2>
+<p>The <em>Programming Paradigms</em> class taught me one thing quite well &ndash; to think functional is to think recursively. So, I tried to find the recursive pattern to solving the first puzzle.</p>
+<p>Given a bunch of rotations, if I have to count the number of times we end up at zero at the end of each rotation, then that number is:</p>
+<ul>
+<li>if we start at zero, then it is 1 + number of times we end up at zero in the rest of the rotations (starting from second rotation)</li>
+<li>else, it is the number of times we end up at zero in the rest of the rotations</li>
+</ul>
+<p>This recursion seems simple, but it is very powerful as it already describes how to decompose the larger problem into a bunch of sub-problems. Of course, no recursion is complete unless you describe the base case. The base case is super simple, <strong>if you have no rotations, then the answer is 0</strong>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-racket" data-lang="racket"><span style="display:flex;"><span>(<span style="color:#66d9ef">define</span> (count-zeros-at-end rotations num)
+</span></span><span style="display:flex;"><span>  (<span style="color:#66d9ef">cond</span>
+</span></span><span style="display:flex;"><span>    [(empty? rotations) <span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    [(= num <span style="color:#ae81ff">0</span>) (+ <span style="color:#ae81ff">1</span> (count-zeros-at-end (cdr rotations) (next-num (car rotations) num)))]
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">else</span> (count-zeros-at-end (cdr rotations) (next-num (car rotations) num))]))</span></span></code></pre></div>
+<p>Observe that the code can be read very similar to how I described the recursion above! This makes programming in Racket a pure delight.</p>
+<p>I have offloaded the tricky part of computing what number we end up at after the rotation to the function <code>next-num</code> which is what I had to tackle next.</p>
+<h2 id="direction-to-rotate">Direction to Rotate</h2>
+<p>Each rotation is of the form <code>&quot;LX&quot;</code> or <code>&quot;RX&quot;</code>, where <code>X</code> is a number while <code>L/R</code> describe left/right rotation of the dial. Doing <code>L</code> decrements the number, while <code>R</code> increments the number. Finally, there is a wraparound at <code>0</code> and <code>99</code>.</p>
+<p>Before dealing with any of the above complications, I remembered that functions are simply values in Racket. They can be passed around just like numbers/strings throughout the code. If the only difference between <code>L</code> and <code>R</code> is whether we decrement or increment the number, then I can just create a single function that also takes an operator <code>+</code> or <code>-</code> as argument.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-racket" data-lang="racket"><span style="display:flex;"><span>(<span style="color:#66d9ef">define</span> (next-num rotation num)
+</span></span><span style="display:flex;"><span>  (<span style="color:#66d9ef">cond</span>
+</span></span><span style="display:flex;"><span>    [(equal? (substring rotation <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span>) <span style="color:#e6db74">&#34;L&#34;</span>) (op-next-num (substring rotation <span style="color:#ae81ff">1</span>) num -)]
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">else</span> (op-next-num (substring rotation <span style="color:#ae81ff">1</span>) num +)]))</span></span></code></pre></div>
+<p>Note how I sent <code>+</code> and <code>-</code> as arguments to the function <code>op-next-num</code>. This makes <code>op-next-num</code> a higher order function, which is just a fancy term for a function that takes another function as argument. The logic of <code>next-num</code> is super simple, it just parses the first character in a rotation and sends the appropriate operator to the <code>op-next-num</code> function call.</p>
+<h2 id="next-number-after-rotation">Next Number after Rotation</h2>
+<p>Now, we need to tackle the increment/decrement and the wraparound. We can implement the wraparound using a simple conditional function</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-racket" data-lang="racket"><span style="display:flex;"><span>(<span style="color:#66d9ef">define</span> (normalize num)
+</span></span><span style="display:flex;"><span>  (<span style="color:#66d9ef">cond</span>
+</span></span><span style="display:flex;"><span>    [(&gt; num <span style="color:#ae81ff">99</span>) (normalize (- num <span style="color:#ae81ff">100</span>))]
+</span></span><span style="display:flex;"><span>    [(&lt; num <span style="color:#ae81ff">0</span>) (normalize (+ num <span style="color:#ae81ff">100</span>))]
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">else</span> num]))</span></span></code></pre></div>
+<p>Once again, recursion to the rescue!</p>
+<p>We now have all the pieces except the last one, which is <code>op-next-num</code>. The only computation it needs to do besides making the call to <code>normalize</code> is to parse the offset in the rotation as a number. Again, Racket makes it super easy</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-racket" data-lang="racket"><span style="display:flex;"><span>(<span style="color:#66d9ef">define</span> (op-next-num offset num op)
+</span></span><span style="display:flex;"><span>  (<span style="color:#66d9ef">let</span> ([new-num (op num (string-&gt;number offset))])
+</span></span><span style="display:flex;"><span>    (normalize new-num)))</span></span></code></pre></div>
+<h2 id="solution">Solution</h2>
+<p>This is enough to solve the first puzzle by simply calling
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-racket" data-lang="racket"><span style="display:flex;"><span>(count-zeros-at-end input <span style="color:#ae81ff">50</span>)</span></span></code></pre></div></p>
+<h1 id="puzzle-2">Puzzle 2</h1>
+<p>The second puzzle is a slight variant of puzzle 1, where instead of counting the number of times we end up on <code>0</code> <strong>after</strong> a rotation, we count the number of times we end up on <code>0</code> <strong>during/after</strong> a rotation.</p>
+<p>My initial thought was to quickly construct a new recursion to define <strong>what</strong> the function to compute this would be. After spending a few minutes, trying to do that while extending the puzzle 1 solution, I realized that going through <code>0</code> is the same as ending up on a <code>0</code> after a &ldquo;sub-rotation&rdquo;, which is a part of the rotation.</p>
+<p>So, instead of modifying/extend the code for puzzle 1, I can simply modify the <strong>input</strong> and reduce puzzle 2 to puzzle 1. <strong>Reduction</strong> is a very powerful concept!</p>
+<h2 id="deconstructing-rotations">Deconstructing rotations</h2>
+<p>To reuse solution for puzzle 1, we simply need to deconstruct the input so that each rotation is a <em>unit</em> rotation. The final result is the same, except now <code>&quot;L5&quot;</code> would be deconstructed into 5 rotations in sequence with each being <code>&quot;L1&quot;</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-racket" data-lang="racket"><span style="display:flex;"><span>(<span style="color:#66d9ef">define</span> (deconstruct-rotations rotations)
+</span></span><span style="display:flex;"><span>  (<span style="color:#66d9ef">if</span> (empty? rotations) rotations
+</span></span><span style="display:flex;"><span>      (<span style="color:#66d9ef">let</span> ([rest-rotations (cdr rotations)]
+</span></span><span style="display:flex;"><span>            [num (string-&gt;number (substring (car rotations) <span style="color:#ae81ff">1</span>))]
+</span></span><span style="display:flex;"><span>            [dir (substring (car rotations) <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span>)])
+</span></span><span style="display:flex;"><span>        (<span style="color:#66d9ef">cond</span>
+</span></span><span style="display:flex;"><span>          [(= num <span style="color:#ae81ff">0</span>) (deconstruct-rotations rest-rotations)]
+</span></span><span style="display:flex;"><span>          [<span style="color:#66d9ef">else</span> (cons
+</span></span><span style="display:flex;"><span>                 (string-append dir <span style="color:#e6db74">&#34;1&#34;</span>)
+</span></span><span style="display:flex;"><span>                 (deconstruct-rotations
+</span></span><span style="display:flex;"><span>                  (cons
+</span></span><span style="display:flex;"><span>                   (string-append dir (number-&gt;string (- num <span style="color:#ae81ff">1</span>)))
+</span></span><span style="display:flex;"><span>                   rest-rotations)))]))))</span></span></code></pre></div>
+<p>That looks big! But its actually relatively straightforward. The <code>let</code> calls simply define variables in the local scope of the function. The recursion defined here is the key to the function! The base case simply says, if there are no more offsets (<code>num = 0</code>), then simply return the deconstructed version of the rest of the rotations. Else, append <code>&quot;L1&quot;</code> or <code>&quot;R1&quot;</code> (depending on the input direction) to the front of the deconstructed list of the rest of the rotations (including the part of the first that is still left).</p>
+<p>This function given input like <code>'(&quot;L2&quot;, &quot;R3&quot;)</code> would deconstruct it into <code>'(&quot;L1&quot;, &quot;L1&quot;, &quot;R1&quot;, &quot;R1&quot;, &quot;R1&quot;)</code>.</p>
+<h2 id="solution-1">Solution</h2>
+<p>The solution is simply calling <code>count-zeros-at-end</code> on the deconstructed input
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-racket" data-lang="racket"><span style="display:flex;"><span>(count-zeros-at-end (deconstruct-rotations (input <span style="color:#ae81ff">50</span>))</span></span></code></pre></div></p>
+
+</main>
+
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-vvanirudh-github-io" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  <footer>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+</script>
+<script defer src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  <hr/>
+  © <a href="https://vvanirudh.github.io">Anirudh Vemula</a> 2025 | <a href="https://github.com/vvanirudh">Github</a> | <a href="https://www.linkedin.com/in/vvanirudh/">LinkedIn</a> | <a href="https://scholar.google.com/citations?user=xRuVTW4AAAAJ&amp;hl=en">Google Scholar</a> | <a href="mailto:vvanirudh@gmail.com">Email</a>
+  
+  </footer>
+  </body>
+</html>
+
